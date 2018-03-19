@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:id="@+id/offer_img"
+            />
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="180dp"
+            android:padding="20dp"
+            android:background="#fff" android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:id="@+id/offer_title"
+                android:hint="Main Heading" android:textColor="#000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:id="@+id/offer_descrip"
+                android:layout_marginBottom="8dp"
+                android:hint="Description Here"
+                />
+            <Button
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Learn More"
+                android:id="@+id/offer_more_btn"
+                android:background="#25a8d0"
+                android:textColor="#fff"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
