@@ -19,14 +19,14 @@ public class MainActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        // this is testing 2
+
 
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run()
             {
 
-                    Intent HomeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent HomeIntent = new Intent(MainActivity.this, volleyList.class);
                     startActivity(HomeIntent);
                     finish();
             }

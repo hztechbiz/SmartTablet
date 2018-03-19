@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.smartapp.hztech.smarttebletapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +23,8 @@
         <activity android:name=".ServicesHome" />
         <activity android:name=".SpecialOffer" />
         <activity android:name=".RoomDetails" />
-        <activity android:name=".NavigationPage"></activity>
+        <activity android:name=".NavigationPage" />
+        <activity android:name=".volleyList"></activity>
     </application>
 
 </manifest>
