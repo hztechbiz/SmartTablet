@@ -16,8 +16,7 @@ public class MainActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
 
@@ -26,7 +25,7 @@ public class MainActivity extends Activity {
             public void run()
             {
 
-                    Intent HomeIntent = new Intent(MainActivity.this, volleyList.class);
+                    Intent HomeIntent = new Intent(MainActivity.this, MapTest.class);
                     startActivity(HomeIntent);
                     finish();
             }

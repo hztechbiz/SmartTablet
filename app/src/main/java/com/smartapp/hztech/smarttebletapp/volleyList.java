@@ -46,7 +46,7 @@ public class volleyList extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray jsonArray = response.getJSONArray("employees");
-                    for (int i = 0; i < jsonArray.length(); i++){
+                    for (int i = 0; i < response.length(); i++){
                         JSONObject empl = jsonArray.getJSONObject(i);
                         String firstName = empl.getString("firstname");
                         int age = empl.getInt("age");
