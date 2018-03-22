@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
             public void run()
             {
 
-                    Intent HomeIntent = new Intent(MainActivity.this, MapTest.class);
+                    Intent HomeIntent = new Intent(MainActivity.this, FragMain.class);
                     startActivity(HomeIntent);
                     finish();
             }
