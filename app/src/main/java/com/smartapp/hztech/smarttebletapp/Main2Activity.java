@@ -9,7 +9,7 @@ import android.view.View;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
 
-public class Main2Activity extends FragmentActivity {
+public class Main2Activity extends FragmentActivity implements HomeFragment.OnFragmentUpdate {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +52,10 @@ public class Main2Activity extends FragmentActivity {
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    @Override
+    public void onUpdateFragment(Fragment fragment) {
+        updateFragment(fragment);
     }
 }
