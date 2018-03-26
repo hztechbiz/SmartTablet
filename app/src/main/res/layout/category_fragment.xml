@@ -2,13 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.smartapp.hztech.smarttebletapp.FragmentOnee">
+    tools:context="com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragment1"
+        android:text="Category"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
 </FrameLayout>

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/banner"
     android:layout_height="match_parent"
-    tools:context="com.smartapp.hztech.smarttebletapp.HomeActivity">
+    tools:context="com.smartapp.hztech.smarttebletapp.Main2Activity">
 
-    <!--side menu-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="150dp"
@@ -16,8 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="#fff"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
 
         <ScrollView
@@ -30,11 +26,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/itemHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:background="#d9dee0"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:paddingBottom="10dp"
                     android:paddingLeft="35dp"
@@ -67,8 +65,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:gravity="center"
                     android:background="@drawable/bggradient"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <ImageView
@@ -96,10 +94,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemWifi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical">
 
                     <ImageView
@@ -128,10 +128,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemHow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -161,10 +163,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -314,6 +318,7 @@
                         android:textColor="#000"
                         android:textSize="13dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
@@ -322,196 +327,17 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-    <!--side menu-->
-    <!--main-content-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginLeft="150dp"
-       >
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="100dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="20dp"
-            android:background="#fff"
-            android:layout_marginLeft="25dp"
-            android:maxWidth="20dp"/>
-
-        <LinearLayout
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:paddingTop="25dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:id="@+id/send"
-                android:paddingRight="25dp"
-                android:orientation="vertical"
-                android:background="#fff">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/resort" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="#000"
-                        android:textSize="20dp"
-                        android:text="RESORTS"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Welcome to the Resorts. Everything you need to know about your room and the Resort facilities"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:paddingTop="25dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:id="@+id/services"
-                android:layout_marginLeft="25dp"
-                android:orientation="vertical"
-                android:background="#fff">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bar" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="#000"
-                        android:textSize="20dp"
-                        android:text="EATERIES, BARS AND NIGHTLIFE"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="A great selection to appeal to all likes and tastes."/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:paddingTop="25dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:orientation="vertical"
-                android:background="#fff">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/thempark" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="#000"
-                        android:textSize="20dp"
-                        android:text="THEME PARKS, TOURS AND ATTRACTIONS"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You will never be short of anything to fo on the coast."/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:paddingTop="25dp"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:layout_marginLeft="25dp"
-                android:orientation="vertical"
-                android:background="#fff">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shopping" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="#000"
-                        android:textSize="20dp"
-                        android:text="SHOPPING, THE STAR AND EVERYTHING ELSE"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Great shopping and the star is a must for the adults."/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="match_parent" />
     </LinearLayout>
-    <!--main-content-->
+
 </android.support.constraint.ConstraintLayout>

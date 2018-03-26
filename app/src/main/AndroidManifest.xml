@@ -34,7 +34,6 @@
         <activity android:name=".RoomDetails" />
         <activity android:name=".NavigationPage" />
         <activity android:name=".volleyList" />
-        <activity android:name=".fragmentTest" />
         <activity android:name=".ReservationAboutUs" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -53,7 +52,7 @@
 
         <activity android:name=".MapTest" />
         <activity android:name=".MapActivity" />
-        <activity android:name=".FragMain"></activity>
+        <activity android:name=".Main2Activity" />
     </application>
 
 </manifest>
