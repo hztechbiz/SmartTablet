@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20sp"
-    tools:context="com.smartapp.hztech.smarttebletapp.volleyList">
+    tools:context="com.smartapp.hztech.smarttebletapp.VolleyWebServiceTesting.volleyList">
 
     <TextView
         android:layout_width="wrap_content"

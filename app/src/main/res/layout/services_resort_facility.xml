@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/banner"
-    tools:context="com.smartapp.hztech.smarttebletapp.ServicesHome">
+    tools:context="com.smartapp.hztech.smarttebletapp.ServicesSection.NavigationPage">
+
     <!--side menu-->
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -345,107 +346,162 @@
                 android:id="@+id/bck"
                 android:paddingRight="10dp"
                 android:text="Back"/>
-<LinearLayout
-    android:layout_width="10dp"
-    android:layout_height="wrap_content"></LinearLayout>
-            <SearchView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="#fff" />
+
 
         </LinearLayout>
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:background="#25a8d0">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:text="WELCOME" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:textColor="#fff"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text=" | "/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:id="@+id/roomdet"
-            android:text="YOUR ROOM"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:textColor="#fff"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text=" | "/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:id="@+id/naviga"
-            android:text="RESORT FACILITIES"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:textColor="#fff"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text=" | "/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:id="@+id/sp_offer_page"
-            android:text="SPECIAL OFFER"/>
-        </LinearLayout>
-        <LinearLayout
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_height="match_parent">
 
-            android:background="#99FFFFFF">
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="30dp"
-                android:textColor="#000"
-                android:text="Wecome to the Hotel Name"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:gravity="center"
-                android:padding="15dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec sit amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus scelerisque, arcu mi ornare nisi, at efficitur libero urna sed nulla. Suspendisse eleifend nulla euismod blandit scelerisque."/>
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <!--Row 1-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="366dp"
+                        android:layout_height="wrap_content"
+                        android:padding="25dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="#fff">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/resort" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:textSize="20dp"
+                            android:text="THEME PARK"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Pellentesque eu commodo erat. Vivamus hendrerit dictum magn bibendum. Maecenas facilisis rutrum sem."/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="366dp"
+                        android:layout_height="wrap_content"
+                        android:padding="25dp"
+                        android:gravity="center"
+                        android:layout_marginLeft="27dp"
+                        android:orientation="vertical"
+                        android:background="#fff">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/thempark" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:textSize="20dp"
+                            android:text="TOURS"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Pellentesque eu commodo erat. Vivamus hendrerit dictum magn bibendum. Maecenas facilisis rutrum sem."/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--Row 2-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="366dp"
+                        android:layout_height="wrap_content"
+                        android:padding="25dp"
+                        android:id="@+id/send"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="#fff">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bar" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:textSize="20dp"
+                            android:text="ACTIVITIES"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Pellentesque eu commodo erat. Vivamus hendrerit dictum magn bibendum. Maecenas facilisis rutrum sem."/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="366dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="27dp"
+                        android:background="#fff"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="25dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shopping" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="BOOK HERE"
+                            android:textColor="#000"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Pellentesque eu commodo erat. Vivamus hendrerit dictum magn bibendum. Maecenas facilisis rutrum sem." />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

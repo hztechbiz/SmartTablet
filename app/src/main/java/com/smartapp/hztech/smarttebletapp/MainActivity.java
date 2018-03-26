@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.smartapp.hztech.smarttebletapp.HomeSection.Main2Activity;
+
 public class MainActivity extends Activity {
 
     private static int SPLASH_TIME_OUT = 4000;
@@ -19,12 +21,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent HomeIntent = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(HomeIntent);
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+                                      @Override
+                                      public void run() {
+                                          Intent HomeIntent = new Intent(MainActivity.this, Main2Activity.class);
+                                          startActivity(HomeIntent);
+                                          finish();
+                                      }
+                                  },
+                SPLASH_TIME_OUT);
     }
 }

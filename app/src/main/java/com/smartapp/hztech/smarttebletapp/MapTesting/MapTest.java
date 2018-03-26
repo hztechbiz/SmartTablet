@@ -1,4 +1,4 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.MapTesting;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.maps.GoogleMap;
+import com.smartapp.hztech.smarttebletapp.R;
 
 
 public class MapTest extends AppCompatActivity{

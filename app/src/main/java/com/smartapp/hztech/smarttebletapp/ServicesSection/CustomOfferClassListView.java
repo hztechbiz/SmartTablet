@@ -1,4 +1,4 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.ServicesSection;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.smartapp.hztech.smarttebletapp.R;
 
 /**
  * Created by HNH on 3/16/2018.

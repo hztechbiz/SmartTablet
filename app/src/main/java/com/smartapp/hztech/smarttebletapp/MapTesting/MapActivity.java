@@ -1,4 +1,4 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.MapTesting;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.smartapp.hztech.smarttebletapp.R;
 
 /**
  * Created by HNH on 3/21/2018.

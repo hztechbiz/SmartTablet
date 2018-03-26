@@ -1,4 +1,4 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.HomeSection;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.ReservationSection.MakeReservation;
+import com.smartapp.hztech.smarttebletapp.ServicesSection.ServicesHome;
 
 public class HomeActivity extends Activity {
 

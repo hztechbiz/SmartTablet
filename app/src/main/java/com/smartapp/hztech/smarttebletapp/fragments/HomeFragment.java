@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.ServicesSection.ServicesHome;
 
 public class HomeFragment extends Fragment {
     OnFragmentUpdate mCallback;
@@ -32,8 +34,19 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        View view = inflater.inflate(R.layout.home_fragment, container, false);
+
+        LinearLayout serv = view.findViewById(R.id.services);
+        serv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//
+                ServicesHome fragmentt = new ServicesHome();
+                mCallback.onUpdateFragment(fragmentt);
+            }
+        });
+
+        return view;
     }
 
     public interface OnFragmentUpdate {

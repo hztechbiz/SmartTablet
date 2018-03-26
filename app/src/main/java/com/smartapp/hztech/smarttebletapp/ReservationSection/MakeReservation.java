@@ -1,8 +1,6 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.ReservationSection;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.smartapp.hztech.smarttebletapp.HomeSection.HomeActivity;
+import com.smartapp.hztech.smarttebletapp.R;
 
 public class MakeReservation extends Activity {
 
@@ -19,7 +20,7 @@ public class MakeReservation extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_make_reservation);
+        setContentView(R.layout.make_reservation);
 
         //        About us screen
         TextView aboutUsScreen = (TextView) findViewById(R.id.aboutPage);

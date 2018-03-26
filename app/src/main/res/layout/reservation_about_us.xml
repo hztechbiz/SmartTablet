@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/reservationbanner"
-    tools:context="com.smartapp.hztech.smarttebletapp.ReservationAboutUs">
+    tools:context="com.smartapp.hztech.smarttebletapp.ReservationSection.ReservationAboutUs">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

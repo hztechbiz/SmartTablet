@@ -1,4 +1,4 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.HomeSection;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
 

@@ -27,14 +27,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".MakeReservation" />
-        <activity android:name=".ServicesHome" />
-        <activity android:name=".SpecialOffer" />
-        <activity android:name=".RoomDetails" />
-        <activity android:name=".NavigationPage" />
-        <activity android:name=".volleyList" />
-        <activity android:name=".ReservationAboutUs" />
+        <activity android:name=".HomeSection.HomeActivity" />
+        <activity android:name=".ReservationSection.MakeReservation" />
+        <activity android:name=".ServicesSection.ServicesHome" />
+        <activity android:name=".ServicesSection.SpecialOffer" />
+        <activity android:name=".ServicesSection.RoomDetails" />
+        <activity android:name=".ServicesSection.NavigationPage" />
+        <activity android:name=".VolleyWebServiceTesting.volleyList" />
+        <activity android:name=".ReservationSection.ReservationAboutUs" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -50,9 +50,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".MapTest" />
-        <activity android:name=".MapActivity" />
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".MapTesting.MapTest" />
+        <activity android:name=".MapTesting.MapActivity" />
+        <activity android:name=".HomeSection.Main2Activity" />
     </application>
 
 </manifest>
