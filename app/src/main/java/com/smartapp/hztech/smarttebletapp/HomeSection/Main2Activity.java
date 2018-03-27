@@ -15,7 +15,7 @@ public class Main2Activity extends FragmentActivity implements HomeFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.main2);
 
         if (findViewById(R.id.fragment_container) != null) {
 

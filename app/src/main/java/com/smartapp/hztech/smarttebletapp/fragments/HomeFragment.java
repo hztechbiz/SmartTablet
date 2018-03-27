@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
         serv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
+
                 ServicesHome fragmentt = new ServicesHome();
                 mCallback.onUpdateFragment(fragmentt);
             }

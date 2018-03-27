@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,326 +7,326 @@
     android:background="@drawable/banner"
     tools:context="com.smartapp.hztech.smarttebletapp.ServicesSection.SpecialOffer">
     <!--side menu-->
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="#fff"
-        android:orientation="vertical"
-        >
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="#fff"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
 
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:background="#d9dee0"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="35dp"
-                    android:paddingTop="10dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginTop="20dp"-->
+                    <!--android:background="#d9dee0"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:paddingLeft="35dp"-->
+                    <!--android:paddingRight="35dp"-->
+                    <!--android:paddingTop="10dp">-->
 
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/home_icon" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/imageView"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/home_icon" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Home"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Home"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:background="@drawable/bggradient"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:background="@drawable/bggradient"-->
+                    <!--android:orientation="vertical">-->
 
-                    <ImageView
-                        android:id="@+id/tv"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/tvc" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/tv"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/tvc" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="OPERATING THE TELEVISION"
-                        android:textColor="#fff"
-                        android:textSize="13dp" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="OPERATING THE TELEVISION"-->
+                        <!--android:textColor="#fff"-->
+                        <!--android:textSize="13dp" />-->
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical">-->
 
-                    <ImageView
-                        android:id="@+id/wifi"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/wifi" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/wifi"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/wifi" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="CONNECT TO WIFI"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="CONNECT TO WIFI"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/useTablet"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/tab" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/useTablet"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/tab" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="HOW TO USE SMART TABLET"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="HOW TO USE SMART TABLET"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/info"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/info" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/info"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/info" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="USEFUL INFROMATION"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="USEFUL INFROMATION"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/map"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/map" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/map"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/map" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="LOCAL MAP"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="LOCAL MAP"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/region"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/region" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/region"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/region" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="LOCAL REGION"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="LOCAL REGION"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/weather"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/weather" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/weather"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/weather" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="WEATHER"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="WEATHER"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#c5c6c9" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#c5c6c9" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:padding="0dp">-->
 
-                    <ImageView
-                        android:id="@+id/news"
-                        android:layout_width="35dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/news" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/news"-->
+                        <!--android:layout_width="35dp"-->
+                        <!--android:layout_height="23dp"-->
+                        <!--android:src="@drawable/news" />-->
 
-                    <TextView
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="NEWS"
-                        android:textColor="#000"
-                        android:textSize="13dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#25a8d0" />
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="110dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="NEWS"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="13dp" />-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="5dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:background="#25a8d0" />-->
+            <!--</LinearLayout>-->
+        <!--</ScrollView>-->
+    <!--</LinearLayout>-->
     <!--side menu-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="10dp"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -435,4 +435,4 @@
         <!--listView End-->
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>
