@@ -53,6 +53,7 @@
         <activity android:name=".MapTesting.MapTest" />
         <activity android:name=".MapTesting.MapActivity" />
         <activity android:name=".HomeSection.Main2Activity" />
+        <activity android:name=".fragments.ServicesFragment"></activity>
     </application>
 
 </manifest>

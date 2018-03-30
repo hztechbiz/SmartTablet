@@ -16,20 +16,20 @@ import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
 
 public class NavigationPage extends Fragment {
 
-    HomeFragment.OnFragmentUpdate mCallBack;
+    //ServicesHome.OnFragmentUpdate mCallBack;
 public NavigationPage(){
 
 }
-public void onAttach(Activity activity){
-    super.onAttach(activity);
-    try {
-        mCallBack = (HomeFragment.OnFragmentUpdate) activity;
-    }
-    catch (ClassCastException e){
-        throw new ClassCastException(activity.toString() +
-        " must implement OnFragmentUpdate");
-    }
-}
+//public void onAttach(Activity activity){
+//    super.onAttach(activity);
+//    try {
+//        mCallBack = (ServicesHome.OnFragmentUpdate) activity;
+//    }
+//    catch (ClassCastException e){
+//        throw new ClassCastException(activity.toString() +
+//        " must implement OnFragmentUpdate");
+//    }
+//}
 
 
     @Override
@@ -37,14 +37,14 @@ public void onAttach(Activity activity){
     public View onCreateView(LayoutInflater inflater, ViewGroup container
     , Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.services_resort_facility, container, false);
-        Button back = view.findViewById(R.id.bck);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ServicesHome fragmentt = new ServicesHome();
-                mCallBack.onUpdateFragment(fragmentt);
-            }
-        });
+//        Button back = view.findViewById(R.id.bck);
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ServicesHome fragmentt = new ServicesHome();
+//                mCallBack.onUpdateFragment(fragmentt);
+//            }
+//        });
     return view;
     }
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public void onAttach(Activity activity){
 //
 //
 //    }
-public interface OnFragmentUpdate {
-    void onUpdateFragment(Fragment fragment);
-}
+//public interface OnFragmentUpdate {
+//    void onUpdateFragment(Fragment fragment);
+//}
 }

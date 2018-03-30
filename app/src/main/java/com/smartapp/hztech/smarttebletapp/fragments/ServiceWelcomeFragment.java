@@ -11,10 +11,10 @@ import android.widget.LinearLayout;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 
-public class HomeFragment extends Fragment {
+public class ServiceWelcomeFragment extends Fragment {
     FragmentListener mCallback;
 
-    public HomeFragment() {
+    public ServiceWelcomeFragment() {
 
     }
 
@@ -34,16 +34,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment, container, false);
-
-        LinearLayout serv = view.findViewById(R.id.services);
-        serv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ServicesFragment fragmentt = new ServicesFragment();
-                mCallback.onUpdateFragment(fragmentt);
-            }
-        });
+        View view = inflater.inflate(R.layout.services_home, container, false);
 
         return view;
     }

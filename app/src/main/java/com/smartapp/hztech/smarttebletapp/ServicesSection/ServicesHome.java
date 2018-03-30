@@ -9,17 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
+
 
 public class ServicesHome extends Fragment {
-   HomeFragment.OnFragmentUpdate mCallback;
-    public ServicesHome() {
+   OnFragmentUpdate mCallback;
+
+   public ServicesHome() {
 
     }
+
     public void onAttach(Activity activity){
         super.onAttach(activity);
         try {
-            mCallback = (HomeFragment.OnFragmentUpdate) activity;
+            mCallback = (OnFragmentUpdate) activity;
         }
         catch (ClassCastException e){
             throw new ClassCastException(activity.toString()
@@ -31,34 +33,6 @@ public class ServicesHome extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.services_home, container, false);
-
-        TextView room_detail = view.findViewById(R.id.roomdet);
-        TextView special_offer = view.findViewById(R.id.sp_offer_page);
-        TextView resort_facility = view.findViewById(R.id.naviga);
-
-        room_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoomDetails navigateToRoom = new RoomDetails();
-                mCallback.onUpdateFragment(navigateToRoom);
-            }
-        });
-
-        special_offer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SpecialOffer navigateSpecial_offer = new SpecialOffer();
-                mCallback.onUpdateFragment(navigateSpecial_offer);
-            }
-        });
-        resort_facility.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavigationPage navigationResort_facility = new NavigationPage();
-                mCallback.onUpdateFragment(navigationResort_facility);
-            }
-        });
-
 
         return view;
 

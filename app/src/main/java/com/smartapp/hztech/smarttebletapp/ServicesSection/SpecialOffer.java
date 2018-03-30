@@ -17,19 +17,19 @@ import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
 
 public class SpecialOffer extends Fragment {
 
-HomeFragment.OnFragmentUpdate mCallBack;
+//ServicesHome.OnFragmentUpdate mCallBack;
     public SpecialOffer(){
 
     }
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        try {
-            mCallBack = (HomeFragment.OnFragmentUpdate) activity;
-        }
-        catch (ClassCastException e){
-            throw new ClassCastException(activity.toString() + "must implement OnFragmentUpdate");
-        }
-    }
+//    public void onAttach(Activity activity){
+//        super.onAttach(activity);
+//        try {
+//            mCallBack = (ServicesHome.OnFragmentUpdate) activity;
+//        }
+//        catch (ClassCastException e){
+//            throw new ClassCastException(activity.toString() + "must implement OnFragmentUpdate");
+//        }
+//    }
     ListView lst;
     String[] OfferName = {
             "Special Offers",
@@ -56,14 +56,7 @@ HomeFragment.OnFragmentUpdate mCallBack;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.services_special_offer, container, false);
 
-        Button back = view.findViewById(R.id.bck);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View v) {
-                ServicesHome navigateService_home = new ServicesHome();
-                mCallBack.onUpdateFragment(navigateService_home);
-           }
-       });
+//
         lst = view.findViewById(R.id.spcial_offer_list);
 //        CustomOfferClassListView customOfferClassListView = new
 //                CustomOfferClassListView();

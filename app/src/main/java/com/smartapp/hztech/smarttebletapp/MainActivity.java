@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.smartapp.hztech.smarttebletapp.HomeSection.Main2Activity;
+import com.smartapp.hztech.smarttebletapp.fragments.ServicesFragment;
 
 public class MainActivity extends Activity {
 

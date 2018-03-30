@@ -9,8 +9,10 @@ import android.view.View;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.ServicesFragment;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 
-public class Main2Activity extends FragmentActivity implements HomeFragment.OnFragmentUpdate {
+public class Main2Activity extends FragmentActivity implements FragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class Main2Activity extends FragmentActivity implements HomeFragment.OnFr
     public void onNavItemClick(View view) {
         switch (view.getId()) {
             case R.id.itemHome:
-                HomeFragment fragment = new HomeFragment();
+                ServicesFragment fragment = new ServicesFragment();
                 updateFragment(fragment);
                 break;
             case R.id.itemHow:
