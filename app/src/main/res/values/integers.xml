@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="slideAnimationDuration">@android:integer/config_shortAnimTime</integer>
+    <integer name="ButtonBarAnimationDuration">@android:integer/config_shortAnimTime</integer>
+    <integer name="SlideUpDownDuration">@android:integer/config_mediumAnimTime</integer>
+</resources>

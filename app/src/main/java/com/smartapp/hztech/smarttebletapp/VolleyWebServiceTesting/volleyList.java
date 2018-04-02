@@ -31,7 +31,8 @@ public class volleyList extends AppCompatActivity {
         mTextviewResult = findViewById(R.id.txt_view_result);
         Button btnParse = findViewById(R.id.btn_parse);
 
-        mQueue = Volley.newRequestQueue(this);
+
+
 
         btnParse.setOnClickListener(new View.OnClickListener() {
             @Override

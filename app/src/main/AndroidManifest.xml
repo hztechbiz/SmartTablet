@@ -20,19 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeSection.HomeActivity" />
+        <activity android:name=".HomeActivity" />
         <activity android:name=".ReservationSection.MakeReservation" />
-        <activity android:name=".ServicesSection.ServicesHome" />
-        <activity android:name=".ServicesSection.SpecialOffer" />
-        <activity android:name=".ServicesSection.RoomDetails" />
-        <activity android:name=".ServicesSection.NavigationPage" />
         <activity android:name=".VolleyWebServiceTesting.volleyList" />
         <activity android:name=".ReservationSection.ReservationAboutUs" />
         <!--
@@ -41,7 +37,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -50,10 +46,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".MapTesting.MapTest" />
-        <activity android:name=".MapTesting.MapActivity" />
-        <activity android:name=".HomeSection.Main2Activity" />
-        <activity android:name=".fragments.ServicesFragment"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SetupActivity" />
+        <activity android:name=".SyncActivity" />
     </application>
 
 </manifest>

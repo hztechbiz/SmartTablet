@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.smartapp.hztech.smarttebletapp.HomeSection.HomeActivity;
+import com.smartapp.hztech.smarttebletapp.HomeActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 
 public class MakeReservation extends Activity {
