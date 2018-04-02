@@ -47,6 +47,7 @@ public class SyncActivity extends Activity {
 
     private void export() {
         String url = "http://192.168.1.105:2202/api/v1/export";
+        url = "http://hztech.biz/smarttablet/api.json";
 
         _queue.add(new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
