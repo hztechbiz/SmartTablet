@@ -22,7 +22,7 @@ public interface ServiceDao {
     @Query("SELECT * FROM services WHERE category_id = :category_id")
     List<Service> getAll(int category_id);
 
-    @Query("SELECT * FROM services WHERE id = :ids LIMIT 1")
+    @Query("SELECT * FROM services WHERE id = :id LIMIT 1")
     Service get(int id);
 
     @Update
