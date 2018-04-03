@@ -66,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bggradient"
+                    android:id="@+id/ott"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -202,6 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:id="@+id/itemMap"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -235,6 +237,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:id="@+id/itemLocalRegion"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -268,6 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:id="@+id/itemWeather"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -301,6 +305,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
+                    android:id="@+id/itemNews"
                     android:orientation="vertical"
                     android:padding="0dp">
 
