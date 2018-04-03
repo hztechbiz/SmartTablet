@@ -14,7 +14,9 @@ public class SplashActivity extends Activity {
 
     private int SPLASH_TIME_OUT = 1000;
     private String API_KEY = "ST@API_KEY";
+    private String SYNC_DONE = "ST@SYNC_DONE";
     private Boolean _isRegistered;
+    private Boolean _isSyncDone;
     private Boolean _isLoaded;
     private Boolean _isTimeout;
 
@@ -22,9 +24,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _isRegistered = false;
-        _isLoaded = false;
-        _isTimeout = false;
+        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = false;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -55,7 +55,7 @@ public class SplashActivity extends Activity {
      * Asynchronous method to check if API_KEY exists in database
      */
     private void checkSynchronized() {
-        new RetrieveSetting(this, API_KEY)
+        new RetrieveSetting(this, API_KEY, SYNC_DONE)
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
@@ -65,8 +65,18 @@ public class SplashActivity extends Activity {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
+                        String[] values = result != null ? (String[]) result : null;
+
                         _isLoaded = true;
-                        _isRegistered = result != null && !result.toString().isEmpty();
+
+                        if (values != null && values.length > 0) {
+                            try {
+                                _isRegistered = !values[0].isEmpty();
+                                _isSyncDone = !values[1].isEmpty();
+                            } catch (Exception ex) {
+                                // no need to handle
+                            }
+                        }
 
                         decide();
                     }
@@ -80,7 +90,7 @@ public class SplashActivity extends Activity {
      */
     private void decide() {
         if (_isLoaded && _isTimeout) {
-            if (_isRegistered) {
+            if (_isRegistered && _isSyncDone) {
                 switchScreen(MainActivity.class);
             } else {
                 switchScreen(SetupActivity.class);

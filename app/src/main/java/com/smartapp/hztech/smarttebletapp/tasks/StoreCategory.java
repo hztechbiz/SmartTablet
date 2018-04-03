@@ -3,21 +3,21 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.smartapp.hztech.smarttebletapp.entities.Setting;
+import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
-public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
+public class StoreCategory extends AsyncTask<Void, Void, Boolean> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
-    private Setting[] _settings;
+    private Category[] _categories;
     private Object error;
 
-    public StoreSetting(Context context, Setting... settings) {
+    public StoreCategory(Context context, Category... categories) {
         _db = DatabaseHelper.getInstance(context);
-        _settings = settings;
+        _categories = categories;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            _db.getAppDatabase().settingDao().insertAll(_settings);
+            _db.getAppDatabase().categoryDao().insertAll(_categories);
         } catch (Exception e) {
             error = e;
             return false;
@@ -50,17 +50,17 @@ public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
             _errorCallback.onError(error);
     }
 
-    public StoreSetting onError(AsyncResultBag.Error callback) {
+    public StoreCategory onError(AsyncResultBag.Error callback) {
         _errorCallback = callback;
         return this;
     }
 
-    public StoreSetting beforeExecuting(AsyncResultBag.Before callback) {
+    public StoreCategory beforeExecuting(AsyncResultBag.Before callback) {
         _beforeCallback = callback;
         return this;
     }
 
-    public StoreSetting onSuccess(AsyncResultBag.Success callback) {
+    public StoreCategory onSuccess(AsyncResultBag.Success callback) {
         _successCallback = callback;
         return this;
     }

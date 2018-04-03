@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreSetting;
 
@@ -53,7 +54,11 @@ public class SetupActivity extends Activity {
      * Method to store API_KEY in database
      */
     private void storeApiKey(String key) {
-        new StoreSetting(this, API_KEY, key)
+        Setting setting = new Setting();
+        setting.setName(API_KEY);
+        setting.setValue(key);
+
+        new StoreSetting(this, setting)
                 .beforeExecuting(new AsyncResultBag.Before() {
                     @Override
                     public void beforeExecuting() {

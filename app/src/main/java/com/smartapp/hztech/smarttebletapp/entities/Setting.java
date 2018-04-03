@@ -12,6 +12,14 @@ public class Setting {
 
     private String value;
 
+    public Setting(@NonNull String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public Setting() {
+    }
+
     public String getName() {
         return name;
     }

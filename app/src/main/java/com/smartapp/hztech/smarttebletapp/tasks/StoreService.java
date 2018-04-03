@@ -3,21 +3,21 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.smartapp.hztech.smarttebletapp.entities.Setting;
+import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
-public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
+public class StoreService extends AsyncTask<Void, Void, Boolean> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
-    private Setting[] _settings;
+    private Service[] _services;
     private Object error;
 
-    public StoreSetting(Context context, Setting... settings) {
+    public StoreService(Context context, Service... services) {
         _db = DatabaseHelper.getInstance(context);
-        _settings = settings;
+        _services = services;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            _db.getAppDatabase().settingDao().insertAll(_settings);
+            _db.getAppDatabase().serviceDao().insertAll(_services);
         } catch (Exception e) {
             error = e;
             return false;
@@ -50,17 +50,17 @@ public class StoreSetting extends AsyncTask<Void, Void, Boolean> {
             _errorCallback.onError(error);
     }
 
-    public StoreSetting onError(AsyncResultBag.Error callback) {
+    public StoreService onError(AsyncResultBag.Error callback) {
         _errorCallback = callback;
         return this;
     }
 
-    public StoreSetting beforeExecuting(AsyncResultBag.Before callback) {
+    public StoreService beforeExecuting(AsyncResultBag.Before callback) {
         _beforeCallback = callback;
         return this;
     }
 
-    public StoreSetting onSuccess(AsyncResultBag.Success callback) {
+    public StoreService onSuccess(AsyncResultBag.Success callback) {
         _successCallback = callback;
         return this;
     }

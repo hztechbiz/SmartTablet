@@ -3,20 +3,26 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.smartapp.hztech.smarttebletapp.dao.ServiceDao;
+import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
-public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
+import java.util.List;
+
+public class RetrieveServices extends AsyncTask<Void, Void, List<Service>> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
-    private String[] _keys;
+    private int[] _ids;
+    private int _category_id;
     private Object error;
 
-    public RetrieveSetting(Context context, String... keys) {
+    public RetrieveServices(Context context, int category_id, int... ids) {
         _db = DatabaseHelper.getInstance(context);
-        _keys = keys;
+        _ids = ids;
+        _category_id = category_id;
     }
 
     @Override
@@ -28,11 +34,19 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(Void... voids) {
-        String[] values = null;
+    protected List<Service> doInBackground(Void... voids) {
+        List<Service> values = null;
 
         try {
-            values = _db.getAppDatabase().settingDao().getAll(_keys);
+            ServiceDao serviceDao = _db.getAppDatabase().serviceDao();
+
+            if (_category_id != 0)
+                values = serviceDao.getAll(_category_id);
+            else if (_ids != null)
+                values = serviceDao.getAll(_ids);
+            else
+                values = serviceDao.getAll();
+
         } catch (Exception e) {
             error = e;
         }
@@ -41,7 +55,7 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     }
 
     @Override
-    protected void onPostExecute(String[] values) {
+    protected void onPostExecute(List<Service> values) {
         super.onPostExecute(values);
 
         if (error == null && _successCallback != null)
@@ -51,17 +65,17 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
             _errorCallback.onError(error);
     }
 
-    public RetrieveSetting onError(AsyncResultBag.Error callback) {
+    public RetrieveServices onError(AsyncResultBag.Error callback) {
         _errorCallback = callback;
         return this;
     }
 
-    public RetrieveSetting beforeExecuting(AsyncResultBag.Before callback) {
+    public RetrieveServices beforeExecuting(AsyncResultBag.Before callback) {
         _beforeCallback = callback;
         return this;
     }
 
-    public RetrieveSetting onSuccess(AsyncResultBag.Success callback) {
+    public RetrieveServices onSuccess(AsyncResultBag.Success callback) {
         _successCallback = callback;
         return this;
     }
