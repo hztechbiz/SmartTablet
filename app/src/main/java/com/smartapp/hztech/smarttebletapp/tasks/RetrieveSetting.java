@@ -44,8 +44,13 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     protected void onPostExecute(String[] values) {
         super.onPostExecute(values);
 
+        Object val = values;
+
+        if (values != null && values.length == 1)
+            val = values[0];
+
         if (error == null && _successCallback != null)
-            _successCallback.onSuccess(values);
+            _successCallback.onSuccess(val);
 
         if (error != null && _errorCallback != null)
             _errorCallback.onError(error);
