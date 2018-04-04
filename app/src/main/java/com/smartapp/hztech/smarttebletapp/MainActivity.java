@@ -1,5 +1,6 @@
 package com.smartapp.hztech.smarttebletapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -28,7 +29,7 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
         setContentView(R.layout.activity_main);
 
         menuBgColorChange();
-        
+
         if (findViewById(R.id.fragment_container) != null) {
 
             if (savedInstanceState != null) {
@@ -119,9 +120,12 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
             }
         }).execute();
 
+
     }
 
     private void menuBgColorChange() {
+
+
     }
 
 
@@ -135,9 +139,17 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
                 CategoryFragment categoryFragment = new CategoryFragment();
                 updateFragment(categoryFragment);
                 break;
-
-
         }
+
+        LinearLayout ott_linear = findViewById(R.id.ott);
+        LinearLayout wifi_linear = findViewById(R.id.itemWifi);
+        LinearLayout howTo_linear = findViewById(R.id.itemHow);
+        LinearLayout Info_linear = findViewById(R.id.itemInfo);
+        LinearLayout map_linear = findViewById(R.id.itemMap);
+        LinearLayout localReg_linear = findViewById(R.id.itemLocalRegion);
+        LinearLayout weather_linear = findViewById(R.id.itemWeather);
+        LinearLayout news_linear = findViewById(R.id.itemNews);
+
     }
 
     public void updateFragment(Fragment newFragment) {
@@ -153,5 +165,36 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
     @Override
     public void onUpdateFragment(Fragment fragment) {
         updateFragment(fragment);
+    }
+
+    public void BackgroundColorChange(View view) {
+        LinearLayout ott_linear = (LinearLayout) findViewById(R.id.ott);
+        LinearLayout wifi_linear = (LinearLayout) findViewById(R.id.itemWifi);
+        LinearLayout howTo_linear = (LinearLayout) findViewById(R.id.itemHow);
+        LinearLayout Info_linear = (LinearLayout) findViewById(R.id.itemInfo);
+        LinearLayout map_linear = (LinearLayout) findViewById(R.id.itemMap);
+        LinearLayout localReg_linear = (LinearLayout) findViewById(R.id.itemLocalRegion);
+        LinearLayout weather_linear = (LinearLayout) findViewById(R.id.itemWeather);
+        LinearLayout news_linear = (LinearLayout) findViewById(R.id.itemNews);
+
+        LinearLayout[] all_items = new LinearLayout[]{ott_linear, wifi_linear, howTo_linear, Info_linear, map_linear, localReg_linear,
+                weather_linear, news_linear};
+
+        for (int i = 0; i < all_items.length; i++) { // smj arha hia kia horha hai? pehle loop chalega saary linear layouts par sb par background zero kardega
+            all_items[i].setBackgroundColor(0);
+        }
+
+        view.setBackgroundColor(Color.CYAN); // not working.
+//       switch (view.getId()){
+//           case R.id.ott:
+//               ott_linear.setBackgroundColor(Color.CYAN);
+//               break;
+//
+//           case R.id.itemMap:
+//               ott_linear.setBackgroundColor(0);
+//               map_linear.setBackgroundColor(Color.CYAN);
+//               break;
+//       }
+
     }
 }
