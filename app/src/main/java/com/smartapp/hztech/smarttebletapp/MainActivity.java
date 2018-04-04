@@ -27,6 +27,8 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
 
         setContentView(R.layout.activity_main);
 
+        menuBgColorChange();
+        
         if (findViewById(R.id.fragment_container) != null) {
 
             if (savedInstanceState != null) {
@@ -40,15 +42,6 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
         }
-
-        new RetrieveSetting(this, "ST@API_KEY")
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        Log.d("API_Key", result.toString());
-                    }
-                }).execute();
-
 
         new RetrieveSetting(this,
                 "enable_operating_the_television",
@@ -127,6 +120,10 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
         }).execute();
 
     }
+
+    private void menuBgColorChange() {
+    }
+
 
     public void onNavItemClick(View view) {
         switch (view.getId()) {
