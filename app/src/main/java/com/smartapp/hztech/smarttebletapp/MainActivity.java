@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
                 String how_use_tablet_category = values[8];
                 String useful_information_category = values[9];
 
-                enable_connect_to_wifi = "0";
+//                enable_connect_to_wifi = "0";
 
                 LinearLayout ott_linear = findViewById(R.id.ott);
                 LinearLayout wifi_linear = findViewById(R.id.itemWifi);
