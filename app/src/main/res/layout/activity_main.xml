@@ -62,12 +62,12 @@
                     android:background="#c5c6c9" />
                 <!--android:background="@drawable/bggradient"-->
                 <LinearLayout
+                    android:id="@+id/ott"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:onClick="BackgroundColorChange"
-                    android:id="@+id/ott"
                     android:gravity="center"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical">
 
                     <ImageView
@@ -99,10 +99,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-
                     android:gravity="center"
-
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical">
 
                     <ImageView
@@ -136,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -171,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -202,12 +200,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:id="@+id/itemMap"
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -237,12 +235,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemLocalRegion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:id="@+id/itemLocalRegion"
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -272,12 +270,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemWeather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:onClick="BackgroundColorChange"
-                    android:id="@+id/itemWeather"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 
@@ -307,12 +305,12 @@
                     android:background="#c5c6c9" />
 
                 <LinearLayout
+                    android:id="@+id/itemNews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:gravity="center"
-                    android:id="@+id/itemNews"
-                    android:onClick="BackgroundColorChange"
+                    android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:padding="0dp">
 

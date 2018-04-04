@@ -10,14 +10,10 @@ import android.view.ViewGroup;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 
-/**
- * Created by HNH on 3/28/2018.
- */
-
 public class ServiceResortFacilityFragment extends Fragment {
     FragmentListener mCallback;
 
-    public ServiceResortFacilityFragment(){
+    public ServiceResortFacilityFragment() {
 
     }
 
@@ -31,12 +27,13 @@ public class ServiceResortFacilityFragment extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentUpdate");
         }
     }
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.services_resort_facility, container, false);
-            return view;
-        }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.services_resort_facility, container, false);
+        return view;
+    }
 
 
 }

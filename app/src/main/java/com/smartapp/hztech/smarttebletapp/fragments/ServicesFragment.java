@@ -1,8 +1,8 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +41,7 @@ public class ServicesFragment extends Fragment {
 
         if (fragment_container != null) {
 
-            ServiceWelcomeFragment firstFragment = new ServiceWelcomeFragment();
+            WelcomeFragment firstFragment = new WelcomeFragment();
 
             getChildFragmentManager().beginTransaction()
                     .add(fragment_container.getId(), firstFragment).commit();
@@ -50,7 +50,7 @@ public class ServicesFragment extends Fragment {
         view.findViewById(R.id.serv_home).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ServiceWelcomeFragment firstFragment = new ServiceWelcomeFragment();
+                WelcomeFragment firstFragment = new WelcomeFragment();
                 updateFragment(firstFragment);
             }
         });

@@ -3,8 +3,11 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+
+import java.util.HashMap;
 
 public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     private DatabaseHelper _db;
@@ -29,10 +32,24 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
 
     @Override
     protected String[] doInBackground(Void... voids) {
-        String[] values = null;
+        Setting[] settings;
+        HashMap<String, Setting> keyedSettings = new HashMap<>();
+        String[] values = new String[_keys.length];
 
         try {
-            values = _db.getAppDatabase().settingDao().getAll(_keys);
+            settings = _db.getAppDatabase().settingDao().getAll(_keys);
+
+            for (int i = 0; i < settings.length; i++) {
+                keyedSettings.put(settings[i].getName(), settings[i]);
+            }
+
+            for (int i = 0; i < settings.length; i++) {
+                values[i] = null;
+
+                if (keyedSettings.containsKey(_keys[i])) {
+                    values[i] = keyedSettings.get(_keys[i]).getValue();
+                }
+            }
         } catch (Exception e) {
             error = e;
         }

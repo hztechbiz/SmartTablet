@@ -14,8 +14,8 @@ public interface SettingDao {
     @Query("SELECT value FROM setting WHERE name = :name LIMIT 1")
     String get(String name);
 
-    @Query("SELECT value FROM setting WHERE name IN (:names)")
-    String[] getAll(String[] names);
+    @Query("SELECT * FROM setting WHERE name IN (:names)")
+    Setting[] getAll(String[] names);
 
     @Update
     void updateAll(Setting... settings);
