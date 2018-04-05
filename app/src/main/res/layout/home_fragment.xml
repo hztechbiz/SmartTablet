@@ -21,194 +21,205 @@
             android:maxWidth="20dp"
             android:src="@drawable/logo" />
 
-        <LinearLayout
+
+        <ListView
+            android:id="@+id/list_calllog"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"></ListView>
 
-            <LinearLayout
-                android:id="@+id/send"
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:background="#fff"
-                android:orientation="vertical"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="25dp">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginLeft="25dp"-->
+            <!--android:layout_marginRight="25dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:orientation="horizontal">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/send"-->
+                <!--android:layout_width="366dp"-->
+                <!--android:layout_height="166dp"-->
+                <!--android:background="#fff"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingBottom="25dp"-->
+                <!--android:paddingLeft="25dp"-->
+                <!--android:paddingRight="25dp"-->
+                <!--android:paddingTop="25dp">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/resort" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="61dp"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:text="RESORTS"
-                        android:textColor="#000"
-                        android:textSize="20dp" />
-                </LinearLayout>
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/resort" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:text="RESORTS"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="20dp" />-->
+                <!--</LinearLayout>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Welcome to the Resorts. Everything you need to know about your room and the Resort facilities" />
-                </LinearLayout>
-            </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="20dp">-->
 
-            <LinearLayout
-                android:id="@+id/services"
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:layout_marginLeft="25dp"
-                android:background="#fff"
-                android:orientation="vertical"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="25dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Welcome to the Resorts. Everything you need to know about your room and the Resort facilities" />-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/services"-->
+                <!--android:layout_width="366dp"-->
+                <!--android:layout_height="166dp"-->
+                <!--android:layout_marginLeft="25dp"-->
+                <!--android:background="#fff"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingBottom="25dp"-->
+                <!--android:paddingLeft="25dp"-->
+                <!--android:paddingRight="25dp"-->
+                <!--android:paddingTop="25dp">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bar" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="61dp"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:text="EATERIES, BARS AND NIGHTLIFE"
-                        android:textColor="#000"
-                        android:textSize="20dp" />
-                </LinearLayout>
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/bar" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:text="EATERIES, BARS AND NIGHTLIFE"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="20dp" />-->
+                <!--</LinearLayout>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="A great selection to appeal to all likes and tastes." />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="20dp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="A great selection to appeal to all likes and tastes." />-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+            <!---->
+        <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:background="#fff"
-                android:orientation="vertical"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="25dp">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="25dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_marginRight="25dp">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="366dp"-->
+                <!--android:layout_height="166dp"-->
+                <!--android:background="#fff"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingBottom="25dp"-->
+                <!--android:paddingLeft="25dp"-->
+                <!--android:paddingRight="25dp"-->
+                <!--android:paddingTop="25dp">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/thempark" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="61dp"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:text="THEME PARKS, TOURS AND ATTRACTIONS"
-                        android:textColor="#000"
-                        android:textSize="20dp" />
-                </LinearLayout>
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/thempark" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:text="THEME PARKS, TOURS AND ATTRACTIONS"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="20dp" />-->
+                <!--</LinearLayout>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="You will never be short of anything to fo on the coast." />
-                </LinearLayout>
-            </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="20dp">-->
 
-            <LinearLayout
-                android:layout_width="366dp"
-                android:layout_height="166dp"
-                android:layout_marginLeft="25dp"
-                android:background="#fff"
-                android:orientation="vertical"
-                android:paddingBottom="25dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="25dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="You will never be short of anything to fo on the coast." />-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="61dp"
-                    android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="366dp"-->
+                <!--android:layout_height="166dp"-->
+                <!--android:layout_marginLeft="25dp"-->
+                <!--android:background="#fff"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingBottom="25dp"-->
+                <!--android:paddingLeft="25dp"-->
+                <!--android:paddingRight="25dp"-->
+                <!--android:paddingTop="25dp">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shopping" />
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="61dp"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:text="SHOPPING, THE STAR AND EVERYTHING ELSE"
-                        android:textColor="#000"
-                        android:textSize="20dp" />
-                </LinearLayout>
+                    <!--<ImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/shopping" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:text="SHOPPING, THE STAR AND EVERYTHING ELSE"-->
+                        <!--android:textColor="#000"-->
+                        <!--android:textSize="20dp" />-->
+                <!--</LinearLayout>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Great shopping and the star is a must for the adults." />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="20dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Great shopping and the star is a must for the adults." />-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+            <!---->
+        <!--</LinearLayout>-->
+
+
     </LinearLayout>
     <!--main-content-->
 </android.support.constraint.ConstraintLayout>

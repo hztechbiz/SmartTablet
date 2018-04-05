@@ -21,7 +21,7 @@ public class HomeActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.home_fragment);
         LinearLayout aaa = findViewById(R.id.send);
-        LinearLayout sercv = findViewById(R.id.services);
+//        LinearLayout sercv = findViewById(R.id.services);
         aaa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,13 +29,13 @@ public class HomeActivity extends Activity {
                 startActivity(a);
             }
         });
-        sercv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ser = new Intent(HomeActivity.this, ServicesHome.class);
-                startActivity(ser);
-            }
-        });
+//        sercv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent ser = new Intent(HomeActivity.this, ServicesHome.class);
+//                startActivity(ser);
+//            }
+//        });
 
     }
 }

@@ -63,6 +63,7 @@
                 <action android:name="android.intent.action.BATTERY_OKAY" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
