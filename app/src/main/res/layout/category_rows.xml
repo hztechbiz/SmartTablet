@@ -3,46 +3,55 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="@color/black_overlay"
+    android:padding="15dp"
     >
-
+    <!--android:paddingBottom="25dp"-->
+    <!--android:paddingLeft="25dp"-->
+    <!--android:paddingRight="25dp"-->
+    <!--android:paddingTop="25dp"-->
 
     <LinearLayout
-        android:id="@+id/send"
-        android:layout_width="366dp"
-        android:layout_height="146dp"
-        android:background="#fff"
-        android:orientation="vertical"
-        android:paddingBottom="25dp"
-        android:paddingLeft="25dp"
+        android:id="@+id/bx_category"
 
-        android:paddingRight="25dp"
-        android:paddingTop="25dp">
+        android:layout_width="370dp"
+        android:layout_height="160dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="20dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:background="@drawable/white_background_corner_radius"
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+
+
             android:orientation="horizontal">
 
             <!--<ImageView-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:background="@drawable/resort" />-->
-            <TextView
-                android:id="@+id/text_calllog_number"
-                android:layout_width="wrap_content"
-                android:hint="name"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <!--<TextView-->
+                <!--android:id="@+id/text_calllog_number"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:hint="name"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="20sp"-->
+                <!--android:textStyle="bold" />-->
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/resort"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="30dp"
                 android:hint="RESORTS"
+                android:layout_gravity="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#000"
@@ -53,11 +62,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:id="@+id/text_calllog_time"
+                android:gravity="fill"
                 android:layout_height="wrap_content"
                 android:hint="Welcome to the Resorts. Everything you need to know about your room and the Resort facilities" />
         </LinearLayout>

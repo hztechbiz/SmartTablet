@@ -56,10 +56,18 @@ public class GridAdapter extends BaseAdapter {
 
         Category category = getItem(position);
 
-        ((TextView) gridView.findViewById(R.id.text_calllog_number)).setText(category.getName());
+      //  ((TextView) gridView.findViewById(R.id.text_calllog_number)).setText(category.getName());
+         LinearLayout box_categories= (LinearLayout) gridView.findViewById(R.id.bx_category);
         ((TextView) gridView.findViewById(R.id.text_calllog_date)).setText(category.getName());
-        ((TextView) gridView.findViewById(R.id.text_calllog_time)).setText(category.getName());
+        ((TextView) gridView.findViewById(R.id.text_calllog_time)).setText(category.getDescription());
+        box_categories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         return gridView;
+
+
     }
 }

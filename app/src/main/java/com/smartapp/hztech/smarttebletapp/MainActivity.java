@@ -124,7 +124,8 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
     }
 
     public void onNavItemClick(View view) {
-        makeMenuItemActive(view);
+        if (view.getId() != R.id.itemHome)
+            makeMenuItemActive(view);
 
         switch (view.getId()) {
             case R.id.itemHome:
@@ -170,6 +171,7 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
             all_items[i].setBackgroundColor(0);
         }
 
-        view.setBackgroundColor(Color.CYAN);
+        view.setBackgroundColor(Color.parseColor("#2cb3dc"));
+       // view.setBackground(R.drawable.sidemenu_gradient_bg);
     }
 }

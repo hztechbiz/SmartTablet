@@ -43,7 +43,7 @@ public class CustomCategoryAdapter extends ArrayAdapter<HashMap<String, String>>
         view = inflater.inflate(resource, parent, false);
 
         holder = new Holder();
-        holder.text_number = (TextView) view.findViewById(R.id.text_calllog_number);
+       // holder.text_number = (TextView) view.findViewById(R.id.text_calllog_number);
         holder.text_date = (TextView) view.findViewById(R.id.text_calllog_date);
         holder.text_time = (TextView) view.findViewById(R.id.text_calllog_time);
 

@@ -121,6 +121,7 @@ public class SyncActivity extends Activity {
             Category category = new Category();
             category.setId(c.getInt("id"));
             category.setName(c.getString("name"));
+            category.setDescription(c.getString("description"));
 
             if (!c.isNull("parent_id"))
                 category.setParent_id(c.getInt("parent_id"));

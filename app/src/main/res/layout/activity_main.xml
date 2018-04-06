@@ -31,13 +31,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:background="#d9dee0"
+                    android:background="@drawable/gray_background_radius"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="35dp"
-                    android:paddingTop="10dp">
+                   >
 
                     <ImageView
                         android:id="@+id/imageView"
@@ -65,7 +62,8 @@
                     android:id="@+id/ott"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical">
@@ -88,17 +86,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemWifi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical">
@@ -122,21 +119,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemHow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/useTablet"
@@ -157,21 +152,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
-                    android:orientation="vertical"
-                    android:padding="0dp">
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/info"
@@ -192,22 +185,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    >
 
                     <ImageView
                         android:id="@+id/map"
@@ -228,21 +219,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemLocalRegion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/region"
@@ -263,21 +252,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemWeather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/weather"
@@ -298,21 +285,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemNews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/news"
@@ -332,7 +317,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_marginTop="10dp"
                     android:background="#25a8d0" />
             </LinearLayout>
         </ScrollView>

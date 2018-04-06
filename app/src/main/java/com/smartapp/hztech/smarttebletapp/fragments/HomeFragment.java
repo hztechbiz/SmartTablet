@@ -3,10 +3,13 @@ package com.smartapp.hztech.smarttebletapp.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -29,6 +32,8 @@ public class HomeFragment extends Fragment {
     private GridView gridView;
     HashMap<String, String> item;
     private GridAdapter gridAdapter;
+    FrameLayout fragment_container;
+    private int _parent_id;
 
     FragmentListener mCallback;
 
@@ -52,6 +57,12 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
+        fragment_container = view.findViewById(R.id.services_fragment_container);
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            _parent_id = Integer.parseInt(getArguments().getString("Category_id"));
+        }
 
         gridView = (GridView) view.findViewById(R.id.grdView);
         _categories = new ArrayList<>();
@@ -66,13 +77,35 @@ public class HomeFragment extends Fragment {
 
         gridAdapter = new GridAdapter(getContext(), _categories);
         gridView.setAdapter(gridAdapter);
+        Log.d("adapterListener", "checking");
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Bundle bundle = new Bundle();
+                bundle.putString("Category_id", String.valueOf(17));
+
+                HomeFragment hmFragment = new HomeFragment();
+                hmFragment.setArguments(bundle);
+                updateFragment(hmFragment);
+            }
+        });
         return view;
+    }
+
+    public void updateFragment(Fragment newFragment) {
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+
+        transaction.replace(fragment_container.getId(), newFragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
     }
 
     private void getCategories() {
 
-        new RetrieveCategories(getContext(), 0)
+        new RetrieveCategories(getContext(), _parent_id)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
