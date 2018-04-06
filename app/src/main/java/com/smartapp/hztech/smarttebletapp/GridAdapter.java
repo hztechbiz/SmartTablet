@@ -7,6 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.smartapp.hztech.smarttebletapp.entities.Category;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by HNH on 4/5/2018.
@@ -14,27 +21,23 @@ import android.widget.LinearLayout;
 
 public class GridAdapter extends BaseAdapter {
 
-    private int icons[];
-    private String img[];
-    private Layout lnr[];
-    private String nam[];
-    private String des[];
+    private List<Category> categories;
     private Context context;
     private LayoutInflater inflater;
 
-    public GridAdapter(Context context,Layout lnr[] ){
-        this.context= context;
-        this.lnr = lnr;
-
+    public GridAdapter(Context context, List<Category> categories) {
+        this.context = context;
+        this.categories = categories;
     }
+
     @Override
     public int getCount() {
-        return lnr.length;
+        return categories.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return lnr[position];
+    public Category getItem(int position) {
+        return categories.get(position);
     }
 
     @Override
@@ -45,12 +48,18 @@ public class GridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View gridView = convertView;
-        if (convertView == null){
+
+        if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             gridView = inflater.inflate(R.layout.category_rows, null);
         }
-        LinearLayout linre = (LinearLayout) gridView.findViewById(R.id.send);
-      //  linre.setLayoutMode(lnr[position]);
+
+        Category category = getItem(position);
+
+        ((TextView) gridView.findViewById(R.id.text_calllog_number)).setText(category.getName());
+        ((TextView) gridView.findViewById(R.id.text_calllog_date)).setText(category.getName());
+        ((TextView) gridView.findViewById(R.id.text_calllog_time)).setText(category.getName());
+
         return gridView;
     }
 }

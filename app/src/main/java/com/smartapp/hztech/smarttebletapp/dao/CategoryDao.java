@@ -14,13 +14,13 @@ import java.util.List;
 @Dao
 public interface CategoryDao {
     @Query("SELECT * FROM categories")
-    List<Category> getAll();
+    Category[] getAll();
 
     @Query("SELECT * FROM categories WHERE id IN (:ids)")
-    List<Category> getAll(int[] ids);
+    Category[] getAll(int[] ids);
 
-    @Query("SELECT * FROM categories WHERE id = :parent_id")
-    List<Category> getAll(int parent_id);
+    @Query("SELECT * FROM categories WHERE parent_id = :parent_id")
+    Category[] getAll(int parent_id);
 
     @Query("SELECT * FROM categories WHERE id = :id LIMIT 1")
     Category get(int id);

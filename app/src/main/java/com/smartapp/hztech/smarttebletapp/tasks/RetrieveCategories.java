@@ -2,6 +2,7 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.smartapp.hztech.smarttebletapp.dao.CategoryDao;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
@@ -10,7 +11,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
 import java.util.List;
 
-public class RetrieveCategories extends AsyncTask<Void, Void, List<Category>> {
+public class RetrieveCategories extends AsyncTask<Void, Void, Category[]> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
@@ -34,15 +35,15 @@ public class RetrieveCategories extends AsyncTask<Void, Void, List<Category>> {
     }
 
     @Override
-    protected List<Category> doInBackground(Void... voids) {
-        List<Category> values = null;
+    protected Category[] doInBackground(Void... voids) {
+        Category[] values = null;
 
         try {
             CategoryDao categoryDao = _db.getAppDatabase().categoryDao();
 
             if (_parent_id != 0)
                 values = categoryDao.getAll(_parent_id);
-            else if (_ids != null)
+            else if (_ids.length != 0)
                 values = categoryDao.getAll(_ids);
             else
                 values = categoryDao.getAll();
@@ -55,7 +56,7 @@ public class RetrieveCategories extends AsyncTask<Void, Void, List<Category>> {
     }
 
     @Override
-    protected void onPostExecute(List<Category> values) {
+    protected void onPostExecute(Category[] values) {
         super.onPostExecute(values);
 
         if (error == null && _successCallback != null)
