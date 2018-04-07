@@ -10,7 +10,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
 import java.util.List;
 
-public class RetrieveServices extends AsyncTask<Void, Void, List<Service>> {
+public class RetrieveServices extends AsyncTask<Void, Void, Service[] > {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
@@ -34,15 +34,15 @@ public class RetrieveServices extends AsyncTask<Void, Void, List<Service>> {
     }
 
     @Override
-    protected List<Service> doInBackground(Void... voids) {
-        List<Service> values = null;
+    protected Service[]  doInBackground(Void... voids) {
+        Service[]  values = null;
 
         try {
             ServiceDao serviceDao = _db.getAppDatabase().serviceDao();
 
             if (_category_id != 0)
                 values = serviceDao.getAll(_category_id);
-            else if (_ids != null)
+            else if (_ids.length > 0)
                 values = serviceDao.getAll(_ids);
             else
                 values = serviceDao.getAll();
@@ -55,7 +55,7 @@ public class RetrieveServices extends AsyncTask<Void, Void, List<Service>> {
     }
 
     @Override
-    protected void onPostExecute(List<Service> values) {
+    protected void onPostExecute(Service[]  values) {
         super.onPostExecute(values);
 
         if (error == null && _successCallback != null)

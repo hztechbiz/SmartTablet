@@ -14,13 +14,13 @@ import java.util.List;
 @Dao
 public interface ServiceDao {
     @Query("SELECT * FROM services")
-    List<Service> getAll();
+    Service[] getAll();
 
     @Query("SELECT * FROM services WHERE id IN (:ids)")
-    List<Service> getAll(int[] ids);
+    Service[] getAll(int[] ids);
 
     @Query("SELECT * FROM services WHERE category_id = :category_id")
-    List<Service> getAll(int category_id);
+    Service[]  getAll(int category_id);
 
     @Query("SELECT * FROM services WHERE id = :id LIMIT 1")
     Service get(int id);

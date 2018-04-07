@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
             _parent_id = Integer.parseInt(getArguments().getString("Category_id"));
         }
 
-        gridView = (GridView) view.findViewById(R.id.grdView);
+       // gridView = (GridView) view.findViewById(R.id.grdView);
         _categories = new ArrayList<>();
 
         getCategories();
@@ -77,14 +77,13 @@ public class HomeFragment extends Fragment {
 
         gridAdapter = new GridAdapter(getContext(), _categories);
         gridView.setAdapter(gridAdapter);
+
         Log.d("adapterListener", "checking");
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Bundle bundle = new Bundle();
                 bundle.putString("Category_id", String.valueOf(17));
-
                 HomeFragment hmFragment = new HomeFragment();
                 hmFragment.setArguments(bundle);
                 updateFragment(hmFragment);

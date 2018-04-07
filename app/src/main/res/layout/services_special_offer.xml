@@ -4,30 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/banner"
     tools:context="com.smartapp.hztech.smarttebletapp.ServicesSection.SpecialOffer">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginLeft="10dp"
         >
 
         <!--listView Start-->
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#59000000"
-    android:layout_margin="15dp">
+    android:layout_height="match_parent">
 
 
-    <ListView
+    <GridView
         android:id="@+id/spcial_offer_list"
         android:layout_width="wrap_content"
-        android:divider="@null"
-        android:background="#fff"
-        android:layout_height="wrap_content" />
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:layout_height="wrap_content" >
+    </GridView>
 </LinearLayout>
         <!--listView End-->
 
