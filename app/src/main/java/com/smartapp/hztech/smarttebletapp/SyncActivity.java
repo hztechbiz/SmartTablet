@@ -16,6 +16,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Hotel;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreCategory;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreHotel;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreService;
@@ -31,10 +32,12 @@ import java.util.Map;
 public class SyncActivity extends Activity {
 
     private String SYNC_DONE = "ST@SYNC_DONE";
+    private String TOKEN = "ST@TOKEN";
     private boolean _isSettingsStored;
     private boolean _isHotelInfoStored;
     private boolean _isCategoriesStored;
     private boolean _isServicesStored;
+    private String _token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +54,31 @@ public class SyncActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        sync();
+
+        new RetrieveSetting(this, TOKEN)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            _token = result.toString();
+                            sync();
+                        } else {
+                            switchScreen(SetupActivity.class);
+                        }
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        switchScreen(SetupActivity.class);
+                    }
+                })
+                .execute();
     }
 
     private void sync() {
-        String url = "http://192.168.1.105:2202/api/v1/export";
-        url = "http://hztech.biz/smarttablet/api.json";
+        String url = Constants.GetApiUrl("export");
+        //url = "http://hztech.biz/smarttablet/api.json";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -81,8 +103,8 @@ public class SyncActivity extends Activity {
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<String, String>();
 
-                params.put("AppKey", "smart-$2y$10$RdYWP.Z6T1DFDjSSunimzOUcMDGIBmyqCQ11/Vof.idVxCY14h8ky-api");
-                params.put("Authorization", "h0SvovaXacjRKH2vkDk6RneNGRt13rSZA06oGX1B3Z5CsFccMbUTzU4zS66Z");
+                params.put("AppKey", Constants.APP_KEY);
+                params.put("Authorization", _token);
 
                 return params;
             }

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.ServicesSection.ServicesOfferClassGridAdapter;
+import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
@@ -26,14 +26,13 @@ import java.util.List;
 
 public class ServiceSpecialOfferFragment extends Fragment {
 
+    FragmentListener mCallback;
     private List<Service> _services;
     private GridView gridView;
-    private ServicesOfferClassGridAdapter gridAdapter;
+    private ServicesGridAdapter gridAdapter;
     private int _parent_id;
 
-    FragmentListener mCallback;
-
-    public ServiceSpecialOfferFragment(){
+    public ServiceSpecialOfferFragment() {
 
     }
 
@@ -47,33 +46,34 @@ public class ServiceSpecialOfferFragment extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentUpdate");
         }
     }
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.services_special_offer, container, false);
-            _services = new ArrayList<>();
-            getServices();
-            gridView = view.findViewById(R.id.spcial_offer_list);
-            gridAdapter = new ServicesOfferClassGridAdapter(getContext(), _services);
-            gridView.setAdapter(gridAdapter);
 
-            return view;
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.services_special_offer, container, false);
+        _services = new ArrayList<>();
+        getServices();
+        gridView = view.findViewById(R.id.spcial_offer_list);
+        //gridAdapter = new ServicesGridAdapter(getContext(), _services);
+        //gridView.setAdapter(gridAdapter);
+
+        return view;
+    }
 
     public void getServices() {
         new RetrieveServices(getContext(), 17)
                 .onSuccess(new AsyncResultBag.Success() {
-            @Override
-            public void onSuccess(Object result) {
-                if (result != null) {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
 
-                    Service[]  services = (Service[] ) result;
-                    _services.clear();
-                    _services.addAll(Arrays.asList(services));
-                    Log.d("_serv", _services.size()+" ");
-                    gridAdapter.notifyDataSetChanged();
-                }
-            }
-        }).execute();
+                            Service[] services = (Service[]) result;
+                            _services.clear();
+                            _services.addAll(Arrays.asList(services));
+                            Log.d("_serv", _services.size() + " ");
+                            gridAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }).execute();
     }
 }

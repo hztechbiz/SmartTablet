@@ -9,7 +9,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
 import java.util.HashMap;
 
-public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
+public class RetrieveSetting extends AsyncTask<Void, Void, HashMap<String, String>> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
@@ -31,24 +31,15 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(Void... voids) {
+    protected HashMap<String, String> doInBackground(Void... voids) {
         Setting[] settings;
-        HashMap<String, Setting> keyedSettings = new HashMap<>();
-        String[] values = new String[_keys.length];
+        HashMap<String, String> values = new HashMap<>();
 
         try {
             settings = _db.getAppDatabase().settingDao().getAll(_keys);
 
             for (int i = 0; i < settings.length; i++) {
-                keyedSettings.put(settings[i].getName(), settings[i]);
-            }
-
-            for (int i = 0; i < settings.length; i++) {
-                values[i] = null;
-
-                if (keyedSettings.containsKey(_keys[i])) {
-                    values[i] = keyedSettings.get(_keys[i]).getValue();
-                }
+                values.put(settings[i].getName(), settings[i].getValue());
             }
         } catch (Exception e) {
             error = e;
@@ -58,13 +49,14 @@ public class RetrieveSetting extends AsyncTask<Void, Void, String[]> {
     }
 
     @Override
-    protected void onPostExecute(String[] values) {
+    protected void onPostExecute(HashMap<String, String> values) {
         super.onPostExecute(values);
 
         Object val = values;
 
-        if (values != null && values.length == 1)
-            val = values[0];
+        if (values.size() == 1 && _keys.length == 1) {
+            val = values.get(_keys[0]);
+        }
 
         if (error == null && _successCallback != null)
             _successCallback.onSuccess(val);

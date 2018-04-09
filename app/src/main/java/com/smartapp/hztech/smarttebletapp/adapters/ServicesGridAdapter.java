@@ -1,10 +1,11 @@
-package com.smartapp.hztech.smarttebletapp.ServicesSection;
+package com.smartapp.hztech.smarttebletapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
@@ -12,19 +13,17 @@ import com.smartapp.hztech.smarttebletapp.entities.Service;
 
 import java.util.List;
 
-/**
- * Created by HNH on 4/7/2018.
- */
+public class ServicesGridAdapter extends BaseAdapter {
 
-public class ServicesOfferClassGridAdapter extends BaseAdapter {
+    private final View.OnClickListener itemClickListener;
     private List<Service> services;
     private Context context;
     private LayoutInflater inflater;
 
-
-    public ServicesOfferClassGridAdapter(Context context, List<Service> services) {
+    public ServicesGridAdapter(Context context, List<Service> services, View.OnClickListener itemClickListener) {
         this.context = context;
         this.services = services;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -44,22 +43,28 @@ public class ServicesOfferClassGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View OfferGridView = convertView;
+        View view = convertView;
+
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            OfferGridView = inflater.inflate(R.layout.spofferlayout, null);
+            view = inflater.inflate(R.layout.spofferlayout, null);
         }
+
         Service service = getItem(position);
+        String description = service.getDescription();
 
-
-        String shrt_description = service.getDescription();
-        if (shrt_description.length() > 100) {
-            shrt_description = service.getDescription().substring(0, 100);
+        if (description.length() > 100) {
+            description = service.getDescription().substring(0, 100);
         }
-        ((TextView) OfferGridView.findViewById(R.id.offer_title)).setText(service.getTitle());
-        ((TextView) OfferGridView.findViewById(R.id.offer_descrip)).setText(shrt_description);
 
+        Button button = view.findViewById(R.id.btn_more);
 
-        return OfferGridView;
+        ((TextView) view.findViewById(R.id.offer_title)).setText(service.getTitle());
+        ((TextView) view.findViewById(R.id.offer_descrip)).setText(description);
+
+        button.setTag(service.getId());
+        button.setOnClickListener(itemClickListener);
+
+        return view;
     }
 }

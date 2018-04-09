@@ -3,42 +3,42 @@ package com.smartapp.hztech.smarttebletapp.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ListView;
 
-import com.smartapp.hztech.smarttebletapp.GridAdapter;
 import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
+import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
+import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveServices;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    private View view;
-    private ListView list_Category;
-    private List<Category> _categories;
-    private GridView gridView;
-    HashMap<String, String> item;
-    private GridAdapter gridAdapter;
-    FrameLayout fragment_container;
-    private int _parent_id;
 
-    FragmentListener mCallback;
+    private FragmentListener fragmentListener;
+    private List<Category> _categories;
+    private List<Service> _services;
+    private GridView gridView;
+    private CategoryGridAdapter categoryAdapter;
+    private ServicesGridAdapter servicesAdapter;
+    private int _category_id;
+    private Boolean _has_children;
 
     public HomeFragment() {
 
+    }
+
+    public void setFragmentListener(FragmentListener fragmentListener) {
+        this.fragmentListener = fragmentListener;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            mCallback = (FragmentListener) activity;
+            fragmentListener = (FragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentUpdate");
@@ -56,55 +56,72 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.home_fragment, container, false);
-        fragment_container = view.findViewById(R.id.services_fragment_container);
         Bundle bundle = getArguments();
 
-        if (bundle != null) {
-            _parent_id = Integer.parseInt(getArguments().getString("Category_id"));
-        }
-
-       // gridView = (GridView) view.findViewById(R.id.grdView);
-        _categories = new ArrayList<>();
-
-        getCategories();
-
-        //CustomCategoryAdapter adapter = new CustomCategoryAdapter(getActivity(), R.layout.category_rows, _categories);
-        //list_Category = (ListView) view.findViewById(R.id.list_calllog);
-        //list_Category.setAdapter(adapter);
-        //GridAdapter gridAdapter = new GridAdapter(getActivity(),R.layout.category_rows, item);
         gridView = view.findViewById(R.id.list_calllog);
 
-        gridAdapter = new GridAdapter(getContext(), _categories);
-        gridView.setAdapter(gridAdapter);
+        _category_id = 0;
+        _has_children = false;
 
-        Log.d("adapterListener", "checking");
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        if (bundle != null) {
+            _category_id = getArguments().getInt("category_id");
+            _has_children = getArguments().getBoolean("has_children");
+        }
+
+        _categories = new ArrayList<>();
+        _services = new ArrayList<>();
+
+        categoryAdapter = new CategoryGridAdapter(getContext(), _categories, new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("Category_id", String.valueOf(17));
-                HomeFragment hmFragment = new HomeFragment();
-                hmFragment.setArguments(bundle);
-                updateFragment(hmFragment);
+
+                if (v.getTag() != null) {
+                    bundle.putInt("category_id", Integer.parseInt(v.getTag().toString()));
+                }
+
+                if (v.getTag(R.string.tag_has_children) != null) {
+                    bundle.putBoolean("has_children", Boolean.valueOf(v.getTag(R.string.tag_has_children).toString()));
+                }
+
+                HomeFragment fragment = new HomeFragment();
+                fragment.setArguments(bundle);
+
+                fragmentListener.onUpdateFragment(fragment);
             }
         });
+
+        servicesAdapter = new ServicesGridAdapter(getContext(), _services, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+
+                if (v.getTag() != null) {
+                    bundle.putInt("service_id", Integer.parseInt(v.getTag().toString()));
+                }
+
+                ServicesFragment fragment = new ServicesFragment();
+                fragment.setArguments(bundle);
+
+                fragmentListener.onUpdateFragment(fragment);
+            }
+        });
+
+        if (_category_id > 0 && !_has_children) {
+            getServices();
+            gridView.setAdapter(servicesAdapter);
+        } else {
+            getCategories();
+            gridView.setAdapter(categoryAdapter);
+        }
+
         return view;
     }
 
-    public void updateFragment(Fragment newFragment) {
-
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-
-        transaction.replace(fragment_container.getId(), newFragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
-    }
-
     private void getCategories() {
-
-        new RetrieveCategories(getContext(), _parent_id)
+        new RetrieveCategories(getContext(), _category_id)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -113,7 +130,25 @@ public class HomeFragment extends Fragment {
 
                             _categories.clear();
                             _categories.addAll(Arrays.asList(categories));
-                            gridAdapter.notifyDataSetChanged();
+
+                            categoryAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }).execute();
+    }
+
+    private void getServices() {
+        new RetrieveServices(getContext(), _category_id)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Service[] services = (Service[]) result;
+
+                            _services.clear();
+                            _services.addAll(Arrays.asList(services));
+
+                            servicesAdapter.notifyDataSetChanged();
                         }
                     }
                 }).execute();

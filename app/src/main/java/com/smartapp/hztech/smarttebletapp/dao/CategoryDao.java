@@ -9,20 +9,18 @@ import android.arch.persistence.room.Update;
 
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 
-import java.util.List;
-
 @Dao
 public interface CategoryDao {
-    @Query("SELECT * FROM categories")
+    @Query("SELECT c.id, c.name, c.description, c.parent_id, (SELECT count(*) FROM categories WHERE parent_id = c.id) AS children_count FROM categories AS c left join categories AS c1 ON c1.id = c.parent_id")
     Category[] getAll();
 
-    @Query("SELECT * FROM categories WHERE id IN (:ids)")
+    @Query("SELECT c.id, c.name, c.description, c.parent_id, (SELECT count(*) FROM categories WHERE parent_id = c.id) AS children_count FROM categories AS c left join categories AS c1 ON c1.id = c.parent_id WHERE c.id IN (:ids)")
     Category[] getAll(int[] ids);
 
-    @Query("SELECT * FROM categories WHERE parent_id = :parent_id")
+    @Query("SELECT c.id, c.name, c.description, c.parent_id, (SELECT count(*) FROM categories WHERE parent_id = c.id) AS children_count FROM categories AS c left join categories AS c1 ON c1.id = c.parent_id WHERE c.parent_id = :parent_id")
     Category[] getAll(int parent_id);
 
-    @Query("SELECT * FROM categories WHERE id = :id LIMIT 1")
+    @Query("SELECT c.id, c.name, c.description, c.parent_id, (SELECT count(*) FROM categories WHERE parent_id = c.id) AS children_count FROM categories AS c left join categories AS c1 ON c1.id = c.parent_id WHERE c.id = :id LIMIT 1")
     Category get(int id);
 
     @Update

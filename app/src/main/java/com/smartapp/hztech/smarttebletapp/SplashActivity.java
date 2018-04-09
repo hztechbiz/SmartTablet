@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
+import java.util.HashMap;
+
 public class SplashActivity extends Activity {
 
     private int SPLASH_TIME_OUT = 1000;
@@ -65,17 +67,13 @@ public class SplashActivity extends Activity {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        String[] values = result != null ? (String[]) result : null;
+                        HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
                         _isLoaded = true;
 
-                        if (values != null && values.length > 0) {
-                            try {
-                                _isRegistered = !values[0].isEmpty();
-                                _isSyncDone = !values[1].isEmpty();
-                            } catch (Exception ex) {
-                                // no need to handle
-                            }
+                        if (values != null) {
+                            _isRegistered = values.containsKey(API_KEY) && !values.get(API_KEY).isEmpty();
+                            _isSyncDone = values.containsKey(SYNC_DONE) && !values.get(SYNC_DONE).isEmpty();
                         }
 
                         decide();

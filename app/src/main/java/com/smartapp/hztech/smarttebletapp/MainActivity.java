@@ -10,12 +10,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.ServicesFragment;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
+
+import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity implements FragmentListener {
 
@@ -35,8 +36,7 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
             }
 
             HomeFragment firstFragment = new HomeFragment();
-
-            firstFragment.setArguments(getIntent().getExtras());
+            firstFragment.setFragmentListener(this);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
@@ -60,19 +60,19 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
         ).onSuccess(new AsyncResultBag.Success() {
             @Override
             public void onSuccess(Object result) {
-                String[] values = result != null ? (String[]) result : null;
+                HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
                 if (values != null) {
-                    String enable_operating_the_television = values[0];
-                    String enable_connect_to_wifi = values[1];
-                    String enable_how_use_tablet = values[2];
-                    String enable_useful_information_category = values[3];
-                    String enable_weather = values[4];
-                    String enable_news = values[5];
-                    String operating_the_television_service = values[6];
-                    String connect_to_wifi_service = values[7];
-                    String how_use_tablet_category = values[8];
-                    String useful_information_category = values[9];
+                    String enable_operating_the_television = values.containsKey("enable_operating_the_television") ? values.get("enable_operating_the_television") : "1";
+                    String enable_connect_to_wifi = values.containsKey("enable_connect_to_wifi") ? values.get("enable_connect_to_wifi") : "1";
+                    String enable_how_use_tablet = values.containsKey("enable_how_use_tablet") ? values.get("enable_how_use_tablet") : "1";
+                    String enable_useful_information_category = values.containsKey("enable_useful_information_category") ? values.get("enable_useful_information_category") : "1";
+                    String enable_weather = values.containsKey("enable_weather") ? values.get("enable_weather") : "1";
+                    String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "1";
+                    String operating_the_television_service = values.containsKey("operating_the_television_service") ? values.get("operating_the_television_service") : "0";
+                    String connect_to_wifi_service = values.containsKey("connect_to_wifi_service") ? values.get("connect_to_wifi_service") : "0";
+                    String how_use_tablet_category = values.containsKey("how_use_tablet_category") ? values.get("how_use_tablet_category") : "0";
+                    String useful_information_category = values.containsKey("useful_information_category") ? values.get("useful_information_category") : "0";
 
                     LinearLayout ott_linear = findViewById(R.id.ott);
                     LinearLayout wifi_linear = findViewById(R.id.itemWifi);
@@ -129,12 +129,12 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
 
         switch (view.getId()) {
             case R.id.itemHome:
-                ServicesFragment fragment = new ServicesFragment();
-                updateFragment(fragment);
+                HomeFragment f1 = new HomeFragment();
+                updateFragment(f1);
                 break;
             case R.id.itemHow:
-                CategoryFragment categoryFragment = new CategoryFragment();
-                updateFragment(categoryFragment);
+                ServicesFragment f2 = new ServicesFragment();
+                updateFragment(f2);
                 break;
         }
     }
@@ -172,6 +172,6 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
         }
 
         view.setBackgroundColor(Color.parseColor("#2cb3dc"));
-       // view.setBackground(R.drawable.sidemenu_gradient_bg);
+        // view.setBackground(R.drawable.sidemenu_gradient_bg);
     }
 }

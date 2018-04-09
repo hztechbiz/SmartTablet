@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/serviceItem"
     android:layout_width="match_parent"
-    android:padding="10dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="380dp"
-        android:background="@drawable/white_background_corner_radius"
         android:layout_height="170dp"
+        android:background="@drawable/white_background_corner_radius"
         android:orientation="horizontal">
 
         <ImageView
@@ -35,19 +36,19 @@
                 android:id="@+id/offer_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginTop="8dp"
                 android:hint="Description Here" />
 
             <Button
-                android:id="@+id/offer_more_btn"
+                android:id="@+id/btn_more"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:textSize="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:text="Learn More"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="10dp" />
 
         </LinearLayout>
 

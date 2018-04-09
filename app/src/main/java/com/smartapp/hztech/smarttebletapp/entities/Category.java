@@ -2,6 +2,7 @@ package com.smartapp.hztech.smarttebletapp.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "categories")
@@ -15,6 +16,9 @@ public class Category {
     private String description;
 
     private int parent_id;
+
+    @Ignore
+    private int children_count;
 
     public int getId() {
         return id;
@@ -46,5 +50,13 @@ public class Category {
 
     public void setParent_id(int parent_id) {
         this.parent_id = parent_id;
+    }
+
+    public int getChildren_count() {
+        return children_count;
+    }
+
+    public void setChildren_count(int children_count) {
+        this.children_count = children_count;
     }
 }

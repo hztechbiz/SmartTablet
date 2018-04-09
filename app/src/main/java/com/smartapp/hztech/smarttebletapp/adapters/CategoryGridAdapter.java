@@ -1,7 +1,6 @@
-package com.smartapp.hztech.smarttebletapp;
+package com.smartapp.hztech.smarttebletapp.adapters;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +8,22 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by HNH on 4/5/2018.
- */
+public class CategoryGridAdapter extends BaseAdapter {
 
-public class GridAdapter extends BaseAdapter {
-
+    private View.OnClickListener itemClickListener;
     private List<Category> categories;
     private Context context;
     private LayoutInflater inflater;
 
-    public GridAdapter(Context context, List<Category> categories) {
+    public CategoryGridAdapter(Context context, List<Category> categories, View.OnClickListener itemClickListener) {
         this.context = context;
         this.categories = categories;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -51,23 +47,21 @@ public class GridAdapter extends BaseAdapter {
 
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            gridView = inflater.inflate(R.layout.category_rows, null);
+            gridView = inflater.inflate(R.layout.category_item, null);
         }
 
         Category category = getItem(position);
 
-      //  ((TextView) gridView.findViewById(R.id.text_calllog_number)).setText(category.getName());
-         LinearLayout box_categories= (LinearLayout) gridView.findViewById(R.id.bx_category);
-        ((TextView) gridView.findViewById(R.id.text_calllog_date)).setText(category.getName());
-        ((TextView) gridView.findViewById(R.id.text_calllog_time)).setText(category.getDescription());
-        box_categories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        LinearLayout box_categories = gridView.findViewById(R.id.bx_category);
 
-            }
-        });
+        ((TextView) gridView.findViewById(R.id.txt_title)).setText(category.getName());
+        ((TextView) gridView.findViewById(R.id.txt_description)).setText(category.getDescription());
+
+        box_categories.setTag(category.getId());
+        box_categories.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+
+        box_categories.setOnClickListener(itemClickListener);
+
         return gridView;
-
-
     }
 }

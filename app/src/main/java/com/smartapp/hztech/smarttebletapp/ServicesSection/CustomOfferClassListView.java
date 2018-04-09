@@ -61,7 +61,7 @@ public class CustomOfferClassListView extends ArrayAdapter<String> {
             heading = v.findViewById(R.id.offer_title);
             description = v.findViewById(R.id.offer_descrip);
             image = v.findViewById(R.id.offer_img);
-            button = v.findViewById(R.id.offer_more_btn);
+            button = v.findViewById(R.id.btn_more);
         }
     }
 }
