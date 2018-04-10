@@ -57,7 +57,7 @@ public class SpecialOffer extends Fragment {
         View view = inflater.inflate(R.layout.services_special_offer, container, false);
 
 //
-        lst = view.findViewById(R.id.spcial_offer_list);
+        //lst = view.findViewById(R.id.spcial_offer_list);
 //        CustomOfferClassListView customOfferClassListView = new
 //                CustomOfferClassListView();
 //
