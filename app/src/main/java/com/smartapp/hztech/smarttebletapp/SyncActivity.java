@@ -3,9 +3,16 @@ package com.smartapp.hztech.smarttebletapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,6 +33,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +50,9 @@ public class SyncActivity extends Activity {
     private boolean _isCategoriesStored;
     private boolean _isServicesStored;
     private String _token;
+    private URL url;
+    private InputStream in;
+    private ImageView backgorundImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +64,11 @@ public class SyncActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_sync);
+
+        // backgorundImage = (ImageView) findViewById(R.id.bg_image);
+        new DownloadbBgImage().execute("https://group-1.s3.us-west-2.amazonaws.com/hotel-1_background.jpeg");
+        new DownloadLogoImage().execute("https://group-1.s3.us-west-2.amazonaws.com/hotel-1_logo.jpeg");
+
     }
 
     @Override
@@ -257,5 +277,119 @@ public class SyncActivity extends Activity {
         builder.setMessage(message).setPositiveButton("Ok", null);
 
         builder.show();
+    }
+
+//    private void setImage(Drawable drawable) {
+//        backgorundImage.setBackgroundDrawable(drawable);
+//    }
+
+    public class DownloadbBgImage extends AsyncTask<String, Integer, Drawable> {
+        @Override
+        protected Drawable doInBackground(String... arg0) {
+            Log.d("Arug_Check", arg0[0]);
+            return downloadBGImage(arg0[0]);
+        }
+
+//        protected void onPostExecute(Drawable image) {
+//            setImage(image);
+//        }
+    }
+
+    public class DownloadLogoImage extends AsyncTask<String, Integer, Drawable> {
+        @Override
+        protected Drawable doInBackground(String... arg0) {
+            Log.d("Arug_Check", arg0[0]);
+            return downloadLogoImage(arg0[0]);
+        }
+
+//        protected void onPostExecute(Drawable image) {
+//            setImage(image);
+//        }
+    }
+
+    private Drawable downloadBGImage(String _url) {
+        try {
+            url = new URL(_url);
+            in = url.openStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            int n = in.read(buf);
+            while (n != -1) {
+                out.write(buf, 0, n);
+                n = in.read(buf);
+            }
+            out.close();
+            in.close();
+            byte[] response = out.toByteArray();
+            String filePath = getFilesDir().getPath() + File.separator + "SyncBackground_" + ".jpg";
+
+            Log.d("check_filePath", filePath);
+            FileOutputStream fos = new FileOutputStream(filePath);
+
+            fos.write(response);
+            fos.close();
+
+// ye file read kar k set kar rah h
+//            File imgFile = new File(filePath);
+//            Log.d("Check_img", imgFile.toString());
+//            if (imgFile.exists()) {
+//                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                Log.d("Check_Time", myBitmap.toString());
+//                backgorundImage.setImageBitmap(myBitmap);
+//
+//                if (in != null) {
+//                    in.close();
+//                }
+//                if (buf != null) {
+//                    buf.clone();
+//                }
+//            }
+        } catch (Exception ex) {
+            Log.d("Error_Check", ex.toString());
+        }
+        return null;
+    }
+
+    private Drawable downloadLogoImage(String _url) {
+        try {
+            url = new URL(_url);
+            in = url.openStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            int n = in.read(buf);
+            while (n != -1) {
+                out.write(buf, 0, n);
+                n = in.read(buf);
+            }
+            out.close();
+            in.close();
+            byte[] response = out.toByteArray();
+            String filePath = getFilesDir().getPath() + File.separator + "SyncLogo_" + ".jpg";
+
+            Log.d("check_filePath", filePath);
+            FileOutputStream fos = new FileOutputStream(filePath);
+
+            fos.write(response);
+            fos.close();
+
+
+            File imgFile = new File(filePath);
+            Log.d("Check_img", imgFile.toString());
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                Log.d("Check_Time", myBitmap.toString());
+                backgorundImage.setImageBitmap(myBitmap);
+
+//                if (in != null) {
+//                    in.close();
+//                }
+//                if (buf != null) {
+//                    buf.clone();
+//                }
+            }
+        } catch (Exception ex) {
+            Log.d("Error_Check", ex.toString());
+        }
+        return null;
     }
 }

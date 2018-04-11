@@ -1,12 +1,15 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
@@ -18,6 +21,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveServices;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +63,21 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         Bundle bundle = getArguments();
+
+        File imgBG = new File("/data/data/com.smartapp.hztech.smarttebletapp/files/SyncBackground_.jpg");
+        if (imgBG.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+            ImageView bgImag = (ImageView) view.findViewById(R.id.main_bg_img);
+            bgImag.setImageBitmap(myBitmap);
+        }
+
+        File imglogo = new File("/data/data/com.smartapp.hztech.smarttebletapp/files/SyncLogo_.jpg");
+        if (imglogo.exists()) {
+            Bitmap LogoBitmap = BitmapFactory.decodeFile(imglogo.getAbsolutePath());
+            ImageView logImag = (ImageView) view.findViewById(R.id.MainLogo);
+            logImag.setImageBitmap(LogoBitmap);
+        }
+
 
         gridView = view.findViewById(R.id.list_calllog);
 

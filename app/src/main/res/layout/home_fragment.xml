@@ -3,32 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/banner"
+
     tools:context="com.smartapp.hztech.smarttebletapp.fragments.HomeFragment">
     <!--main-content-->
+    <ImageView
+
+        android:id="@+id/main_bg_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/white_background_corner_radius"
-            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="15dp"
-            android:src="@drawable/logo" />
+            android:id="@+id/MainLogo"
+            android:paddingTop="15dp" />
 
 
         <GridView
-            android:layout_margin="15dp"
             android:id="@+id/list_calllog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="15dp"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"></GridView>
 

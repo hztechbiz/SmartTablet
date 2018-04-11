@@ -6,11 +6,21 @@
     android:background="@drawable/bggradient"
     tools:context="com.smartapp.hztech.smarttebletapp.SetupActivity">
 
+
+    <!--<ImageView-->
+    <!--android:alpha="0.2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:id="@+id/bg_image"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--tools:ignore="ContentDescription" />-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
+
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -27,5 +37,6 @@
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
