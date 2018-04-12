@@ -20,10 +20,12 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveServices;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -32,10 +34,12 @@ public class HomeFragment extends Fragment {
     private List<Category> _categories;
     private List<Service> _services;
     private GridView gridView;
+    private ImageView _logoImageView, _bgImageView;
     private CategoryGridAdapter categoryAdapter;
     private ServicesGridAdapter servicesAdapter;
     private int _category_id;
     private Boolean _has_children;
+    private String FILE_PATH = "ST@FILE_PATH";
 
     public HomeFragment() {
 
@@ -64,22 +68,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         Bundle bundle = getArguments();
 
-        File imgBG = new File("/data/data/com.smartapp.hztech.smarttebletapp/files/SyncBackground_.jpg");
-        if (imgBG.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-            ImageView bgImag = (ImageView) view.findViewById(R.id.main_bg_img);
-            bgImag.setImageBitmap(myBitmap);
-        }
-
-        File imglogo = new File("/data/data/com.smartapp.hztech.smarttebletapp/files/SyncLogo_.jpg");
-        if (imglogo.exists()) {
-            Bitmap LogoBitmap = BitmapFactory.decodeFile(imglogo.getAbsolutePath());
-            ImageView logImag = (ImageView) view.findViewById(R.id.MainLogo);
-            logImag.setImageBitmap(LogoBitmap);
-        }
-
-
         gridView = view.findViewById(R.id.list_calllog);
+        _bgImageView = view.findViewById(R.id.main_bg_img);
+        _logoImageView = view.findViewById(R.id.MainLogo);
 
         _category_id = 0;
         _has_children = false;
@@ -136,7 +127,37 @@ public class HomeFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
+        setBranding();
+
         return view;
+    }
+
+    private void setBranding() {
+        new RetrieveSetting(getContext(), FILE_PATH)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            String filePath = result.toString();
+
+                            if (filePath != null) {
+                                File imgBG = new File(filePath + "/Background.jpg");
+                                File imglogo = new File(filePath + "/Logo.jpg");
+
+                                if (imgBG.exists()) {
+                                    Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                    _bgImageView.setImageBitmap(myBitmap);
+                                }
+
+                                if (imglogo.exists()) {
+                                    Bitmap LogoBitmap = BitmapFactory.decodeFile(imglogo.getAbsolutePath());
+                                    _logoImageView.setImageBitmap(LogoBitmap);
+                                }
+                            }
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void getCategories() {

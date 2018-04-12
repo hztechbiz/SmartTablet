@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,6 +22,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Hotel;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.tasks.DownloadImage;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreCategory;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreHotel;
@@ -45,30 +45,33 @@ public class SyncActivity extends Activity {
 
     private String SYNC_DONE = "ST@SYNC_DONE";
     private String TOKEN = "ST@TOKEN";
+    private String FILE_PATH = "ST@FILE_PATH";
     private boolean _isSettingsStored;
     private boolean _isHotelInfoStored;
     private boolean _isCategoriesStored;
     private boolean _isServicesStored;
+    private boolean _hasLogo;
+    private boolean _hasBackground;
+    private boolean _logoDownloaded;
+    private boolean _backgroundDownloaded;
+    private boolean _isPathStored;
     private String _token;
-    private URL url;
-    private InputStream in;
-    private ImageView backgorundImage;
+    private int _extraFieldsLength;
+    private int _indexesFilled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = false;
+        _hasBackground = _hasLogo = _logoDownloaded = _backgroundDownloaded = false;
+        _extraFieldsLength = 1;
+        _indexesFilled = 0;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_sync);
-
-        // backgorundImage = (ImageView) findViewById(R.id.bg_image);
-        new DownloadbBgImage().execute("https://group-1.s3.us-west-2.amazonaws.com/hotel-1_background.jpeg");
-        new DownloadLogoImage().execute("https://group-1.s3.us-west-2.amazonaws.com/hotel-1_logo.jpeg");
-
     }
 
     @Override
@@ -214,7 +217,10 @@ public class SyncActivity extends Activity {
     }
 
     private void storeHotelSettings(JSONArray meta) throws JSONException {
-        Setting[] settings = new Setting[meta.length()];
+        int length = meta.length() + _extraFieldsLength;
+        Setting[] settings = new Setting[length];
+        String logo = null;
+        String background = null;
 
         for (int i = 0; i < meta.length(); i++) {
             JSONObject m = meta.getJSONObject(i);
@@ -224,7 +230,42 @@ public class SyncActivity extends Activity {
             setting.setValue(m.getString("meta_value"));
 
             settings[i] = setting;
+
+            if (setting.getName().equals("logo")) {
+                _hasLogo = !setting.getValue().isEmpty();
+                logo = setting.getValue();
+            }
+
+            if (setting.getName().equals("background")) {
+                _hasBackground = !setting.getValue().isEmpty();
+                background = setting.getValue();
+            }
+            _indexesFilled++;
         }
+
+        if (_hasLogo)
+            new DownloadImage(this, logo, getFilePath("Logo.jpg"))
+                    .onSuccess(new AsyncResultBag.Success() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            Log.d("DownloadedImages", result.toString());
+                            _logoDownloaded = true;
+                        }
+                    })
+                    .execute();
+
+        if (_hasBackground)
+            new DownloadImage(this, background, getFilePath("Background.jpg"))
+                    .onSuccess(new AsyncResultBag.Success() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            Log.d("DownloadedImages", result.toString());
+                            _backgroundDownloaded = true;
+                        }
+                    })
+                    .execute();
+
+        settings[_indexesFilled++] = new Setting(FILE_PATH, getFilePath(null));
 
         new StoreSetting(this, settings)
                 .onSuccess(new AsyncResultBag.Success() {
@@ -250,7 +291,8 @@ public class SyncActivity extends Activity {
     }
 
     private void decide() {
-        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored;
+        Boolean isDownloaded = (!_hasBackground || _backgroundDownloaded) && (!_hasLogo || _logoDownloaded);
+        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored && isDownloaded;
 
         if (isDone) {
             new StoreSetting(this, new Setting(SYNC_DONE, "1"))
@@ -279,117 +321,12 @@ public class SyncActivity extends Activity {
         builder.show();
     }
 
-//    private void setImage(Drawable drawable) {
-//        backgorundImage.setBackgroundDrawable(drawable);
-//    }
+    private String getFilePath(String filename) {
+        String path = getFilesDir().getPath();
 
-    public class DownloadbBgImage extends AsyncTask<String, Integer, Drawable> {
-        @Override
-        protected Drawable doInBackground(String... arg0) {
-            Log.d("Arug_Check", arg0[0]);
-            return downloadBGImage(arg0[0]);
-        }
+        if (filename == null)
+            return path;
 
-//        protected void onPostExecute(Drawable image) {
-//            setImage(image);
-//        }
-    }
-
-    public class DownloadLogoImage extends AsyncTask<String, Integer, Drawable> {
-        @Override
-        protected Drawable doInBackground(String... arg0) {
-            Log.d("Arug_Check", arg0[0]);
-            return downloadLogoImage(arg0[0]);
-        }
-
-//        protected void onPostExecute(Drawable image) {
-//            setImage(image);
-//        }
-    }
-
-    private Drawable downloadBGImage(String _url) {
-        try {
-            url = new URL(_url);
-            in = url.openStream();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
-            int n = in.read(buf);
-            while (n != -1) {
-                out.write(buf, 0, n);
-                n = in.read(buf);
-            }
-            out.close();
-            in.close();
-            byte[] response = out.toByteArray();
-            String filePath = getFilesDir().getPath() + File.separator + "SyncBackground_" + ".jpg";
-
-            Log.d("check_filePath", filePath);
-            FileOutputStream fos = new FileOutputStream(filePath);
-
-            fos.write(response);
-            fos.close();
-
-// ye file read kar k set kar rah h
-//            File imgFile = new File(filePath);
-//            Log.d("Check_img", imgFile.toString());
-//            if (imgFile.exists()) {
-//                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//                Log.d("Check_Time", myBitmap.toString());
-//                backgorundImage.setImageBitmap(myBitmap);
-//
-//                if (in != null) {
-//                    in.close();
-//                }
-//                if (buf != null) {
-//                    buf.clone();
-//                }
-//            }
-        } catch (Exception ex) {
-            Log.d("Error_Check", ex.toString());
-        }
-        return null;
-    }
-
-    private Drawable downloadLogoImage(String _url) {
-        try {
-            url = new URL(_url);
-            in = url.openStream();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
-            int n = in.read(buf);
-            while (n != -1) {
-                out.write(buf, 0, n);
-                n = in.read(buf);
-            }
-            out.close();
-            in.close();
-            byte[] response = out.toByteArray();
-            String filePath = getFilesDir().getPath() + File.separator + "SyncLogo_" + ".jpg";
-
-            Log.d("check_filePath", filePath);
-            FileOutputStream fos = new FileOutputStream(filePath);
-
-            fos.write(response);
-            fos.close();
-
-
-            File imgFile = new File(filePath);
-            Log.d("Check_img", imgFile.toString());
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                Log.d("Check_Time", myBitmap.toString());
-                backgorundImage.setImageBitmap(myBitmap);
-
-//                if (in != null) {
-//                    in.close();
-//                }
-//                if (buf != null) {
-//                    buf.clone();
-//                }
-            }
-        } catch (Exception ex) {
-            Log.d("Error_Check", ex.toString());
-        }
-        return null;
+        return path + File.separator + filename;
     }
 }

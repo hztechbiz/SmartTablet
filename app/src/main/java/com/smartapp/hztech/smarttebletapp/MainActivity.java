@@ -67,7 +67,8 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
                     String enable_connect_to_wifi = values.containsKey("enable_connect_to_wifi") ? values.get("enable_connect_to_wifi") : "1";
                     String enable_how_use_tablet = values.containsKey("enable_how_use_tablet") ? values.get("enable_how_use_tablet") : "1";
                     String enable_useful_information_category = values.containsKey("enable_useful_information_category") ? values.get("enable_useful_information_category") : "1";
-                    String enable_weather = values.containsKey("enable_weather") ? values.get("enable_weather") : "1";
+                    String enable_weather = values.containsKey("enable_weather")
+                            ? values.get("enable_weather") : "1";
                     String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "1";
                     String operating_the_television_service = values.containsKey("operating_the_television_service") ? values.get("operating_the_television_service") : "0";
                     String connect_to_wifi_service = values.containsKey("connect_to_wifi_service") ? values.get("connect_to_wifi_service") : "0";
