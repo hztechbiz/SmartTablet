@@ -1,8 +1,10 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -137,6 +139,7 @@ public class HomeFragment extends Fragment {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
+
                         if (result != null) {
                             String filePath = result.toString();
 
@@ -145,8 +148,13 @@ public class HomeFragment extends Fragment {
                                 File imglogo = new File(filePath + "/Logo.jpg");
 
                                 if (imgBG.exists()) {
-                                    Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    _bgImageView.setImageBitmap(myBitmap);
+//                                    Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+//                                    _bgImageView.setImageBitmap(myBitmap);
+
+                                    Resources res = getResources();
+                                    Bitmap bitmap =  BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                    _bgImageView.setBackgroundDrawable(bd);
                                 }
 
                                 if (imglogo.exists()) {
