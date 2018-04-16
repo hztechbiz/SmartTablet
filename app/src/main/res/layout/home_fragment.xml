@@ -23,15 +23,13 @@
         <ImageView
             android:layout_width="300dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
             android:background="@drawable/white_background_corner_radius"
-            android:paddingBottom="15dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:id="@+id/MainLogo"
             android:paddingTop="15dp" />
-
 
         <GridView
             android:id="@+id/list_calllog"

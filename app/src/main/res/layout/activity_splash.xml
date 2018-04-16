@@ -19,14 +19,16 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:id="@+id/imgId"
     android:gravity="center">
     <ImageView
         android:id="@+id/splsh_Logo"
         android:layout_width="300dp"
+        android:background="@drawable/white_background_corner_radius"
         android:layout_height="100dp"
         android:paddingBottom="15dp"
         android:paddingLeft="20dp"
+        android:visibility="gone"
         android:paddingRight="20dp"
         android:paddingTop="15dp"
        />
