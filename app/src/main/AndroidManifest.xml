@@ -74,6 +74,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".topBarActivity"></activity>
     </application>
 
 </manifest>
