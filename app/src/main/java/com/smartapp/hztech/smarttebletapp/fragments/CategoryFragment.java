@@ -14,8 +14,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
+import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
@@ -27,10 +27,9 @@ import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class CategoryFragment extends Fragment {
 
     private FragmentListener fragmentListener;
     private List<Category> _categories;
@@ -43,7 +42,7 @@ public class HomeFragment extends Fragment {
     private Boolean _has_children;
     private String FILE_PATH = "ST@FILE_PATH";
 
-    public HomeFragment() {
+    public CategoryFragment() {
 
     }
 
@@ -67,19 +66,17 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.home_fragment, container, false);
+        View view = inflater.inflate(R.layout.category_fragment, container, false);
         Bundle bundle = getArguments();
 
-        gridView = view.findViewById(R.id.list_calllog);
-        _bgImageView = view.findViewById(R.id.main_bg_img);
-        _logoImageView = view.findViewById(R.id.MainLogo);
+        gridView = view.findViewById(R.id.gridview);
 
         _category_id = 0;
         _has_children = false;
 
         if (bundle != null) {
-            _category_id = getArguments().getInt("category_id");
-            _has_children = getArguments().getBoolean("has_children");
+            _category_id = getArguments().getInt(getString(R.string.param_category_id));
+            _has_children = getArguments().getBoolean(getString(R.string.param_has_children));
         }
 
         _categories = new ArrayList<>();
@@ -98,7 +95,7 @@ public class HomeFragment extends Fragment {
                     bundle.putBoolean("has_children", Boolean.valueOf(v.getTag(R.string.tag_has_children).toString()));
                 }
 
-                HomeFragment fragment = new HomeFragment();
+                CategoryFragment fragment = new CategoryFragment();
                 fragment.setArguments(bundle);
 
                 fragmentListener.onUpdateFragment(fragment);
@@ -111,10 +108,10 @@ public class HomeFragment extends Fragment {
                 Bundle bundle = new Bundle();
 
                 if (v.getTag() != null) {
-                    bundle.putInt("service_id", Integer.parseInt(v.getTag().toString()));
+                    bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(v.getTag().toString()));
                 }
 
-                ServicesFragment fragment = new ServicesFragment();
+                ServiceFragment fragment = new ServiceFragment();
                 fragment.setArguments(bundle);
 
                 fragmentListener.onUpdateFragment(fragment);
@@ -129,7 +126,7 @@ public class HomeFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
-        setBranding();
+        //setBranding();
 
         return view;
     }
@@ -152,7 +149,7 @@ public class HomeFragment extends Fragment {
 //                                    _bgImageView.setImageBitmap(myBitmap);
 
                                     Resources res = getResources();
-                                    Bitmap bitmap =  BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
                                     BitmapDrawable bd = new BitmapDrawable(res, bitmap);
                                     _bgImageView.setBackgroundDrawable(bd);
                                 }

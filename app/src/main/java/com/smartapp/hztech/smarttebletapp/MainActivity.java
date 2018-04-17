@@ -10,8 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.smartapp.hztech.smarttebletapp.fragments.HomeFragment;
-import com.smartapp.hztech.smarttebletapp.fragments.ServicesFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
@@ -35,8 +35,8 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
                 return;
             }
 
-            HomeFragment firstFragment = new HomeFragment();
-            firstFragment.setFragmentListener(this);
+            MainFragment firstFragment = new MainFragment();
+            //firstFragment.setFragmentListener(this);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
@@ -130,11 +130,11 @@ public class MainActivity extends FragmentActivity implements FragmentListener {
 
         switch (view.getId()) {
             case R.id.itemHome:
-                HomeFragment f1 = new HomeFragment();
+                MainFragment f1 = new MainFragment();
                 updateFragment(f1);
                 break;
             case R.id.itemHow:
-                ServicesFragment f2 = new ServicesFragment();
+                ServiceFragment f2 = new ServiceFragment();
                 updateFragment(f2);
                 break;
         }

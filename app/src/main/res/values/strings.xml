@@ -9,5 +9,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hotel_welcome_text">Welcome to %s</string>
+    <!-- TAGS -->
     <string name="tag_has_children">HAS_CHILDREN</string>
+    <string name="tag_action">ACTION</string>
+    <string name="tag_value">VALUE</string>
+
+    <!-- PARAMS -->
+    <string name="param_category_id">CATEGORY_ID</string>
+    <string name="param_has_children">HAS_CHILDREN</string>
+    <string name="param_service_id">SERVICE_ID</string>
 </resources>

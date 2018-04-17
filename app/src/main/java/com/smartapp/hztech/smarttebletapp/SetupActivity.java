@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -79,7 +80,7 @@ public class SetupActivity extends Activity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            showMessage("Failed to setup");
+                            showMessage("Failed to setup: " + error.networkResponse.statusCode);
                         }
                     }) {
                         @Override

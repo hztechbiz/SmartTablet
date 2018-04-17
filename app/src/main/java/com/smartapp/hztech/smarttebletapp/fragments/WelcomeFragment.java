@@ -1,6 +1,5 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,30 +9,19 @@ import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
-import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.models.HotelModel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveHotel;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
+
+import java.util.HashMap;
 
 public class WelcomeFragment extends Fragment {
-    FragmentListener mCallback;
     TextView txtHotelName, txtDescription;
+    String _heading, _description, _new_heading, _new_description;
 
     public WelcomeFragment() {
 
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-            mCallback = (FragmentListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentUpdate");
-        }
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,14 +37,42 @@ public class WelcomeFragment extends Fragment {
                     public void onSuccess(Object result) {
                         HotelModel hotel = (HotelModel) result;
 
-                        String heading = getString(R.string.hotel_welcome_text, hotel.getName());
+                        _heading = getString(R.string.hotel_welcome_text, hotel.getName());
+                        _description = getString(R.string.hotel_welcome_text, hotel.getName());
 
-                        txtHotelName.setText(heading);
-                        txtDescription.setText(heading);
+                        setup();
+                    }
+                })
+                .execute();
+
+        new RetrieveSetting(getContext(), "welcome_heading", "welcome_description")
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+
+                        if (values != null) {
+                            _new_heading = values.containsKey("welcome_heading") ? values.get("welcome_heading") : null;
+                            _new_description = values.containsKey("welcome_description") ? values.get("welcome_description") : null;
+                        }
+
+                        setup();
                     }
                 })
                 .execute();
 
         return view;
+    }
+
+    private void setup() {
+        if (_new_heading != null)
+            txtHotelName.setText(_new_heading);
+        else
+            txtHotelName.setText(_heading);
+
+        if (_new_description != null)
+            txtDescription.setText(_new_description);
+        else
+            txtDescription.setText(_description);
     }
 }
