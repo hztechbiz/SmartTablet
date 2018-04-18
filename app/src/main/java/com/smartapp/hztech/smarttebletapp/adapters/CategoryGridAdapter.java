@@ -54,10 +54,10 @@ public class CategoryGridAdapter extends BaseAdapter {
 
         LinearLayout box_categories = gridView.findViewById(R.id.bx_category);
 
-        ((TextView) gridView.findViewById(R.id.txt_title)).setText(category.getName());
+        ((TextView) gridView.findViewById(R.id.txt_title)).setText(category.getName() + ", " + category.getChildren_count());
         ((TextView) gridView.findViewById(R.id.txt_description)).setText(category.getDescription());
 
-        box_categories.setTag(category.getId());
+        box_categories.setTag(R.string.tag_value, category.getId());
         box_categories.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
 
         box_categories.setOnClickListener(itemClickListener);

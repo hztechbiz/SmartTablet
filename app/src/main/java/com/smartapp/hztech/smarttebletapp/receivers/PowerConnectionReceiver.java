@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class PowerConnectionReceiver extends BroadcastReceiver {
     private String TAG = PowerConnectionReceiver.class.getName();
-    private String TOKEN = "ST@TOKEN";
     private Context _context;
     private String _token;
 
@@ -49,7 +48,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
                 new Setting("isOnAc", acCharge ? "true" : "false"))
                 .execute();
 
-        new RetrieveSetting(context, TOKEN)
+        new RetrieveSetting(context, Constants.TOKEN_KEY)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -91,7 +90,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.getMessage());
+                Log.e(TAG, error + ", " + _token);
             }
         }) {
             @Override

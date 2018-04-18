@@ -8,13 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
@@ -76,8 +73,8 @@ public class SplashActivity extends Activity {
                                         BitmapDrawable bd = new BitmapDrawable(res, bitmap);
                                         _splshBackground.setBackgroundDrawable(bd);
                                     }
-                                    if (splshLogo.exists()) {
 
+                                    if (splshLogo.exists()) {
                                         Bitmap splshLogoBitmap = BitmapFactory.decodeFile(splshLogo.getAbsolutePath());
                                         _splshLogo.setVisibility(View.VISIBLE);
                                         _splshLogo.setImageBitmap(splshLogoBitmap);
@@ -85,7 +82,6 @@ public class SplashActivity extends Activity {
                                 }
                             }
                         } else {
-
                             Resources res1 = getResources();
                             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bgbg);
                             BitmapDrawable bd = new BitmapDrawable(res1, bitmap);

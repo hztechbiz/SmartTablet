@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class BatteryLevelReceiver extends BroadcastReceiver {
     private String TAG = BatteryLevelReceiver.class.getName();
-    private String TOKEN = "ST@TOKEN";
     private Context _context;
     private String _token;
 
@@ -34,15 +33,16 @@ public class BatteryLevelReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         _context = context;
 
-        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        //int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-        final float percentage = level / (float) scale;
+        //final float percentage = level / (float) scale;
+        final float percentage = level;
 
         new StoreSetting(context, new Setting("battery_percentage", String.valueOf(percentage)))
                 .execute();
 
-        new RetrieveSetting(context, TOKEN)
+        new RetrieveSetting(context, Constants.TOKEN_KEY)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {

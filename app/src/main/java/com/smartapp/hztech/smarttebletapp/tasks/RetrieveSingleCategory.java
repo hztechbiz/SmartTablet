@@ -2,6 +2,7 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;

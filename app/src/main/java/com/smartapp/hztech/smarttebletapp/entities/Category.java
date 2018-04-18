@@ -59,4 +59,15 @@ public class Category {
     public void setChildren_count(int children_count) {
         this.children_count = children_count;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", parent_id=" + parent_id +
+                ", children_count=" + children_count +
+                '}';
+    }
 }

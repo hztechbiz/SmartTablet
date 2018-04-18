@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
     private String TAG = NetworkChangeReceiver.class.getName();
-    private String TOKEN = "ST@TOKEN";
     private Context _context;
     private String _token;
 
@@ -46,7 +45,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 final String wifi_name = info.getSSID();
                 final int wifi_signals_level = WifiManager.calculateSignalLevel(info.getRssi(), 5);
 
-                new RetrieveSetting(context, TOKEN)
+                new RetrieveSetting(context, Constants.TOKEN_KEY)
                         .onSuccess(new AsyncResultBag.Success() {
                             @Override
                             public void onSuccess(Object result) {

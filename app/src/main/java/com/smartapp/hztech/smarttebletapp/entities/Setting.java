@@ -29,6 +29,9 @@ public class Setting {
     }
 
     public String getValue() {
+        if (value.equals("null"))
+            return null;
+
         return value;
     }
 

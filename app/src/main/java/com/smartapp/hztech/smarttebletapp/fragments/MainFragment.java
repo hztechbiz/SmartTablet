@@ -12,33 +12,50 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleCategory;
 
 import java.util.HashMap;
 
-public class MainFragment extends Fragment implements FragmentListener {
-    FrameLayout fragment_container;
-    TextView menu_item_1, menu_item_2, menu_item_3, menu_item_4;
+public class MainFragment extends Fragment {
+    private FrameLayout fragmentContainer;
+    private Fragment _childFragment;
+    private TextView menu_item_1, menu_item_2, menu_item_3, menu_item_4;
+    private FragmentListener mainFragmentListener;
+    private FragmentListener childFragmentListener = new FragmentListener() {
+        @Override
+        public void onUpdateFragment(Fragment newFragment) {
+            Log.d("FragmentUpdated", "From: MainFragment, Fragment: " + newFragment.getClass().getName());
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+
+            transaction.replace(fragmentContainer.getId(), newFragment);
+            transaction.addToBackStack(null);
+
+            transaction.commit();
+        }
+    };
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
 
-        fragment_container = view.findViewById(R.id.services_fragment_container);
+        fragmentContainer = view.findViewById(R.id.listing_fragment_container);
         menu_item_1 = view.findViewById(R.id.menu_item_1);
         menu_item_2 = view.findViewById(R.id.menu_item_2);
         menu_item_3 = view.findViewById(R.id.menu_item_3);
         menu_item_4 = view.findViewById(R.id.menu_item_4);
 
-        if (fragment_container != null) {
+        if (fragmentContainer != null) {
 
-            WelcomeFragment welcomeFragment = new WelcomeFragment();
+            if (_childFragment == null)
+                _childFragment = new WelcomeFragment();
 
             getChildFragmentManager().beginTransaction()
-                    .add(fragment_container.getId(), welcomeFragment).commit();
+                    .add(fragmentContainer.getId(), _childFragment).commit();
         }
 
         bindMenuItems();
@@ -54,20 +71,25 @@ public class MainFragment extends Fragment implements FragmentListener {
 
                 if (action.equals("welcome")) {
                     WelcomeFragment fragment = new WelcomeFragment();
-                    updateFragment(fragment);
+                    childFragmentListener.onUpdateFragment(fragment);
                 } else {
                     Bundle bundle = new Bundle();
                     Object category_id = v.getTag(R.string.tag_value);
+                    Object has_children = v.getTag(R.string.tag_has_children);
 
                     if (category_id != null) {
                         bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
                     }
 
+                    if (has_children != null) {
+                        bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
+                    }
+
                     CategoryFragment fragment = new CategoryFragment();
-                    fragment.setFragmentListener(MainFragment.this);
+                    fragment.setFragmentListener(childFragmentListener);
                     fragment.setArguments(bundle);
 
-                    updateFragment(fragment);
+                    childFragmentListener.onUpdateFragment(fragment);
                 }
             }
         };
@@ -107,6 +129,19 @@ public class MainFragment extends Fragment implements FragmentListener {
                             menu_item_2.setTag(R.string.tag_action, "category");
                             menu_item_2.setTag(R.string.tag_value, category_id);
 
+                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                    .onSuccess(new AsyncResultBag.Success() {
+                                        @Override
+                                        public void onSuccess(Object result) {
+                                            Category category = result != null ? (Category) result : null;
+
+                                            if (category != null) {
+                                                menu_item_2.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                            }
+                                        }
+                                    })
+                                    .execute();
+
                             enable_item = values.containsKey("top_menu_item_3_show") && values.get("top_menu_item_3_show").equals("1");
                             item_text = values.containsKey("top_menu_item_3_text") ? values.get("top_menu_item_3_text") : "";
                             category_id = values.containsKey("top_menu_item_3_category") ? values.get("top_menu_item_3_category") : null;
@@ -116,6 +151,19 @@ public class MainFragment extends Fragment implements FragmentListener {
                             menu_item_3.setTag(R.string.tag_action, "category");
                             menu_item_3.setTag(R.string.tag_value, category_id);
 
+                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                    .onSuccess(new AsyncResultBag.Success() {
+                                        @Override
+                                        public void onSuccess(Object result) {
+                                            Category category = result != null ? (Category) result : null;
+
+                                            if (category != null) {
+                                                menu_item_3.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                            }
+                                        }
+                                    })
+                                    .execute();
+
                             enable_item = values.containsKey("top_menu_item_4_show") && values.get("top_menu_item_4_show").equals("1");
                             item_text = values.containsKey("top_menu_item_4_text") ? values.get("top_menu_item_4_text") : "";
                             category_id = values.containsKey("top_menu_item_4_category") ? values.get("top_menu_item_4_category") : null;
@@ -124,6 +172,19 @@ public class MainFragment extends Fragment implements FragmentListener {
                             menu_item_4.setText(item_text);
                             menu_item_4.setTag(R.string.tag_action, "category");
                             menu_item_4.setTag(R.string.tag_value, category_id);
+
+                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                    .onSuccess(new AsyncResultBag.Success() {
+                                        @Override
+                                        public void onSuccess(Object result) {
+                                            Category category = result != null ? (Category) result : null;
+
+                                            if (category != null) {
+                                                menu_item_4.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                            }
+                                        }
+                                    })
+                                    .execute();
 
                             menu_item_1.setOnClickListener(menuItemClickListener);
                             menu_item_2.setOnClickListener(menuItemClickListener);
@@ -135,19 +196,15 @@ public class MainFragment extends Fragment implements FragmentListener {
                 .execute();
     }
 
-    public void updateFragment(Fragment newFragment) {
-        Log.d("ServiceDetails", newFragment.getClass().getName());
-
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-
-        transaction.replace(fragment_container.getId(), newFragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+    public void setFragmentListener(FragmentListener fragmentListener) {
+        mainFragmentListener = fragmentListener;
     }
 
-    @Override
-    public void onUpdateFragment(Fragment fragment) {
-        updateFragment(fragment);
+    public void setChildFragment(Fragment fragment) {
+        _childFragment = fragment;
+    }
+
+    public Fragment getChildFragment() {
+        return _childFragment;
     }
 }

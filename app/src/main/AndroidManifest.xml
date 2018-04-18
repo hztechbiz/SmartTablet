@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
 
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -65,6 +64,7 @@
         </receiver>
         <receiver android:name=".receivers.BatteryLevelReceiver">
             <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
                 <action android:name="android.intent.action.BATTERY_LOW" />
                 <action android:name="android.intent.action.BATTERY_OKAY" />
             </intent-filter>

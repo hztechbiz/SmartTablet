@@ -12,6 +12,8 @@
     <!-- TAGS -->
     <string name="tag_has_children">HAS_CHILDREN</string>
     <string name="tag_action">ACTION</string>
+    <string name="tag_action_category">CATEGORY</string>
+    <string name="tag_action_service">SERVICE</string>
     <string name="tag_value">VALUE</string>
 
     <!-- PARAMS -->

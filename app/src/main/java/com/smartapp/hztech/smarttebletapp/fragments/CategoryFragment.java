@@ -1,6 +1,5 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -51,18 +50,6 @@ public class CategoryFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-            fragmentListener = (FragmentListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentUpdate");
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -75,8 +62,8 @@ public class CategoryFragment extends Fragment {
         _has_children = false;
 
         if (bundle != null) {
-            _category_id = getArguments().getInt(getString(R.string.param_category_id));
-            _has_children = getArguments().getBoolean(getString(R.string.param_has_children));
+            _category_id = bundle.getInt(getString(R.string.param_category_id));
+            _has_children = bundle.getBoolean(getString(R.string.param_has_children));
         }
 
         _categories = new ArrayList<>();
@@ -86,16 +73,19 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+                Object category_id = v.getTag(R.string.tag_value);
+                Object has_children = v.getTag(R.string.tag_has_children);
 
-                if (v.getTag() != null) {
-                    bundle.putInt("category_id", Integer.parseInt(v.getTag().toString()));
+                if (category_id != null) {
+                    bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
                 }
 
-                if (v.getTag(R.string.tag_has_children) != null) {
-                    bundle.putBoolean("has_children", Boolean.valueOf(v.getTag(R.string.tag_has_children).toString()));
+                if (has_children != null) {
+                    bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
                 }
 
                 CategoryFragment fragment = new CategoryFragment();
+                fragment.setFragmentListener(fragmentListener);
                 fragment.setArguments(bundle);
 
                 fragmentListener.onUpdateFragment(fragment);
