@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,14 +34,13 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/gray_background_radius"
                     android:onClick="onNavItemClick"
-                    android:orientation="vertical"
-                   >
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/imageView"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/home_icon" />
+                        android:src="@drawable/homeicon" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -62,17 +62,17 @@
                     android:id="@+id/ott"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/tv"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/tvc" />
+                        android:src="@drawable/operatingthetelevision" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -94,17 +94,17 @@
                     android:id="@+id/itemWifi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/wifi"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/wifi" />
+                        android:src="@drawable/connecttowifi" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -137,7 +137,7 @@
                         android:id="@+id/useTablet"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/tab" />
+                        android:src="@drawable/usemobile" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -160,17 +160,17 @@
                     android:id="@+id/itemInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/info"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/info" />
+                        android:src="@drawable/userinformation" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -196,15 +196,14 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    >
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/map"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/map" />
+                        android:src="@drawable/localmap" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -230,14 +229,14 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/region"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/region" />
+                        android:src="@drawable/localregion" />
 
                     <TextView
                         android:layout_width="110dp"
@@ -263,8 +262,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/weather"
@@ -296,8 +295,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/news"

@@ -80,7 +80,7 @@ public class SetupActivity extends Activity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            showMessage("Failed to setup: " + error.networkResponse.statusCode);
+                          //  showMessage("Failed to setup: " + error.networkResponse.statusCode);
                         }
                     }) {
                         @Override
