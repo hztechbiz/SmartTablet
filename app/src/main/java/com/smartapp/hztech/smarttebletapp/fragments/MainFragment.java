@@ -129,18 +129,20 @@ public class MainFragment extends Fragment {
                             menu_item_2.setTag(R.string.tag_action, "category");
                             menu_item_2.setTag(R.string.tag_value, category_id);
 
-                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                    .onSuccess(new AsyncResultBag.Success() {
-                                        @Override
-                                        public void onSuccess(Object result) {
-                                            Category category = result != null ? (Category) result : null;
+                            if (category_id != null) {
+                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                        .onSuccess(new AsyncResultBag.Success() {
+                                            @Override
+                                            public void onSuccess(Object result) {
+                                                Category category = result != null ? (Category) result : null;
 
-                                            if (category != null) {
-                                                menu_item_2.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                if (category != null) {
+                                                    menu_item_2.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                }
                                             }
-                                        }
-                                    })
-                                    .execute();
+                                        })
+                                        .execute();
+                            }
 
                             enable_item = values.containsKey("top_menu_item_3_show") && values.get("top_menu_item_3_show").equals("1");
                             item_text = values.containsKey("top_menu_item_3_text") ? values.get("top_menu_item_3_text") : "";
@@ -151,18 +153,20 @@ public class MainFragment extends Fragment {
                             menu_item_3.setTag(R.string.tag_action, "category");
                             menu_item_3.setTag(R.string.tag_value, category_id);
 
-                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                    .onSuccess(new AsyncResultBag.Success() {
-                                        @Override
-                                        public void onSuccess(Object result) {
-                                            Category category = result != null ? (Category) result : null;
+                            if (category_id != null) {
+                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                        .onSuccess(new AsyncResultBag.Success() {
+                                            @Override
+                                            public void onSuccess(Object result) {
+                                                Category category = result != null ? (Category) result : null;
 
-                                            if (category != null) {
-                                                menu_item_3.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                if (category != null) {
+                                                    menu_item_3.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                }
                                             }
-                                        }
-                                    })
-                                    .execute();
+                                        })
+                                        .execute();
+                            }
 
                             enable_item = values.containsKey("top_menu_item_4_show") && values.get("top_menu_item_4_show").equals("1");
                             item_text = values.containsKey("top_menu_item_4_text") ? values.get("top_menu_item_4_text") : "";
@@ -173,18 +177,20 @@ public class MainFragment extends Fragment {
                             menu_item_4.setTag(R.string.tag_action, "category");
                             menu_item_4.setTag(R.string.tag_value, category_id);
 
-                            new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                    .onSuccess(new AsyncResultBag.Success() {
-                                        @Override
-                                        public void onSuccess(Object result) {
-                                            Category category = result != null ? (Category) result : null;
+                            if (category_id != null) {
+                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
+                                        .onSuccess(new AsyncResultBag.Success() {
+                                            @Override
+                                            public void onSuccess(Object result) {
+                                                Category category = result != null ? (Category) result : null;
 
-                                            if (category != null) {
-                                                menu_item_4.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                if (category != null) {
+                                                    menu_item_4.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+                                                }
                                             }
-                                        }
-                                    })
-                                    .execute();
+                                        })
+                                        .execute();
+                            }
 
                             menu_item_1.setOnClickListener(menuItemClickListener);
                             menu_item_2.setOnClickListener(menuItemClickListener);

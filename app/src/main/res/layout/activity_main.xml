@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.smartapp.hztech.smarttebletapp.MainActivity">
+
+
+    <ImageView
+        android:id="@+id/main_bg_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -39,7 +49,7 @@
                         android:id="@+id/imageView"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/homeicon" />
+                        android:src="@drawable/home" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -80,11 +90,15 @@
                         android:text="OPERATING THE TELEVISION"
                         android:textColor="#000"
                         android:textSize="13dp" />
+
+
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_gravity="bottom"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:background="#c5c6c9" />
@@ -186,6 +200,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:visibility="gone"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
@@ -220,6 +235,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:visibility="gone"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
@@ -313,14 +329,25 @@
                         android:textColor="#000"
                         android:textSize="13dp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_marginTop="42dp"
                     android:layout_height="5dp"
                     android:background="#25a8d0" />
             </LinearLayout>
+
         </ScrollView>
+
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -328,10 +355,94 @@
         android:layout_marginLeft="150dp"
         android:orientation="vertical">
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+
+                android:background="@drawable/white_background_corner_radius"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_width="200dp"
+                 android:layout_marginLeft="5dp"
+                    android:layout_height="match_parent"
+                    android:hint="Search"
+                    android:backgroundTint="#25a8d0"
+                    android:cursorVisible="false"
+                    android:textColorHint="#808080"
+                    />
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/search"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/wifi_connect"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_background_with_corner"
+                android:padding="5dp"
+                android:src="@drawable/wsignal" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_background_with_corner"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/bettryStatus"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/battery_icon"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/percentage_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Battery"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:padding="5dp"
+                android:background="@drawable/btn_background_with_corner"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/getTime"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff"
+                    android:hint="11:00 PM"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+
+
+</RelativeLayout>

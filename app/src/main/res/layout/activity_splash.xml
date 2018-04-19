@@ -12,7 +12,7 @@
         android:id="@+id/splsh_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bgbg"
+        android:background="@drawable/banner"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         tools:ignore="ContentDescription" />

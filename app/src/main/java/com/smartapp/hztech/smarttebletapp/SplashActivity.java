@@ -83,7 +83,7 @@ public class SplashActivity extends Activity {
                             }
                         } else {
                             Resources res1 = getResources();
-                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bgbg);
+                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
                             BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
                             _splshBackground.setBackgroundDrawable(bd);
                         }

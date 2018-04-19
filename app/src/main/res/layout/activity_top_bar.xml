@@ -6,46 +6,46 @@
     android:layout_height="match_parent"
     tools:context="com.smartapp.hztech.smarttebletapp.topBarActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="right"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="5dp"
-            android:background="@drawable/btn_background_with_corner"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/wsignal"
-            android:id="@+id/wifi_connect"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:background="@drawable/btn_background_with_corner"
-            android:orientation="horizontal">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/bettryStatus"
-            android:padding="5dp"
-            />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:id="@+id/percentage_set"/>
-        </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:gravity="right"-->
+        <!--android:orientation="horizontal">-->
         <!--<ImageView-->
             <!--android:layout_width="40dp"-->
             <!--android:layout_height="40dp"-->
-            <!--android:layout_marginRight="10dp"-->
             <!--android:padding="5dp"-->
             <!--android:background="@drawable/btn_background_with_corner"-->
-            <!--android:src="@drawable/wsignal2"/>-->
-    </LinearLayout>
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:src="@drawable/wsignal"-->
+            <!--android:id="@+id/wifi_connect"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/btn_background_with_corner"-->
+            <!--android:orientation="horizontal">-->
+        <!--<ImageView-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:id="@+id/bettryStatus"-->
+            <!--android:padding="5dp"-->
+            <!--/>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="#fff"-->
+                <!--android:id="@+id/percentage_set"/>-->
+        <!--</LinearLayout>-->
+        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="40dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="40dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginRight="10dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="5dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:background="@drawable/btn_background_with_corner"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:src="@drawable/wsignal2"/>&ndash;&gt;-->
+    <!--</LinearLayout>-->
 
 </RelativeLayout>
