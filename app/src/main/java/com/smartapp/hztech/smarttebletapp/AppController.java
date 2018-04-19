@@ -152,6 +152,7 @@ public class AppController extends Application {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
+                Log.d(TAG, "Token: " + _token);
             }
         }, new Response.ErrorListener() {
             @Override

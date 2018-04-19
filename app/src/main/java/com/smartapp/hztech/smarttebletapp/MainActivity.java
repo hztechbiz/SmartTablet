@@ -27,10 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
@@ -38,17 +34,12 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
-import org.json.JSONObject;
-
 import java.io.File;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
 
@@ -59,8 +50,7 @@ public class MainActivity extends FragmentActivity {
     private TextView percentage_set, set_Time;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
-   private WifiManager wifiManager;
-    private String FILE_PATH = "ST@FILE_PATH";
+    private WifiManager wifiManager;
 
     private FragmentListener fragmentListener = new FragmentListener() {
         @Override
@@ -97,7 +87,6 @@ public class MainActivity extends FragmentActivity {
         set_Time.setText(date);
 
 
-
         if (fragmentContainer != null) {
 
             if (savedInstanceState != null) {
@@ -124,12 +113,14 @@ public class MainActivity extends FragmentActivity {
 
                 setSignal(wifi_signals_level);
             }
-        }, 5000);
+        }, 1000);
+
         setupMenuItems();
         setBranding();
     }
+
     private void setBranding() {
-        new RetrieveSetting(this, FILE_PATH)
+        new RetrieveSetting(this, Constants.FILE_PATH_KEY)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -162,8 +153,12 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onStop() {
-        unregisterReceiver(wifiScanReceiver);
-        unregisterReceiver(batteryBroadcastReceiver);
+        if (wifiScanReceiver != null)
+            unregisterReceiver(wifiScanReceiver);
+
+        if (batteryBroadcastReceiver != null)
+            unregisterReceiver(batteryBroadcastReceiver);
+
         super.onStop();
     }
 
@@ -255,8 +250,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onNavItemClick(View view) {
-        if (view.getId() != R.id.itemHome)
-            makeMenuItemActive(view);
+        makeMenuItemActive(view, (view.getId() != R.id.itemHome));
 
         Object action = view.getTag(R.string.tag_action);
         Object value = view.getTag(R.string.tag_value);
@@ -288,7 +282,7 @@ public class MainActivity extends FragmentActivity {
         fragmentListener.onUpdateFragment(mainFragment);
     }
 
-    public void makeMenuItemActive(View view) {
+    public void makeMenuItemActive(View view, Boolean makeActive) {
         LinearLayout ott_linear = findViewById(R.id.ott);
         LinearLayout wifi_linear = findViewById(R.id.itemWifi);
         LinearLayout howTo_linear = findViewById(R.id.itemHow);
@@ -305,8 +299,10 @@ public class MainActivity extends FragmentActivity {
             all_item.setBackgroundColor(0);
         }
 
-        view.setBackgroundColor(Color.parseColor("#2cb3dc"));
-        // view.setBackground(R.drawable.sidemenu_gradient_bg);
+        if (makeActive) {
+            view.setBackgroundColor(Color.parseColor("#2cb3dc"));
+            // view.setBackground(R.drawable.sidemenu_gradient_bg);
+        }
     }
 
     public void setSignal(int wifi_signals_level) {
@@ -374,8 +370,7 @@ public class MainActivity extends FragmentActivity {
             res = R.drawable.battery_icon;
         } else if (percentage <= 99) {
             res = R.drawable.battery_icon;
-        }
-        else if (percentage <= 100) {
+        } else if (percentage <= 100) {
             res = R.drawable.btfull1;
         }
 
@@ -385,22 +380,19 @@ public class MainActivity extends FragmentActivity {
 
     class BatteryBroadcastReceiver extends BroadcastReceiver {
 
-        private final static String BATTERY_LEVEL = "level";
-
         @Override
         public void onReceive(Context context, Intent intent) {
 
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
 
-            Log.d("checkPercent", level + " ");
             percentage_set.setText(level + "%");
 
             setBattery(level);
         }
     }
 
-    class WifiScanReceiver extends BroadcastReceiver{
-        public void onReceive(Context c, Intent intent){
+    class WifiScanReceiver extends BroadcastReceiver {
+        public void onReceive(Context c, Intent intent) {
             List<ScanResult> wifiScanList = wifiManager.getScanResults();
 
             WifiInfo info = wifiManager.getConnectionInfo();
@@ -409,8 +401,6 @@ public class MainActivity extends FragmentActivity {
             final int wifi_signals_level = WifiManager.calculateSignalLevel(info.getRssi()
                     , 4);
             setSignal(wifi_signals_level);
-
         }
-
     }
 }

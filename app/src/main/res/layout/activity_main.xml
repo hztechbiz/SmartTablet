@@ -92,7 +92,6 @@
                         android:textSize="13dp" />
 
 
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -200,8 +199,8 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:visibility="gone"
-                    android:background="#c5c6c9" />
+                    android:background="#c5c6c9"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/itemMap"
@@ -235,8 +234,8 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:visibility="gone"
-                    android:background="#c5c6c9" />
+                    android:background="#c5c6c9"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/itemLocalRegion"
@@ -329,6 +328,7 @@
                         android:textColor="#000"
                         android:textSize="13dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -338,8 +338,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="42dp"
                     android:layout_height="5dp"
+                    android:layout_marginTop="42dp"
                     android:background="#25a8d0" />
             </LinearLayout>
 
@@ -373,17 +373,17 @@
 
                 <EditText
                     android:layout_width="200dp"
-                 android:layout_marginLeft="5dp"
                     android:layout_height="match_parent"
-                    android:hint="Search"
+                    android:layout_marginLeft="5dp"
                     android:backgroundTint="#25a8d0"
                     android:cursorVisible="false"
-                    android:textColorHint="#808080"
-                    />
-               <ImageView
-                   android:layout_width="40dp"
-                   android:layout_height="40dp"
-                   android:src="@drawable/search"/>
+                    android:hint="Search"
+                    android:textColorHint="#808080" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/search" />
             </LinearLayout>
 
             <ImageView
@@ -393,56 +393,59 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:padding="5dp"
-                android:src="@drawable/wsignal" />
+                android:src="@drawable/wsignal"
+                android:layout_marginEnd="10dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginRight="10dp">
 
                 <ImageView
                     android:id="@+id/bettryStatus"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/battery_icon"
-                    android:padding="5dp" />
+                    android:padding="5dp"
+                    android:src="@drawable/battery_icon" />
 
                 <TextView
                     android:id="@+id/percentage_set"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Battery"
+                    android:hint="0%"
                     android:textColor="#fff"
                     android:textColorHint="#fff" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="20dp"
-                android:padding="5dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/btn_background_with_corner"
-                android:gravity="center">
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginRight="20dp">
 
                 <TextView
+                    android:id="@+id/getTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/getTime"
+                    android:hint="00:00 PM"
                     android:textColor="#fff"
-                    android:textColorHint="#fff"
-                    android:hint="11:00 PM"/>
+                    android:textColorHint="#fff" />
             </LinearLayout>
 
         </LinearLayout>
-        <FrameLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-
 
 
 </RelativeLayout>

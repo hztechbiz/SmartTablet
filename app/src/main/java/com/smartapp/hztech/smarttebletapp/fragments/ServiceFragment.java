@@ -13,7 +13,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleService;
 
 public class ServiceFragment extends Fragment {
-    TextView txt_title;
+    TextView txt_title, txt_description;
     int _service_id;
 
     public ServiceFragment() {
@@ -33,6 +33,7 @@ public class ServiceFragment extends Fragment {
         }
 
         txt_title = view.findViewById(R.id.txt_title);
+        txt_description = view.findViewById(R.id.txt_description);
 
         bind();
 
@@ -48,6 +49,7 @@ public class ServiceFragment extends Fragment {
 
                         if (service != null) {
                             txt_title.setText(service.getTitle());
+                            txt_description.setText(service.getDescription());
                         }
                     }
                 })

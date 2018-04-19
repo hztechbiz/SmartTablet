@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.smartapp.hztech.smarttebletapp.Constants;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
@@ -39,7 +40,6 @@ public class CategoryFragment extends Fragment {
     private ServicesGridAdapter servicesAdapter;
     private int _category_id;
     private Boolean _has_children;
-    private String FILE_PATH = "ST@FILE_PATH";
 
     public CategoryFragment() {
 
@@ -122,7 +122,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void setBranding() {
-        new RetrieveSetting(getContext(), FILE_PATH)
+        new RetrieveSetting(getContext(), Constants.FILE_PATH_KEY)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {

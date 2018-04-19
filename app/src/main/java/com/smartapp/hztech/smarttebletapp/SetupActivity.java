@@ -27,8 +27,8 @@ import java.util.Map;
 public class SetupActivity extends Activity {
 
     private ProgressDialog _progressDialog;
-    private String API_KEY = "ST@API_KEY";
-    private String TOKEN = "ST@TOKEN";
+    private String API_KEY = Constants.API_KEY;
+    private String TOKEN = Constants.TOKEN_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class SetupActivity extends Activity {
                     JSONObject jsonRequest = new JSONObject();
 
                     try {
-                        jsonRequest.put("udid", "Test");
+                        jsonRequest.put("udid", Math.random() + "");
                         jsonRequest.put("api_key", key);
                     } catch (Exception ex) {
                         showMessage(ex.getMessage());
