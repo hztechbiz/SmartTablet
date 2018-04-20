@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.ArrowKeyMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -36,8 +37,10 @@ import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,10 +50,11 @@ public class MainActivity extends FragmentActivity {
     private FrameLayout fragmentContainer;
 
     private ImageView set_sginal_img, setBatteryStatus, setBgImage;
-    private TextView percentage_set, set_Time;
+    private TextView percentage_set, set_Time, searchKey;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
+    private ImageView ttv, wifi, useTablet, info, map, region, weather, news;
 
     private FragmentListener fragmentListener = new FragmentListener() {
         @Override
@@ -79,14 +83,26 @@ public class MainActivity extends FragmentActivity {
         set_sginal_img = (ImageView) findViewById(R.id.wifi_connect);
         setBatteryStatus = (ImageView) findViewById(R.id.bettryStatus);
         percentage_set = (TextView) findViewById(R.id.percentage_set);
+//        searchKey = (TextView) findViewById(R.id.searchKey);
         set_Time = (TextView) findViewById(R.id.getTime);
         setBgImage = (ImageView) findViewById(R.id.main_bg_img);
+        ttv = (ImageView) findViewById(R.id.tv);
+        wifi = (ImageView) findViewById(R.id.wifi);
+        useTablet = (ImageView) findViewById(R.id.useTablet);
+        info = (ImageView) findViewById(R.id.info);
+        map = (ImageView) findViewById(R.id.map);
+        region = (ImageView) findViewById(R.id.region);
+        weather = (ImageView) findViewById(R.id.weather);
+        news = (ImageView) findViewById(R.id.news);
 
-        DateFormat df = new SimpleDateFormat("HH:mm a");
-        String date = df.format(Calendar.getInstance().getTime());
-        set_Time.setText(date);
 
-
+//        searchKey.setTextIsSelectable(false);
+//        searchKey.setFocusable(true);
+//        searchKey.setFocusableInTouchMode(true);
+//        searchKey.setClickable(true);
+//        searchKey.setLongClickable(true);
+//        searchKey.setMovementMethod(ArrowKeyMovementMethod.getInstance());
+//        searchKey.setText(searchKey.getText(), TextView.BufferType.SPANNABLE);
         if (fragmentContainer != null) {
 
             if (savedInstanceState != null) {
@@ -117,6 +133,7 @@ public class MainActivity extends FragmentActivity {
 
         setupMenuItems();
         setBranding();
+
     }
 
     private void setBranding() {
@@ -147,6 +164,28 @@ public class MainActivity extends FragmentActivity {
     protected void onStart() {
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                DateFormat df = new SimpleDateFormat("hh:mm a");
+                                String date = df.format(Calendar.getInstance().getTime());
+                                set_Time.setText(date);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+        t.start();
 
         super.onStart();
     }
@@ -297,11 +336,49 @@ public class MainActivity extends FragmentActivity {
 
         for (LinearLayout all_item : all_items) {
             all_item.setBackgroundColor(0);
+
         }
 
         if (makeActive) {
             view.setBackgroundColor(Color.parseColor("#2cb3dc"));
             // view.setBackground(R.drawable.sidemenu_gradient_bg);
+        }
+        ttv.setImageResource(R.drawable.operatingthetelevision);
+        wifi.setImageResource(R.drawable.connecttowifi);
+        useTablet.setImageResource(R.drawable.usemobile);
+        info.setImageResource(R.drawable.userinformation);
+        map.setImageResource(R.drawable.localmap);
+        region.setImageResource(R.drawable.localregion);
+        weather.setImageResource(R.drawable.weather);
+        news.setImageResource(R.drawable.news);
+
+
+        switch (view.getId()) {
+            case R.id.ott:
+                ttv.setImageResource(R.drawable.operating_the_television_black);
+                break;
+            case R.id.itemWifi:
+                wifi.setImageResource(R.drawable.connect_to_wifi_black);
+                break;
+            case R.id.itemHow:
+                useTablet.setImageResource(R.drawable.how_to_use_smart_tablet_black);
+                break;
+            case R.id.itemInfo:
+                info.setImageResource(R.drawable.useful_info_black);
+                break;
+            case R.id.itemMap:
+                map.setImageResource(R.drawable.local_map_black);
+                break;
+            case R.id.itemLocalRegion:
+                region.setImageResource(R.drawable.the_local_region_black);
+                break;
+            case R.id.itemWeather:
+                weather.setImageResource(R.drawable.weather_black);
+                break;
+            case R.id.itemNews:
+                news.setImageResource(R.drawable.news_black);
+                break;
+
         }
     }
 

@@ -1,9 +1,13 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +61,20 @@ public class MainFragment extends Fragment {
             getChildFragmentManager().beginTransaction()
                     .add(fragmentContainer.getId(), _childFragment).commit();
         }
+        menu_item_1.setFilters(new InputFilter[]{new
+                InputFilter.AllCaps()});
+        menu_item_2.setFilters(new InputFilter[]{new
+                InputFilter.AllCaps()});
+        menu_item_3.setFilters(new InputFilter[]{new
+                InputFilter.AllCaps()});
+        menu_item_4.setFilters(new InputFilter[]{new
+                InputFilter.AllCaps()});
+
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
+        menu_item_1.setTypeface(typeface);
+        menu_item_2.setTypeface(typeface);
+        menu_item_3.setTypeface(typeface);
+        menu_item_4.setTypeface(typeface);
 
         bindMenuItems();
 

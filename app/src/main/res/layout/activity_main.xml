@@ -358,38 +358,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:gravity="right"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10dp"-->
 
-                android:background="@drawable/white_background_corner_radius"
-                android:gravity="center"
-                android:orientation="horizontal">
+                <!--android:background="@drawable/white_background_corner_radius"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal">-->
 
-                <EditText
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:backgroundTint="#25a8d0"
-                    android:cursorVisible="false"
-                    android:hint="Search"
-                    android:textColorHint="#808080" />
+                <!--<EditText-->
+                    <!--android:layout_width="200dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginLeft="5dp"-->
+                    <!--android:backgroundTint="#25a8d0"-->
+                    <!--android:cursorVisible="false"-->
+                    <!--android:focusable="false"-->
+                    <!--android:focusableInTouchMode="true"-->
+                    <!--android:focusedByDefault="true"-->
+                    <!--android:hint="Search"-->
+                    <!--android:textColorHint="#808080" />-->
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/search" />
-            </LinearLayout>
+
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:src="@drawable/search" />-->
+            <!--</LinearLayout>-->
 
             <ImageView
                 android:id="@+id/wifi_connect"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:padding="5dp"
@@ -399,17 +403,18 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:layout_marginRight="10dp">
 
                 <ImageView
                     android:id="@+id/bettryStatus"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="5dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="3dp"
                     android:src="@drawable/battery_icon" />
 
                 <TextView
@@ -423,11 +428,11 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="20dp"
+                android:layout_height="30dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
-                android:padding="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:layout_marginRight="20dp">
 
                 <TextView

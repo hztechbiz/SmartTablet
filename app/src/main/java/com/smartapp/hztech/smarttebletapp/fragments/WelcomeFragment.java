@@ -1,7 +1,9 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,11 @@ public class WelcomeFragment extends Fragment {
 
         txtHotelName = view.findViewById(R.id.txt_hotel_name);
         txtDescription = view.findViewById(R.id.txt_description);
+
+        Typeface LatoBold = ResourcesCompat.getFont(getContext(), R.font.lato_bold);
+        txtHotelName.setTypeface(LatoBold);
+        Typeface LatoRegular = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
+        txtDescription.setTypeface(LatoRegular);
 
         new RetrieveHotel(getContext())
                 .onSuccess(new AsyncResultBag.Success() {
