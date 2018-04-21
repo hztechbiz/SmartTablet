@@ -3,15 +3,10 @@ package com.smartapp.hztech.smarttebletapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -33,11 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -299,7 +290,7 @@ public class SyncActivity extends Activity {
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
-                            switchScreen(MainActivity.class);
+                            switchScreen(MainActivityNew.class);
                         }
                     })
                     .execute();

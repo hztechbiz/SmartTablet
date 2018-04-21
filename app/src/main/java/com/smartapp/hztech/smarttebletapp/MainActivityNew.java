@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
-import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
@@ -39,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivityNew extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
     private FrameLayout fragmentContainer;
@@ -94,11 +93,11 @@ public class MainActivity extends FragmentActivity {
                 return;
             }
 
-            MainFragment firstFragment = new MainFragment();
-            firstFragment.setFragmentListener(fragmentListener);
+            CategoryFragment fragment = new CategoryFragment();
+            fragment.setFragmentListener(fragmentListener);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(fragmentContainer.getId(), firstFragment).commit();
+                    .add(fragmentContainer.getId(), fragment).commit();
         }
 
         batteryBroadcastReceiver = new BatteryBroadcastReceiver();
@@ -281,8 +280,6 @@ public class MainActivity extends FragmentActivity {
         Object value = view.getTag(R.string.tag_value);
 
         Bundle bundle = new Bundle();
-        MainFragment mainFragment = new MainFragment();
-        mainFragment.setFragmentListener(fragmentListener);
 
         if (action != null && value != null) {
             if (action.equals(R.string.tag_action_category)) {
@@ -293,7 +290,7 @@ public class MainActivity extends FragmentActivity {
                 fragment.setFragmentListener(fragmentListener);
                 fragment.setArguments(bundle);
 
-                mainFragment.setChildFragment(fragment);
+                fragmentListener.onUpdateFragment(fragment);
 
             } else if (action.equals(R.string.tag_action_service)) {
                 bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(value.toString()));
@@ -301,11 +298,14 @@ public class MainActivity extends FragmentActivity {
                 ServiceFragment fragment = new ServiceFragment();
                 fragment.setArguments(bundle);
 
-                mainFragment.setChildFragment(fragment);
+                fragmentListener.onUpdateFragment(fragment);
             }
-        }
+        } else {
+            CategoryFragment fragment = new CategoryFragment();
+            fragment.setFragmentListener(fragmentListener);
 
-        fragmentListener.onUpdateFragment(mainFragment);
+            fragmentListener.onUpdateFragment(fragment);
+        }
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {

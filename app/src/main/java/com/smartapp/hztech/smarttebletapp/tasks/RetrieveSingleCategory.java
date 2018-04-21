@@ -2,8 +2,8 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.smartapp.hztech.smarttebletapp.dao.CategoryDao;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
@@ -34,7 +34,13 @@ public class RetrieveSingleCategory extends AsyncTask<Void, Void, Category> {
         Category value = null;
 
         try {
-            value = _db.getAppDatabase().categoryDao().get(_id);
+
+            CategoryDao categoryDao = _db.getAppDatabase().categoryDao();
+            value = categoryDao.get(_id);
+
+            int count = categoryDao.getAll(value.getId()).length;
+            value.setChildren_count(count);
+
         } catch (Exception e) {
             error = e;
         }

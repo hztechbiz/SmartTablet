@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.smartapp.hztech.smarttebletapp.MainActivity">
 
-
     <ImageView
         android:id="@+id/main_bg_img"
         android:layout_width="match_parent"
@@ -13,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         tools:ignore="ContentDescription" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -345,7 +343,6 @@
 
         </ScrollView>
 
-
     </LinearLayout>
 
 
@@ -362,53 +359,25 @@
             android:gravity="right"
             android:orientation="horizontal">
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginRight="10dp"-->
-
-                <!--android:background="@drawable/white_background_corner_radius"-->
-                <!--android:gravity="center"-->
-                <!--android:orientation="horizontal">-->
-
-                <!--<EditText-->
-                    <!--android:layout_width="200dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_marginLeft="5dp"-->
-                    <!--android:backgroundTint="#25a8d0"-->
-                    <!--android:cursorVisible="false"-->
-                    <!--android:focusable="false"-->
-                    <!--android:focusableInTouchMode="true"-->
-                    <!--android:focusedByDefault="true"-->
-                    <!--android:hint="Search"-->
-                    <!--android:textColorHint="#808080" />-->
-
-
-                <!--<ImageView-->
-                    <!--android:layout_width="40dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:src="@drawable/search" />-->
-            <!--</LinearLayout>-->
-
             <ImageView
                 android:id="@+id/wifi_connect"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:padding="5dp"
-                android:src="@drawable/wsignal"
-                android:layout_marginEnd="10dp" />
+                android:src="@drawable/wsignal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginRight="10dp">
+                android:paddingRight="5dp">
 
                 <ImageView
                     android:id="@+id/bettryStatus"
@@ -429,11 +398,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginRight="20dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginRight="20dp">
+                android:paddingRight="5dp">
 
                 <TextView
                     android:id="@+id/getTime"
@@ -449,7 +418,8 @@
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:padding="20dp" />
     </LinearLayout>
 
 

@@ -148,7 +148,7 @@ public class SplashActivity extends Activity {
     private void decide() {
         if (_isLoaded && _isTimeout) {
             if (_isRegistered && _isSyncDone) {
-                switchScreen(MainActivity.class);
+                switchScreen(MainActivityNew.class);
             } else {
                 switchScreen(SetupActivity.class);
             }
