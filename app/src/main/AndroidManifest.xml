@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -36,9 +35,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".ReservationSection.MakeReservation" />
+        <activity android:name=".MarketingPartnerSection.MarketPartner" />
         <activity android:name=".VolleyWebServiceTesting.volleyList" />
-        <activity android:name=".ReservationSection.ReservationAboutUs" />
+        <activity android:name=".MarketingPartnerSection.MarketPartnerAboutUs" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -88,6 +87,8 @@
         <activity
             android:name=".topBarActivity"
             android:screenOrientation="landscape" />
+        <activity android:name=".MarketingPartnerSection.MarketPartnerlocation" />
+        <activity android:name=".MarketingPartnerSection.PartnerGallery"></activity>
     </application>
 
 </manifest>

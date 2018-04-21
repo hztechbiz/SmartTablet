@@ -61,7 +61,6 @@ public class MainActivity extends FragmentActivity {
         public void onUpdateFragment(Fragment newFragment) {
             Log.d("FragmentUpdated", "From: MainActivity, Fragment: " + newFragment.getClass().getName());
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
             transaction.replace(fragmentContainer.getId(), newFragment);
             transaction.addToBackStack(null);
 
@@ -95,14 +94,6 @@ public class MainActivity extends FragmentActivity {
         weather = (ImageView) findViewById(R.id.weather);
         news = (ImageView) findViewById(R.id.news);
 
-
-//        searchKey.setTextIsSelectable(false);
-//        searchKey.setFocusable(true);
-//        searchKey.setFocusableInTouchMode(true);
-//        searchKey.setClickable(true);
-//        searchKey.setLongClickable(true);
-//        searchKey.setMovementMethod(ArrowKeyMovementMethod.getInstance());
-//        searchKey.setText(searchKey.getText(), TextView.BufferType.SPANNABLE);
         if (fragmentContainer != null) {
 
             if (savedInstanceState != null) {
@@ -300,7 +291,8 @@ public class MainActivity extends FragmentActivity {
 
         if (action != null && value != null) {
             if (action.equals(R.string.tag_action_category)) {
-                bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(value.toString()));
+                bundle.putInt(getString(R.string.param_category_id),
+                        Integer.parseInt(value.toString()));
 
                 CategoryFragment fragment = new CategoryFragment();
                 fragment.setFragmentListener(fragmentListener);
@@ -351,7 +343,6 @@ public class MainActivity extends FragmentActivity {
         region.setImageResource(R.drawable.localregion);
         weather.setImageResource(R.drawable.weather);
         news.setImageResource(R.drawable.news);
-
 
         switch (view.getId()) {
             case R.id.ott:

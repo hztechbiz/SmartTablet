@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/reservationbanner"
-    tools:context="com.smartapp.hztech.smarttebletapp.ReservationSection.MakeReservation">
+    tools:context="com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.MarketPartner">
+
+    <ImageView
+        android:id="@+id/main_market_partner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,30 +24,125 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_marginBottom="20dp">
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-             >
-            <Button
+            android:orientation="horizontal">
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/back"
-                android:background="#25a8d0"
-                android:textColor="#fff"
-                android:paddingLeft="10dp"
-                android:id="@+id/bck"
-                android:paddingRight="10dp"
-                android:text="Back"/>
-            <Button
+                android:layout_height="30dp"
+                android:background="@drawable/btn_background_with_corner"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginRight="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="3dp"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" BACK "
+                    android:textSize="17dp"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff" />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_background_with_corner"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginRight="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="3dp"
+                    android:src="@drawable/homeicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" HOME "
+                    android:textSize="17dp"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/home"
-                android:layout_marginLeft="5dp"
-                android:background="#25a8d0"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="#fff"
-                android:text="Home"/>
+                android:gravity="right"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:id="@+id/wifi_connect"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_background_with_corner"
+                    android:padding="5dp"
+                    android:src="@drawable/wsignal"
+                    android:layout_marginEnd="10dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_background_with_corner"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/bettryStatus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="3dp"
+                        android:src="@drawable/battery_icon" />
+
+                    <TextView
+                        android:id="@+id/percentage_set"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="0%"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/btn_background_with_corner"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/getTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="00:00 PM"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
          </LinearLayout>
         
         <!--navigation-->
@@ -147,15 +250,15 @@
         </LinearLayout>
         <!--navigation-->
 
-
-        <LinearLayout
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/market_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="260dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"></LinearLayout>
-
+            android:layout_marginLeft="50dp"
+            />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,4 +273,4 @@
 
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

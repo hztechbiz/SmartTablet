@@ -32,8 +32,6 @@ public class volleyList extends AppCompatActivity {
         Button btnParse = findViewById(R.id.btn_parse);
 
 
-
-
         btnParse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,20 +39,21 @@ public class volleyList extends AppCompatActivity {
             }
         });
     }
-    private void JsonParse(){
+
+    private void JsonParse() {
         String url = "https://api.myjson.com/bins/kp9wz";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray jsonArray = response.getJSONArray("employees");
-                    for (int i = 0; i < response.length(); i++){
+                    for (int i = 0; i < response.length(); i++) {
                         JSONObject empl = jsonArray.getJSONObject(i);
                         String firstName = empl.getString("firstname");
                         int age = empl.getInt("age");
                         String mail = empl.getString("mail");
 
-                        mTextviewResult.append(firstName+", "+ String.valueOf(age)+", "+ mail + "\n\n");
+                        mTextviewResult.append(firstName + ", " + String.valueOf(age) + ", " + mail + "\n\n");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

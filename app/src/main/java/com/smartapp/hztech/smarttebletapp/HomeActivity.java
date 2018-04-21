@@ -8,8 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.smartapp.hztech.smarttebletapp.ReservationSection.MakeReservation;
-import com.smartapp.hztech.smarttebletapp.ServicesSection.ServicesHome;
+import com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.MarketPartner;
 
 public class HomeActivity extends Activity {
 
@@ -25,7 +24,7 @@ public class HomeActivity extends Activity {
         aaa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a = new Intent(HomeActivity.this, MakeReservation.class);
+                Intent a = new Intent(HomeActivity.this, MarketPartner.class);
                 startActivity(a);
             }
         });
