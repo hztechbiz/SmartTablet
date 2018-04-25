@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context="com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.MarketPartnerTestimonials">
+
+
+    <ViewFlipper
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        android:id="@+id/viewFlip">
+
+        <LinearLayout
+            android:layout_width="450dp"
+            android:layout_height="160dp"
+            android:background="#03507f"
+            android:id="@+id/linearLayout1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus."/>
+
+<!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Mike Patterson"-->
+    <!--android:background="black"-->
+    <!---->
+    <!--android:layout_marginTop="70dp"-->
+    <!--android:textColor="#03507f"/>-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="450dp"
+            android:layout_height="160dp"
+            android:background="#25a8d0"
+            android:id="@+id/linearLayout2"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus."/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="450dp"
+            android:layout_height="160dp"
+            android:background="#a5a8bf"
+            android:id="@+id/linearLayout3"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus."/>
+        </LinearLayout>
+        <!--<ImageView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:id="@+id/img1"-->
+        <!--android:scaleType="center"-->
+        <!--android:src="@drawable/gallery1"/>-->
+
+
+    </ViewFlipper>
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/pre"
+        android:src="@drawable/pre"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What people say about us"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" android:textSize="30dp"
+        android:layout_marginTop="10dp"/>
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/nxt"
+        android:src="@drawable/nxt"
+        android:layout_alignParentRight="true"/>
+
+
+
+
+</RelativeLayout>

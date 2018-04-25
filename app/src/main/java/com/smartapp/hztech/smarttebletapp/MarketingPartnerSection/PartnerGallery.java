@@ -1,22 +1,26 @@
 package com.smartapp.hztech.smarttebletapp.MarketingPartnerSection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
 
-public class PartnerGallery extends Fragment {
+public class PartnerGallery extends FragmentActivity {
 
     public PartnerGallery() {
 
     }
 
+    Button popUp;
     GridView gridView;
     int gallerThumb[] = {R.drawable.gallery1,
             R.drawable.gallery2,
@@ -26,18 +30,25 @@ public class PartnerGallery extends Fragment {
             R.drawable.gallery6};
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.market_partner_gallery, container, false);
+        setContentView(R.layout.market_partner_gallery);
 
+        popUp = (Button) findViewById(R.id.popUpcheck);
+        gridView = (GridView) findViewById(R.id.list_gallery);
 
-        gridView = view.findViewById(R.id.list_gallery);
-
-        GalleryGridAdapter adapter = new
-                GalleryGridAdapter(getContext(), gallerThumb);
+        GalleryGridAdapter adapter = new GalleryGridAdapter (this, gallerThumb);
         gridView.setAdapter(adapter);
-        return view;
+
+
+        popUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 }

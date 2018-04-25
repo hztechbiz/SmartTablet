@@ -1,9 +1,13 @@
 package com.smartapp.hztech.smarttebletapp.adapters;
 
 import android.content.Context;
+import android.media.Image;
+import android.renderscript.Sampler;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -17,22 +21,28 @@ import java.util.List;
  */
 
 public class GalleryGridAdapter extends BaseAdapter {
-    private int icons[];
+    private View.OnClickListener itemClick;
+    private int[] image;
+    private int resource;
     private Context context;
     private LayoutInflater inflater;
 
-    public GalleryGridAdapter(Context context, int icons[]){
-        this.icons = icons;
+    public GalleryGridAdapter(Context context, int[] image ) {
+
+        this.image = image;
         this.context = context;
+
+        //inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
+
     @Override
     public int getCount() {
-        return icons.length;
+        return image.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return icons[position];
+        return image[position];
     }
 
     @Override
@@ -43,13 +53,47 @@ public class GalleryGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+//        ViewHolder holder = null;
+//        if (convertView == null){
+//            holder = new ViewHolder();
+//            convertView = inflater.inflate(resource, null);
+//            holder.imageView = (ImageView) convertView.findViewById(R.id.garl1);
+//            convertView.setTag(holder);
+//        }
+//        else {
+//            holder = (ViewHolder)convertView.getTag();
+//        }
+//        holder.imageView.setImageResource(image[position]);
+//        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+
+
+        Object object = getItem(position);
+
         View gridView = convertView;
-        if (convertView == null){
-            inflater = (LayoutInflater)  context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            gridView =  inflater.inflate(R.layout.custome_gallery, null);
+        if (convertView == null) {
+            inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+            gridView = inflater.inflate(R.layout.custome_gallery, null);
         }
-        ImageView imgview = (ImageView) gridView.findViewById(R.id.garl1);
-        imgview.setImageResource(icons[position]);
+        final ImageView imgview = (ImageView) gridView.findViewById(R.id.garl1);
+        imgview.setImageResource(image[position]);
+
+
+        // imgview.setTag(R.string.tag_value, object.getClass());
+       // imgview.setOnClickListener(itemClick);
+        imgview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgview.getId();
+            }
+        });
+
         return gridView;
     }
+
+    class HolderView{
+
+    }
+
 }
