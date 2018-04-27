@@ -14,6 +14,7 @@ public class MarketPartnerTestimonials extends FragmentActivity implements View.
 
     ViewFlipper flipper;
     ImageView next, Back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,12 +28,12 @@ public class MarketPartnerTestimonials extends FragmentActivity implements View.
         next.setOnClickListener(this);
         Back.setOnClickListener(this);
     }
+
     @Override
-    public void onClick(View v){
-        if (v == next){
+    public void onClick(View v) {
+        if (v == next) {
             flipper.showNext();
-        }
-        else if (v == Back){
+        } else if (v == Back) {
             flipper.showPrevious();
         }
     }

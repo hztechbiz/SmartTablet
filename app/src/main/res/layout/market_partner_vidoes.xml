@@ -17,10 +17,13 @@
         android:id="@+id/testVideo"
         android:layout_gravity="center"
         android:layout_width="700dp"
-        android:background="#ffffff"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
+
+
+
+
     </LinearLayout>
 
 

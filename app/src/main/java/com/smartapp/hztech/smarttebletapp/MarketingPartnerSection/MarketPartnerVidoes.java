@@ -1,5 +1,6 @@
 package com.smartapp.hztech.smarttebletapp.MarketingPartnerSection;
 
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,14 +17,33 @@ import com.smartapp.hztech.smarttebletapp.R;
 public class MarketPartnerVidoes extends FragmentActivity {
     String TAG = "com.ebookfrenzy.videoplayer";
 
-   private VideoView videoView;
+    private VideoView videoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.market_partner_vidoes);
 
-        videoView = (VideoView) findViewById(R.id.testVideo);
 
+//         Offline Video Player
+
+//        String fileName = "Video";
+//        String filePlace = "android.resource://" + getPackageName() + "//raw/hotelvideo";
+        videoView = (VideoView) findViewById(R.id.testVideo);
+//
+//        videoView.setVideoURI(Uri.parse(filePlace));
+//
+//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                mp.setLooping(true);
+//            }
+//        });
+//        videoView.setMediaController(new MediaController(this));
+//        videoView.start();
+
+
+//        Online Video Player
         videoView.setVideoPath(
                 "http://www.ebookfrenzy.com/android_book/movie.mp4");
 
@@ -32,13 +52,12 @@ public class MarketPartnerVidoes extends FragmentActivity {
         videoView.setMediaController(mediaController);
 
         videoView.setOnPreparedListener(new
-         MediaPlayer.OnPreparedListener() {
-            @Override
-              public void onPrepared(MediaPlayer mp) {
-//               Log.d("Duration = " +
-//                 videoView.getDuration());
-                  }
-                   });
+                                                MediaPlayer.OnPreparedListener() {
+                                                    @Override
+                                                    public void onPrepared(MediaPlayer mp) {
+                                                        Log.d("Duration = ", videoView.getDuration() + " ");
+                                                    }
+                                                });
 
         videoView.start();
     }

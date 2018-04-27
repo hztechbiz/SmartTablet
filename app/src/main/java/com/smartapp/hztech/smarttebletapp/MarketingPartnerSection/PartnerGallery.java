@@ -8,11 +8,16 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PartnerGallery extends FragmentActivity {
 
@@ -22,7 +27,9 @@ public class PartnerGallery extends FragmentActivity {
 
     Button popUp;
     GridView gridView;
-    int gallerThumb[] = {R.drawable.gallery1,
+    List<Integer> ItemsList;
+    int selectedItem;
+    int[] gallerThumb = {R.drawable.gallery1,
             R.drawable.gallery2,
             R.drawable.gallery3,
             R.drawable.gallery4,
@@ -30,7 +37,7 @@ public class PartnerGallery extends FragmentActivity {
             R.drawable.gallery6};
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_partner_gallery);
@@ -38,17 +45,33 @@ public class PartnerGallery extends FragmentActivity {
         popUp = (Button) findViewById(R.id.popUpcheck);
         gridView = (GridView) findViewById(R.id.list_gallery);
 
-        GalleryGridAdapter adapter = new GalleryGridAdapter (this, gallerThumb);
+        // ItemsList = new ArrayList<Integer>(Arrays.asList(gallerThumb));
+
+        GalleryGridAdapter adapter = new GalleryGridAdapter(this, gallerThumb);
         gridView.setAdapter(adapter);
 
 
-        popUp.setOnClickListener(new View.OnClickListener() {
+//        Grid View Listener ID Get
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = (Integer) parent.getItemAtPosition(position);
+
                 Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
+                i.putExtra("IMAGE", selectedItem);
                 startActivity(i);
             }
         });
+
+//        Navigate on PopUp Activity On Button
+
+//        popUp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
     }
 }

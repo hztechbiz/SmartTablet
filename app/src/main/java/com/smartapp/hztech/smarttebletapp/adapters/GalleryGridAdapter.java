@@ -1,6 +1,7 @@
 package com.smartapp.hztech.smarttebletapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.renderscript.Sampler;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.PopUpActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 
 import java.util.List;
 
-/**
- * Created by HNH on 4/21/2018.
- */
 
 public class GalleryGridAdapter extends BaseAdapter {
     private View.OnClickListener itemClick;
@@ -27,7 +26,7 @@ public class GalleryGridAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
 
-    public GalleryGridAdapter(Context context, int[] image ) {
+    public GalleryGridAdapter(Context context, int[] image) {
 
         this.image = image;
         this.context = context;
@@ -67,8 +66,6 @@ public class GalleryGridAdapter extends BaseAdapter {
 //        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 
-
-
         Object object = getItem(position);
 
         View gridView = convertView;
@@ -81,18 +78,22 @@ public class GalleryGridAdapter extends BaseAdapter {
 
 
         // imgview.setTag(R.string.tag_value, object.getClass());
-       // imgview.setOnClickListener(itemClick);
-        imgview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgview.getId();
-            }
-        });
+        // imgview.setOnClickListener(itemClick);
 
+
+//        imgview.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                v.getId();
+//                Intent i = new Intent(context, PopUpActivity.class);
+//                context.startActivity(i);
+//            }
+//        });
         return gridView;
     }
 
-    class HolderView{
+    class HolderView {
 
     }
 
