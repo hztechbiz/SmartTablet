@@ -2,14 +2,11 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.smartapp.hztech.smarttebletapp.dao.CategoryDao;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
-
-import java.util.List;
 
 public class RetrieveCategories extends AsyncTask<Void, Void, Category[]> {
     private DatabaseHelper _db;
@@ -47,6 +44,11 @@ public class RetrieveCategories extends AsyncTask<Void, Void, Category[]> {
                 values = categoryDao.getAll(_ids);
             else
                 values = categoryDao.getAll();
+
+            for (int i = 0; i < values.length; i++) {
+                int count = categoryDao.getAll(values[i].getId()).length;
+                values[i].setChildren_count(count);
+            }
 
         } catch (Exception e) {
             error = e;
