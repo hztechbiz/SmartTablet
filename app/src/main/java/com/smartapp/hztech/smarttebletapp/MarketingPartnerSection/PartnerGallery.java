@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
@@ -41,7 +43,7 @@ public class PartnerGallery extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_partner_gallery);
-
+        final LinearLayout lnr = (LinearLayout) findViewById(R.id.mainBlur);
         popUp = (Button) findViewById(R.id.popUpcheck);
         gridView = (GridView) findViewById(R.id.list_gallery);
 
@@ -57,9 +59,13 @@ public class PartnerGallery extends FragmentActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = (Integer) parent.getItemAtPosition(position);
 
+                lnr.getBackground().setAlpha(100);
                 Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
                 i.putExtra("IMAGE", selectedItem);
                 startActivity(i);
+
+
+
             }
         });
 

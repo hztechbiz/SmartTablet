@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".MarketingPartnerSection.PartnerGallery"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,13 +91,15 @@
             android:name=".topBarActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerlocation" />
-        <activity android:name=".MarketingPartnerSection.PartnerGallery" />
+        <activity android:name=".SplashActivity" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerMenu" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerVidoes" />
         <activity
             android:name=".MarketingPartnerSection.PopUpActivity"
             android:theme="@style/AppTheme.PopMe" />
-        <activity android:name=".MarketingPartnerSection.MarketPartnerTestimonials"></activity>
+        <activity android:name=".MarketingPartnerSection.MarketPartnerTestimonials" />
+        <activity android:name=".PopUps.PoolPopUp" />
+        <activity android:name=".PopUps.BatteryPopUp"></activity>
     </application>
 
 </manifest>

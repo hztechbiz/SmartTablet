@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.smartapp.hztech.smarttebletapp.PopUps.BatteryPopUp;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
@@ -415,6 +416,8 @@ public class MainActivity extends FragmentActivity {
         int res = R.drawable.battery_icon;
         if (percentage < 10) {
             res = R.drawable.batterydown;
+//            Intent btryPop = new Intent(getApplicationContext(), BatteryPopUp.class);
+//            startActivity(btryPop);
         } else if (percentage < 20) {
             res = R.drawable.battery_icon;
         } else if (percentage < 30) {
@@ -432,6 +435,8 @@ public class MainActivity extends FragmentActivity {
         } else if (percentage < 90) {
             res = R.drawable.battery_icon;
         } else if (percentage <= 99) {
+            Intent btryPop = new Intent(getApplicationContext(), BatteryPopUp.class);
+            startActivity(btryPop);
             res = R.drawable.battery_icon;
         } else if (percentage <= 100) {
             res = R.drawable.btfull1;
