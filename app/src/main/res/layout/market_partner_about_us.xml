@@ -8,45 +8,43 @@
     tools:context="com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.MarketPartnerAboutUs">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/white_bg_border_radius_opacity"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/reservationthumb1" />
+
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/white_bg_border_radius_opacity"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/reservationthumb1"/>
 
+                android:orientation="vertical">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/aboutParaTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="10dp"
-
-                        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec sit amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus scelerisque, arcu mi ornare nisi, at efficitur libero urna sed nulla. Suspendisse eleifend nulla euismod blandit scelerisque.\n\nNunc commodo mauris nec mi vestibulum, ut sollicitudin diam rhoncus. Aliquam sapien ex, egestas non felis ac, porttitor efficitur enim. Duis laoreet porta augue nec dictum. Etiam turpis massa, finibus sed velit vitae, consequat dapibus augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce est mi, dignissim sed sagittis non, blandit a lorem. Fusce libero leo, vestibulum vitae efficitur vitae, porttitor eu ante. Aenean at metus auctor, pulvinar turpis ac, mattis lacus.\n\nNam vulputate, enim et molestie viverra, nunc lorem ornare nisl, faucibus tristique est lectus volutpat nisl. Etiam vel lobortis lectus, sed convallis massa."
-                        android:textColor="#000" />
-                </LinearLayout>
-            </ScrollView>
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin aliquam tellus et hendrerit. Nullam eu augue gravida, rhoncus augue eu, viverra diam. Donec sit amet dignissim mi, et luctus lacus. Quisque tincidunt, purus non finibus scelerisque, arcu mi ornare nisi, at efficitur libero urna sed nulla. Suspendisse eleifend nulla euismod blandit scelerisque.\n\nNunc commodo mauris nec mi vestibulum, ut sollicitudin diam rhoncus. Aliquam sapien ex, egestas non felis ac, porttitor efficitur enim. Duis laoreet porta augue nec dictum. Etiam turpis massa, finibus sed velit vitae, consequat dapibus augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce est mi, dignissim sed sagittis non, blandit a lorem. Fusce libero leo, vestibulum vitae efficitur vitae, porttitor eu ante. Aenean at metus auctor, pulvinar turpis ac, mattis lacus.\n\nNam vulputate, enim et molestie viverra, nunc lorem ornare nisl, faucibus tristique est lectus volutpat nisl. Etiam vel lobortis lectus, sed convallis massa."
+                    android:textColor="#000" />
+            </LinearLayout>
+        </ScrollView>
 
 
-        </LinearLayout>
-
+    </LinearLayout>
 
 
 </LinearLayout>

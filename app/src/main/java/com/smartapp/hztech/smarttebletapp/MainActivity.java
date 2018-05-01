@@ -434,10 +434,6 @@ public class MainActivity extends FragmentActivity {
             res = R.drawable.battery_icon;
         } else if (percentage < 90) {
             res = R.drawable.battery_icon;
-        } else if (percentage <= 99) {
-            Intent btryPop = new Intent(getApplicationContext(), BatteryPopUp.class);
-            startActivity(btryPop);
-            res = R.drawable.battery_icon;
         } else if (percentage <= 100) {
             res = R.drawable.btfull1;
         }

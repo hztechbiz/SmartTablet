@@ -27,7 +27,6 @@ public class PartnerGallery extends FragmentActivity {
 
     }
 
-    Button popUp;
     GridView gridView;
     List<Integer> ItemsList;
     int selectedItem;
@@ -44,40 +43,22 @@ public class PartnerGallery extends FragmentActivity {
 
         setContentView(R.layout.market_partner_gallery);
         final LinearLayout lnr = (LinearLayout) findViewById(R.id.mainBlur);
-        popUp = (Button) findViewById(R.id.popUpcheck);
         gridView = (GridView) findViewById(R.id.list_gallery);
-
-        // ItemsList = new ArrayList<Integer>(Arrays.asList(gallerThumb));
-
         GalleryGridAdapter adapter = new GalleryGridAdapter(this, gallerThumb);
         gridView.setAdapter(adapter);
 
 
-//        Grid View Listener ID Get
+//              Grid View Listener ID Get
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = (Integer) parent.getItemAtPosition(position);
-
-                lnr.getBackground().setAlpha(100);
+//              lnr.getBackground().setAlpha(100);
                 Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
                 i.putExtra("IMAGE", selectedItem);
                 startActivity(i);
-
-
-
             }
         });
-
-//        Navigate on PopUp Activity On Button
-
-//        popUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
-//                startActivity(i);
-//            }
-//        });
 
     }
 }

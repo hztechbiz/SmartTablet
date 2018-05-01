@@ -64,7 +64,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
                     android:background="#c5c6c9" />
-                <!--android:background="@drawable/bggradient"-->
+
                 <LinearLayout
                     android:id="@+id/ott"
                     android:layout_width="match_parent"

@@ -30,8 +30,6 @@ public class GalleryGridAdapter extends BaseAdapter {
 
         this.image = image;
         this.context = context;
-
-        //inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -52,22 +50,6 @@ public class GalleryGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-//        ViewHolder holder = null;
-//        if (convertView == null){
-//            holder = new ViewHolder();
-//            convertView = inflater.inflate(resource, null);
-//            holder.imageView = (ImageView) convertView.findViewById(R.id.garl1);
-//            convertView.setTag(holder);
-//        }
-//        else {
-//            holder = (ViewHolder)convertView.getTag();
-//        }
-//        holder.imageView.setImageResource(image[position]);
-//        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-
-        Object object = getItem(position);
-
         View gridView = convertView;
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -76,25 +58,7 @@ public class GalleryGridAdapter extends BaseAdapter {
         final ImageView imgview = (ImageView) gridView.findViewById(R.id.garl1);
         imgview.setImageResource(image[position]);
 
-
-        // imgview.setTag(R.string.tag_value, object.getClass());
-        // imgview.setOnClickListener(itemClick);
-
-
-//        imgview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                v.getId();
-//                Intent i = new Intent(context, PopUpActivity.class);
-//                context.startActivity(i);
-//            }
-//        });
         return gridView;
-    }
-
-    class HolderView {
-
     }
 
 }

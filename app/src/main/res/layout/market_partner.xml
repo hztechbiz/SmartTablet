@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,25 +18,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="20dp">
+        android:orientation="vertical">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginRight="10dp">
+                android:paddingRight="5dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -46,22 +46,24 @@
                     android:src="@drawable/back" />
 
                 <TextView
+                    android:id="@+id/bckScreenTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" BACK "
-                    android:textSize="17dp"
                     android:textColor="#fff"
-                    android:textColorHint="#fff" />
+                    android:textColorHint="#fff"
+                    android:textSize="17dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/btn_background_with_corner"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginRight="10dp">
+                android:paddingRight="5dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -70,12 +72,13 @@
                     android:src="@drawable/homeicon" />
 
                 <TextView
+                    android:id="@+id/hometxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" HOME "
-                    android:textSize="17dp"
                     android:textColor="#fff"
-                    android:textColorHint="#fff" />
+                    android:textColorHint="#fff"
+                    android:textSize="17dp" />
             </LinearLayout>
 
 
@@ -90,21 +93,21 @@
                     android:id="@+id/wifi_connect"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/btn_background_with_corner"
                     android:padding="5dp"
-                    android:src="@drawable/wsignal"
-                    android:layout_marginEnd="10dp" />
+                    android:src="@drawable/wsignal" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/btn_background_with_corner"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginRight="10dp">
+                    android:paddingRight="5dp">
 
                     <ImageView
                         android:id="@+id/bettryStatus"
@@ -125,11 +128,11 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/btn_background_with_corner"
                     android:gravity="center"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_marginRight="20dp">
+                    android:paddingRight="5dp">
 
                     <TextView
                         android:id="@+id/getTime"
@@ -143,110 +146,128 @@
             </LinearLayout>
 
 
-         </LinearLayout>
-        
+        </LinearLayout>
+
         <!--navigation-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginTop="15dp"
+            android:background="#25a8d0"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:paddingBottom="15dp"
-            android:paddingTop="15dp"
-            android:background="#25a8d0">
+            android:paddingTop="15dp">
+
+            <TextView
+                android:id="@+id/aboutPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ABOUT US"
+                android:textColor="#fff"
+                android:textSize="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:id="@+id/aboutPage"
-                android:text="ABOUT US" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text=" | "/>
+                android:text=" | "
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
             <TextView
+                android:id="@+id/locationMp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:text="LOCATION"
                 android:textColor="#fff"
-                android:text="LOCATION"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text=" | "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:text="MENUS"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text=" | "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:text="GALLERY"/>
+                android:textSize="15dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:textSize="15dp"
+                android:text=" | "
                 android:textColor="#fff"
-                android:text=" | "/>
+                android:textSize="15dp" />
+
             <TextView
+                android:id="@+id/MenuMP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:text="MENUS"
                 android:textColor="#fff"
-                android:text="OFFERS"/>
+                android:textSize="15dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:textSize="15dp"
+                android:text=" | "
                 android:textColor="#fff"
-                android:text=" | "/>
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/gallaryMp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GALLERY"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
-                android:text="VIDEO"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textColor="#fff"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text=" | "/>
+                android:text=" | "
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/offerMP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OFFERS"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text=" | "
                 android:textColor="#fff"
-                android:text="TESTIMONIALS"/>
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/videoMP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VIDEO"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text=" | "
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/testtiMP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TESTIMONIALS"
+                android:textColor="#fff"
+                android:textSize="15dp" />
         </LinearLayout>
         <!--navigation-->
 
@@ -254,22 +275,21 @@
             android:id="@+id/market_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="260dp"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginRight="50dp"
             android:layout_marginLeft="50dp"
-            />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#25a8d0"
-                android:paddingLeft="30dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingRight="30dp"
-                android:textColor="#fff"
-                android:text="MAKE A RESERVATION"/>
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#25a8d0"
+            android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:text="MAKE A RESERVATION"
+            android:textColor="#fff" />
 
 
     </LinearLayout>

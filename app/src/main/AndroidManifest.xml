@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MarketingPartnerSection.PartnerGallery"
+            android:name=".SplashActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +91,7 @@
             android:name=".topBarActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerlocation" />
-        <activity android:name=".SplashActivity" />
+        <activity android:name=".MarketingPartnerSection.PartnerGallery" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerMenu" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerVidoes" />
         <activity

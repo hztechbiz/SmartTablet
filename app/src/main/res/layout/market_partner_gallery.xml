@@ -8,26 +8,21 @@
     tools:context="com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.PartnerGallery">
 
     <LinearLayout
+        android:id="@+id/mainBlur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/mainBlur">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PopUp"
-        android:id="@+id/popUpcheck"/>
+        android:orientation="vertical">
 
-    <GridView
-        android:id="@+id/list_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="15dp"
-        android:numColumns="3"
-        android:columnWidth="100dp"
-        android:stretchMode="columnWidth">
+        <GridView
+            android:id="@+id/list_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:columnWidth="100dp"
+            android:numColumns="3"
+            android:stretchMode="columnWidth">
 
-    </GridView>
+        </GridView>
     </LinearLayout>
 
 </LinearLayout>

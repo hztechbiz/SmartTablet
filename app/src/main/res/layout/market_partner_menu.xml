@@ -11,23 +11,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@drawable/white_bg_border_radius_opacity"
+        android:orientation="vertical"
         android:padding="30dp">
 
         <TextView
+            android:id="@+id/menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="PRICING"
+            android:text="Menu"
             android:textColor="#25a8d0"
             android:textSize="20dp" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,16 +41,18 @@
 
             </LinearLayout>
         </ScrollView>
+
         <Button
+            android:id="@+id/btnBooking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#25a8d0"
-            android:paddingLeft="30dp"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:textColor="#fff"
-            android:text="BOOK NOW HERE"/>
+            android:paddingTop="10dp"
+            android:text="BOOK NOW HERE"
+            android:textColor="#fff" />
 
     </LinearLayout>
 

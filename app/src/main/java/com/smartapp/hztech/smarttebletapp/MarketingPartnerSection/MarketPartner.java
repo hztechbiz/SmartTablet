@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
@@ -19,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +52,7 @@ public class MarketPartner extends FragmentActivity {
     private FrameLayout marketFragmentContainer;
     private ImageView BackgroudImage;
     private ImageView set_sginal_img, setBatteryStatus, setBgImage;
-    private TextView percentage_set, set_Time, searchKey;
+    private TextView percentage_set, set_Time, searchKey, backScreenTxt, Hometxt, aboutMP, LocationMp, MenuMP, gallaryMp, offerMP, VideoMP, TesttiMP;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
@@ -85,7 +87,16 @@ public class MarketPartner extends FragmentActivity {
         set_sginal_img = (ImageView) findViewById(R.id.wifi_connect);
         setBatteryStatus = (ImageView) findViewById(R.id.bettryStatus);
         percentage_set = (TextView) findViewById(R.id.percentage_set);
-//        searchKey = (TextView) findViewById(R.id.searchKey);
+        backScreenTxt = (TextView) findViewById(R.id.bckScreenTxt);
+        Hometxt = (TextView) findViewById(R.id.hometxt);
+        aboutMP = (TextView) findViewById(R.id.aboutPage);
+        LocationMp = (TextView) findViewById(R.id.locationMp);
+        MenuMP = (TextView) findViewById(R.id.MenuMP);
+        gallaryMp = (TextView) findViewById(R.id.gallaryMp);
+        offerMP = (TextView) findViewById(R.id.offerMP);
+        VideoMP = (TextView) findViewById(R.id.videoMP);
+        TesttiMP = (TextView) findViewById(R.id.testtiMP);
+//      searchKey = (TextView) findViewById(R.id.searchKey);
         set_Time = (TextView) findViewById(R.id.getTime);
 
         if (marketFragmentContainer != null) {
@@ -113,6 +124,18 @@ public class MarketPartner extends FragmentActivity {
                 setSignal(wifi_signals_level);
             }
         }, 1000);
+
+
+        Typeface topBarFont = ResourcesCompat.getFont(this, R.font.lato_regular);
+        backScreenTxt.setTypeface(topBarFont);
+        Hometxt.setTypeface(topBarFont);
+        aboutMP.setTypeface(topBarFont);
+        LocationMp.setTypeface(topBarFont);
+        MenuMP.setTypeface(topBarFont);
+        gallaryMp.setTypeface(topBarFont);
+        offerMP.setTypeface(topBarFont);
+        VideoMP.setTypeface(topBarFont);
+        TesttiMP.setTypeface(topBarFont);
 
 
         setBranding();
