@@ -19,6 +19,7 @@ import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveServices;
@@ -32,6 +33,7 @@ import java.util.List;
 public class CategoryFragment extends Fragment {
 
     private FragmentListener fragmentListener;
+    private FragmentActivityListener parentListener;
     private List<Category> _categories;
     private List<Service> _services;
     private GridView gridView;
@@ -40,6 +42,7 @@ public class CategoryFragment extends Fragment {
     private ServicesGridAdapter servicesAdapter;
     private int _category_id;
     private Boolean _has_children;
+    private String _listing_type;
 
     public CategoryFragment() {
 
@@ -47,6 +50,10 @@ public class CategoryFragment extends Fragment {
 
     public void setFragmentListener(FragmentListener fragmentListener) {
         this.fragmentListener = fragmentListener;
+    }
+
+    public void setParentListener(FragmentActivityListener parentListener) {
+        this.parentListener = parentListener;
     }
 
     @Override
@@ -60,10 +67,20 @@ public class CategoryFragment extends Fragment {
 
         _category_id = 0;
         _has_children = false;
+        _listing_type = null;
 
         if (bundle != null) {
-            _category_id = bundle.getInt(getString(R.string.param_category_id));
-            _has_children = bundle.getBoolean(getString(R.string.param_has_children));
+            if (bundle.containsKey(getString(R.string.param_category_id))) {
+                _category_id = bundle.getInt(getString(R.string.param_category_id));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_has_children))) {
+                _has_children = bundle.getBoolean(getString(R.string.param_has_children));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_listing_type))) {
+                _listing_type = bundle.getString(getString(R.string.param_listing_type));
+            }
         }
 
         _categories = new ArrayList<>();
@@ -86,6 +103,7 @@ public class CategoryFragment extends Fragment {
 
                 CategoryFragment fragment = new CategoryFragment();
                 fragment.setFragmentListener(fragmentListener);
+                fragment.setParentListener(parentListener);
                 fragment.setArguments(bundle);
 
                 fragmentListener.onUpdateFragment(fragment);
@@ -102,6 +120,8 @@ public class CategoryFragment extends Fragment {
                 }
 
                 ServiceFragment fragment = new ServiceFragment();
+                fragment.setFragmentListener(fragmentListener);
+                fragment.setActivityListener(parentListener);
                 fragment.setArguments(bundle);
 
                 fragmentListener.onUpdateFragment(fragment);
@@ -116,7 +136,8 @@ public class CategoryFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
-        //setBranding();
+        parentListener.receive(R.string.msg_show_sidebar, null);
+        parentListener.receive(R.string.msg_reset_menu, null);
 
         return view;
     }
@@ -156,7 +177,12 @@ public class CategoryFragment extends Fragment {
     }
 
     private void getCategories() {
-        new RetrieveCategories(getContext(), _category_id)
+        String type = null;
+
+        if (_category_id == 0 && _listing_type != null)
+            type = _listing_type;
+
+        new RetrieveCategories(getContext(), _category_id, type)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {

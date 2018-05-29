@@ -20,6 +20,8 @@ public class Category {
     @Ignore
     private int children_count;
 
+    private boolean is_marketing_partner;
+
     public int getId() {
         return id;
     }
@@ -69,5 +71,13 @@ public class Category {
                 ", parent_id=" + parent_id +
                 ", children_count=" + children_count +
                 '}';
+    }
+
+    public boolean isIs_marketing_partner() {
+        return is_marketing_partner;
+    }
+
+    public void setIs_marketing_partner(boolean is_marketing_partner) {
+        this.is_marketing_partner = is_marketing_partner;
     }
 }

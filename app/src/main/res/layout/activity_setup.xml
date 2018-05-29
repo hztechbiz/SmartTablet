@@ -19,6 +19,7 @@
             android:ems="10"
             android:gravity="center"
             android:hint="ENTER API KEY HERE"
+            android:text="874AQ-dm3cV-rW7J8-DB3Ut-fWwr0"
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textSize="30sp"

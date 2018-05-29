@@ -3,7 +3,6 @@ package com.smartapp.hztech.smarttebletapp.MarketingPartnerSection;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,26 +15,19 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.Constants;
-import com.smartapp.hztech.smarttebletapp.HomeActivity;
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.NavigationFragment;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
@@ -104,7 +96,7 @@ public class MarketPartner extends FragmentActivity {
                 return;
             }
 
-            MainFragment checkFragment = new MainFragment();
+            NavigationFragment checkFragment = new NavigationFragment();
             checkFragment.setFragmentListener(fragmentListener);
 
             getSupportFragmentManager().beginTransaction().add(marketFragmentContainer.getId()

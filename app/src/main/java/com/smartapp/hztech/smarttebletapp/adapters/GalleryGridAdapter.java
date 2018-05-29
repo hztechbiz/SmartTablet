@@ -1,45 +1,42 @@
 package com.smartapp.hztech.smarttebletapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
-import android.renderscript.Sampler;
-import android.support.v7.widget.RecyclerView;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.PopUpActivity;
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.entities.Category;
 
+import java.io.File;
 import java.util.List;
 
 
 public class GalleryGridAdapter extends BaseAdapter {
     private View.OnClickListener itemClick;
-    private int[] image;
+    private List<String> image;
     private int resource;
     private Context context;
     private LayoutInflater inflater;
 
-    public GalleryGridAdapter(Context context, int[] image) {
-
+    public GalleryGridAdapter(Context context, List<String> image) {
         this.image = image;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return image.length;
+        return image.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return image[position];
+        return image.get(position);
     }
 
     @Override
@@ -55,8 +52,17 @@ public class GalleryGridAdapter extends BaseAdapter {
             inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             gridView = inflater.inflate(R.layout.custome_gallery, null);
         }
-        final ImageView imgview = (ImageView) gridView.findViewById(R.id.garl1);
-        imgview.setImageResource(image[position]);
+
+        File imgBG = new File(image.get(position));
+
+        if (imgBG.exists()) {
+            Resources res = context.getResources();
+            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
+            final ImageView imgview = gridView.findViewById(R.id.garl1);
+            imgview.setImageDrawable(bd);
+        }
 
         return gridView;
     }

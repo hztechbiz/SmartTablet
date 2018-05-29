@@ -16,11 +16,13 @@ public class RetrieveCategories extends AsyncTask<Void, Void, Category[]> {
     private int[] _ids;
     private int _parent_id;
     private Object error;
+    private String _listing_type;
 
-    public RetrieveCategories(Context context, int parent_id, int... ids) {
+    public RetrieveCategories(Context context, int parent_id, String listing_type, int... ids) {
         _db = DatabaseHelper.getInstance(context);
         _ids = ids;
         _parent_id = parent_id;
+        _listing_type = listing_type;
     }
 
     @Override
@@ -42,7 +44,12 @@ public class RetrieveCategories extends AsyncTask<Void, Void, Category[]> {
                 values = categoryDao.getAll(_parent_id);
             else if (_ids.length != 0)
                 values = categoryDao.getAll(_ids);
-            else
+            else if (_listing_type != null) {
+                if (_listing_type.equals("mp"))
+                    values = categoryDao.getMpAll();
+                else
+                    values = categoryDao.getGsdAll();
+            } else
                 values = categoryDao.getAll();
 
             for (int i = 0; i < values.length; i++) {

@@ -26,11 +26,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.smartapp.hztech.smarttebletapp.PopUps.BatteryPopUp;
 import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
@@ -47,11 +47,30 @@ public class MainActivity extends FragmentActivity {
 
     private ImageView img_wifi_signals, img_battery_level, bg_image;
     private TextView txt_battery_percentage, txt_time;
+    private LinearLayout _sidebar;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
+    private FragmentActivityListener activityListener = new FragmentActivityListener() {
+        @Override
+        public void receive(int message, Object arguments) {
+            switch (message) {
+                case R.string.msg_hide_sidebar:
+                    hideSidebar();
+                    break;
+                case R.string.msg_show_sidebar:
+                    showSideBar();
+                    break;
+                case R.string.msg_update_menu:
 
+                    break;
+                case R.string.msg_reset_menu:
+
+                    break;
+            }
+        }
+    };
     private FragmentListener fragmentListener = new FragmentListener() {
         @Override
         public void onUpdateFragment(Fragment newFragment) {
@@ -64,6 +83,14 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
+    private void hideSidebar() {
+        _sidebar.setVisibility(View.GONE);
+    }
+
+    private void showSideBar() {
+        _sidebar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,19 +102,20 @@ public class MainActivity extends FragmentActivity {
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
-        img_wifi_signals = (ImageView) findViewById(R.id.wifi_connect);
-        img_battery_level = (ImageView) findViewById(R.id.bettryStatus);
-        txt_battery_percentage = (TextView) findViewById(R.id.percentage_set);
-        txt_time = (TextView) findViewById(R.id.getTime);
-        bg_image = (ImageView) findViewById(R.id.main_bg_img);
-        item_icon_1 = (ImageView) findViewById(R.id.tv);
-        item_icon_2 = (ImageView) findViewById(R.id.wifi);
-        item_icon_3 = (ImageView) findViewById(R.id.useTablet);
-        item_icon_4 = (ImageView) findViewById(R.id.info);
-        item_icon_5 = (ImageView) findViewById(R.id.map);
-        item_icon_6 = (ImageView) findViewById(R.id.region);
-        item_icon_7 = (ImageView) findViewById(R.id.weather);
-        item_icon_8 = (ImageView) findViewById(R.id.news);
+        _sidebar = findViewById(R.id.sidebar);
+        img_wifi_signals = findViewById(R.id.wifi_connect);
+        img_battery_level = findViewById(R.id.bettryStatus);
+        txt_battery_percentage = findViewById(R.id.percentage_set);
+        txt_time = findViewById(R.id.getTime);
+        bg_image = findViewById(R.id.main_bg_img);
+        item_icon_1 = findViewById(R.id.tv);
+        item_icon_2 = findViewById(R.id.wifi);
+        item_icon_3 = findViewById(R.id.useTablet);
+        item_icon_4 = findViewById(R.id.info);
+        item_icon_5 = findViewById(R.id.map);
+        item_icon_6 = findViewById(R.id.region);
+        item_icon_7 = findViewById(R.id.weather);
+        item_icon_8 = findViewById(R.id.news);
 
         if (fragmentContainer != null) {
 
@@ -97,6 +125,7 @@ public class MainActivity extends FragmentActivity {
 
             MainFragment firstFragment = new MainFragment();
             firstFragment.setFragmentListener(fragmentListener);
+            firstFragment.setParentListener(activityListener);
 
             getSupportFragmentManager().beginTransaction()
                     .add(fragmentContainer.getId(), firstFragment).commit();
@@ -119,31 +148,33 @@ public class MainActivity extends FragmentActivity {
 
         setupMenuItems();
         setBranding();
-
     }
 
     private void setBranding() {
-        new RetrieveSetting(this, Constants.FILE_PATH_KEY)
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
+        RetrieveSetting setting = new RetrieveSetting(this, Constants.SETTING_BACKGROUND);
 
-                        if (result != null) {
-                            String filePath = result.toString();
+        setting.onSuccess(new AsyncResultBag.Success() {
+            @Override
+            public void onSuccess(Object result) {
 
-                            if (filePath != null) {
-                                File imgBG = new File(filePath + "/Background.jpg");
-                                if (imgBG.exists()) {
-                                    Resources res = getResources();
-                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-                                    bg_image.setBackgroundDrawable(bd);
-                                }
-                            }
+                if (result != null) {
+                    String filePath = result.toString();
+
+                    if (filePath != null) {
+                        File imgBG = new File(filePath);
+
+                        if (imgBG.exists()) {
+                            Resources res = getResources();
+                            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                            bg_image.setBackgroundDrawable(bd);
                         }
                     }
-                })
-                .execute();
+                }
+            }
+        });
+        setting.setMediaKeys(Constants.SETTING_BACKGROUND);
+        setting.execute();
     }
 
     @Override
@@ -284,6 +315,7 @@ public class MainActivity extends FragmentActivity {
         Bundle bundle = new Bundle();
         MainFragment mainFragment = new MainFragment();
         mainFragment.setFragmentListener(fragmentListener);
+        mainFragment.setParentListener(activityListener);
 
         if (action != null && value != null) {
             if (action.equals(R.string.tag_action_category)) {
@@ -292,21 +324,26 @@ public class MainActivity extends FragmentActivity {
 
                 CategoryFragment fragment = new CategoryFragment();
                 fragment.setFragmentListener(fragmentListener);
+                fragment.setParentListener(activityListener);
                 fragment.setArguments(bundle);
 
-                mainFragment.setChildFragment(fragment);
+                //navigationFragment.setChildFragment(fragment);
+                fragmentListener.onUpdateFragment(fragment);
 
             } else if (action.equals(R.string.tag_action_service)) {
                 bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(value.toString()));
 
                 ServiceFragment fragment = new ServiceFragment();
                 fragment.setArguments(bundle);
+                fragment.setFragmentListener(fragmentListener);
+                fragment.setActivityListener(activityListener);
 
-                mainFragment.setChildFragment(fragment);
+                //navigationFragment.setChildFragment(fragment);
+                fragmentListener.onUpdateFragment(fragment);
             }
+        } else {
+            fragmentListener.onUpdateFragment(mainFragment);
         }
-
-        fragmentListener.onUpdateFragment(mainFragment);
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {

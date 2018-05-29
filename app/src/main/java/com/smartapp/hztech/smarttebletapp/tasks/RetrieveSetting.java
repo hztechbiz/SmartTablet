@@ -3,10 +3,12 @@ package com.smartapp.hztech.smarttebletapp.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.smartapp.hztech.smarttebletapp.entities.Media;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.helpers.DatabaseHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RetrieveSetting extends AsyncTask<Void, Void, HashMap<String, String>> {
@@ -14,12 +16,16 @@ public class RetrieveSetting extends AsyncTask<Void, Void, HashMap<String, Strin
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
-    private String[] _keys;
+    private String[] _keys, _media_keys;
     private Object error;
 
     public RetrieveSetting(Context context, String... keys) {
         _db = DatabaseHelper.getInstance(context);
         _keys = keys;
+    }
+
+    public void setMediaKeys(String... keys) {
+        _media_keys = keys;
     }
 
     @Override
@@ -39,7 +45,14 @@ public class RetrieveSetting extends AsyncTask<Void, Void, HashMap<String, Strin
             settings = _db.getAppDatabase().settingDao().getAll(_keys);
 
             for (int i = 0; i < settings.length; i++) {
-                values.put(settings[i].getName(), settings[i].getValue());
+                String value = settings[i].getValue();
+
+                if (_media_keys != null && Arrays.asList(_media_keys).contains(settings[i].getName())) {
+                    Media media = _db.getAppDatabase().mediaDao().get(Integer.parseInt(value));
+                    value = media.getPath();
+                }
+
+                values.put(settings[i].getName(), value);
             }
         } catch (Exception e) {
             error = e;

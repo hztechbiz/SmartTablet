@@ -1,31 +1,19 @@
 package com.smartapp.hztech.smarttebletapp.MarketingPartnerSection;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PartnerGallery extends FragmentActivity {
-
-    public PartnerGallery() {
-
-    }
 
     GridView gridView;
     List<Integer> ItemsList;
@@ -36,6 +24,9 @@ public class PartnerGallery extends FragmentActivity {
             R.drawable.gallery4,
             R.drawable.gallery5,
             R.drawable.gallery6};
+    public PartnerGallery() {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +35,8 @@ public class PartnerGallery extends FragmentActivity {
         setContentView(R.layout.market_partner_gallery);
         final LinearLayout lnr = (LinearLayout) findViewById(R.id.mainBlur);
         gridView = (GridView) findViewById(R.id.list_gallery);
-        GalleryGridAdapter adapter = new GalleryGridAdapter(this, gallerThumb);
-        gridView.setAdapter(adapter);
+        //GalleryGridAdapter adapter = new GalleryGridAdapter(this, gallerThumb);
+        //gridView.setAdapter(adapter);
 
 
 //              Grid View Listener ID Get

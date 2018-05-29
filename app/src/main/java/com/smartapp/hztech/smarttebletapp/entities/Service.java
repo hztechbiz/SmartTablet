@@ -23,6 +23,8 @@ public class Service {
     @ColumnInfo(typeAffinity = 2)
     private String meta;
 
+    private boolean is_marketing_partner;
+
     public int getId() {
         return id;
     }
@@ -77,5 +79,13 @@ public class Service {
 
     public void setMeta(String meta) {
         this.meta = meta;
+    }
+
+    public boolean isIs_marketing_partner() {
+        return is_marketing_partner;
+    }
+
+    public void setIs_marketing_partner(boolean is_marketing_partner) {
+        this.is_marketing_partner = is_marketing_partner;
     }
 }

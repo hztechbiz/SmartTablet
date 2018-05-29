@@ -11,6 +11,7 @@
     <string name="hotel_welcome_text">Welcome to %s</string>
     <!-- TAGS -->
     <string name="tag_has_children">HAS_CHILDREN</string>
+    <string name="tag_is_mp">IS_MP</string>
     <string name="tag_action">ACTION</string>
     <string name="tag_action_category">CATEGORY</string>
     <string name="tag_action_service">SERVICE</string>
@@ -20,4 +21,15 @@
     <string name="param_category_id">CATEGORY_ID</string>
     <string name="param_has_children">HAS_CHILDREN</string>
     <string name="param_service_id">SERVICE_ID</string>
+    <string name="param_listing_type">LISTING_TYPE</string>
+
+    <!-- MESSAGES -->
+    <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
+    <string name="msg_show_sidebar">SHOW_SIDEBAR</string>
+    <string name="msg_update_menu">UPDATE_MENU</string>
+    <string name="msg_reset_menu">RESET_MENU</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="make_a_reservation">MAKE A RESERVATION</string>
 </resources>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -14,13 +13,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.entities.Hotel;
+import com.smartapp.hztech.smarttebletapp.entities.Media;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
-import com.smartapp.hztech.smarttebletapp.tasks.DownloadImage;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreCategory;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreHotel;
+import com.smartapp.hztech.smarttebletapp.tasks.StoreMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreService;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreSetting;
 
@@ -41,21 +41,19 @@ public class SyncActivity extends Activity {
     private boolean _isHotelInfoStored;
     private boolean _isCategoriesStored;
     private boolean _isServicesStored;
-    private boolean _hasLogo;
-    private boolean _hasBackground;
-    private boolean _logoDownloaded;
-    private boolean _backgroundDownloaded;
-    private boolean _isPathStored;
+    private boolean _isFilesDownloaded;
     private String _token;
     private int _extraFieldsLength;
     private int _indexesFilled;
+    private boolean _hasError;
+    private Object _error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = false;
-        _hasBackground = _hasLogo = _logoDownloaded = _backgroundDownloaded = false;
+        _hasError = false;
+        _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = _isFilesDownloaded = false;
         _extraFieldsLength = 1;
         _indexesFilled = 0;
 
@@ -146,6 +144,44 @@ public class SyncActivity extends Activity {
 
         JSONArray services_arr = data.getJSONArray("services");
         storeServices(services_arr);
+
+        JSONArray media_arr = data.getJSONArray("objects");
+        storeMedias(media_arr);
+    }
+
+    private void storeMedias(JSONArray media_arr) throws JSONException {
+        Media[] medias = new Media[media_arr.length()];
+
+        for (int i = 0; i < media_arr.length(); i++) {
+            JSONObject m = media_arr.getJSONObject(i);
+
+            Media media = new Media();
+            media.setId(m.getInt("id"));
+            media.setUrl(m.getString("url"));
+
+            medias[i] = media;
+        }
+
+        if (medias.length > 0) {
+            new StoreMedia(this, getFilePath(null), medias)
+                    .onSuccess(new AsyncResultBag.Success() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            _isFilesDownloaded = true;
+                            decide();
+                        }
+                    })
+                    .onError(new AsyncResultBag.Error() {
+                        @Override
+                        public void onError(Object error) {
+                            _hasError = true;
+                            _error = error;
+                        }
+                    })
+                    .execute();
+        } else {
+            _isFilesDownloaded = true;
+        }
     }
 
     private void storeCategories(JSONArray categories_arr) throws JSONException {
@@ -158,6 +194,7 @@ public class SyncActivity extends Activity {
             category.setId(c.getInt("id"));
             category.setName(c.getString("name"));
             category.setDescription(c.getString("description"));
+            category.setIs_marketing_partner((c.getInt("is_marketing_partner") == 1));
 
             if (!c.isNull("parent_id"))
                 category.setParent_id(c.getInt("parent_id"));
@@ -189,6 +226,7 @@ public class SyncActivity extends Activity {
             service.setCategory_id(s.getInt("category_id"));
             service.setStatus(s.getInt("status"));
             service.setHotel_id(s.getInt("hotel_id"));
+            service.setIs_marketing_partner((s.getInt("is_marketing_partner") == 1));
 
             if (!s.isNull("meta"))
                 service.setMeta(s.getJSONArray("meta").toString());
@@ -210,8 +248,6 @@ public class SyncActivity extends Activity {
     private void storeHotelSettings(JSONArray meta) throws JSONException {
         int length = meta.length() + _extraFieldsLength;
         Setting[] settings = new Setting[length];
-        String logo = null;
-        String background = null;
 
         for (int i = 0; i < meta.length(); i++) {
             JSONObject m = meta.getJSONObject(i);
@@ -222,39 +258,8 @@ public class SyncActivity extends Activity {
 
             settings[i] = setting;
 
-            if (setting.getName().equals("logo")) {
-                _hasLogo = !setting.getValue().isEmpty();
-                logo = setting.getValue();
-            }
-
-            if (setting.getName().equals("background")) {
-                _hasBackground = !setting.getValue().isEmpty();
-                background = setting.getValue();
-            }
             _indexesFilled++;
         }
-
-        if (_hasLogo)
-            new DownloadImage(this, logo, getFilePath("Logo.jpg"))
-                    .onSuccess(new AsyncResultBag.Success() {
-                        @Override
-                        public void onSuccess(Object result) {
-                            Log.d("DownloadedImages", result.toString());
-                            _logoDownloaded = true;
-                        }
-                    })
-                    .execute();
-
-        if (_hasBackground)
-            new DownloadImage(this, background, getFilePath("Background.jpg"))
-                    .onSuccess(new AsyncResultBag.Success() {
-                        @Override
-                        public void onSuccess(Object result) {
-                            Log.d("DownloadedImages", result.toString());
-                            _backgroundDownloaded = true;
-                        }
-                    })
-                    .execute();
 
         settings[_indexesFilled++] = new Setting(FILE_PATH, getFilePath(null));
 
@@ -282,15 +287,14 @@ public class SyncActivity extends Activity {
     }
 
     private void decide() {
-        Boolean isDownloaded = (!_hasBackground || _backgroundDownloaded) && (!_hasLogo || _logoDownloaded);
-        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored && isDownloaded;
+        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored && _isFilesDownloaded;
 
         if (isDone) {
             new StoreSetting(this, new Setting(SYNC_DONE, "1"))
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
-                            switchScreen(MainActivityNew.class);
+                            switchScreen(MainActivity.class);
                         }
                     })
                     .execute();

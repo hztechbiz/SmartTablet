@@ -59,6 +59,7 @@ public class CategoryGridAdapter extends BaseAdapter {
 
         box_categories.setTag(R.string.tag_value, category.getId());
         box_categories.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
+        box_categories.setTag(R.string.tag_is_mp, category.isIs_marketing_partner());
 
         box_categories.setOnClickListener(itemClickListener);
 

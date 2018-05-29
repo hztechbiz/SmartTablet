@@ -37,7 +37,6 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".MarketingPartnerSection.MarketPartner" />
         <activity android:name=".VolleyWebServiceTesting.volleyList" />
-        <activity android:name=".MarketingPartnerSection.MarketPartnerAboutUs" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -90,7 +89,6 @@
         <activity
             android:name=".topBarActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".MarketingPartnerSection.MarketPartnerlocation" />
         <activity android:name=".MarketingPartnerSection.PartnerGallery" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerMenu" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerVidoes" />

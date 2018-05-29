@@ -14,7 +14,7 @@
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/sidebar"
         android:layout_width="150dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -22,7 +22,6 @@
         android:layout_alignParentTop="true"
         android:background="#fff"
         android:orientation="vertical">
-
 
         <ScrollView
             android:layout_width="match_parent"
@@ -349,8 +348,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="150dp"
-        android:orientation="vertical">
+        android:layout_toRightOf="@id/sidebar"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/sidebar">
 
         <LinearLayout
             android:layout_width="match_parent"

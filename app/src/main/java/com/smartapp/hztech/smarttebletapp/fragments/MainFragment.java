@@ -1,234 +1,136 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
-import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
-import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
+import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
+import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
-import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
-import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleCategory;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainFragment extends Fragment {
-    private FrameLayout fragmentContainer;
-    private Fragment _childFragment;
-    private TextView menu_item_1, menu_item_2, menu_item_3, menu_item_4;
-    private FragmentListener mainFragmentListener;
-    private FragmentListener childFragmentListener = new FragmentListener() {
-        @Override
-        public void onUpdateFragment(Fragment newFragment) {
-            Log.d("FragmentUpdated", "From: MainFragment, Fragment: " + newFragment.getClass().getName());
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
-            transaction.replace(fragmentContainer.getId(), newFragment);
-            transaction.addToBackStack(null);
+    private FragmentListener fragmentListener;
+    private FragmentActivityListener parentListener;
+    private List<Category> _categories;
+    private List<Service> _services;
+    private GridView gridView;
+    private ImageView _logoImageView, _bgImageView;
+    private CategoryGridAdapter categoryAdapter;
+    private ServicesGridAdapter servicesAdapter;
+    private int _category_id;
+    private Boolean _has_children;
+    private String _listing_type;
 
-            transaction.commit();
-        }
-    };
+    public MainFragment() {
 
-    @Nullable
+    }
+
+    public void setFragmentListener(FragmentListener fragmentListener) {
+        this.fragmentListener = fragmentListener;
+    }
+
+    public void setParentListener(FragmentActivityListener parentListener) {
+        this.parentListener = parentListener;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_fragment, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        fragmentContainer = view.findViewById(R.id.listing_fragment_container);
-        menu_item_1 = view.findViewById(R.id.menu_item_1);
-        menu_item_2 = view.findViewById(R.id.menu_item_2);
-        menu_item_3 = view.findViewById(R.id.menu_item_3);
-        menu_item_4 = view.findViewById(R.id.menu_item_4);
+        View view = inflater.inflate(R.layout.category_fragment, container, false);
+        Bundle bundle = getArguments();
 
-        if (fragmentContainer != null) {
+        gridView = view.findViewById(R.id.gridview);
 
-            if (_childFragment == null)
-                _childFragment = new WelcomeFragment();
+        _category_id = 0;
+        _has_children = false;
+        _listing_type = null;
 
-            getChildFragmentManager().beginTransaction()
-                    .add(fragmentContainer.getId(), _childFragment).commit();
+        if (bundle != null) {
+            if (bundle.containsKey(getString(R.string.param_category_id))) {
+                _category_id = bundle.getInt(getString(R.string.param_category_id));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_has_children))) {
+                _has_children = bundle.getBoolean(getString(R.string.param_has_children));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_listing_type))) {
+                _listing_type = bundle.getString(getString(R.string.param_listing_type));
+            }
         }
-        menu_item_1.setFilters(new InputFilter[]{new
-                InputFilter.AllCaps()});
-        menu_item_2.setFilters(new InputFilter[]{new
-                InputFilter.AllCaps()});
-        menu_item_3.setFilters(new InputFilter[]{new
-                InputFilter.AllCaps()});
-        menu_item_4.setFilters(new InputFilter[]{new
-                InputFilter.AllCaps()});
 
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
-        menu_item_1.setTypeface(typeface);
-        menu_item_2.setTypeface(typeface);
-        menu_item_3.setTypeface(typeface);
-        menu_item_4.setTypeface(typeface);
+        _categories = new ArrayList<>();
+        _services = new ArrayList<>();
 
-        bindMenuItems();
+        categoryAdapter = new CategoryGridAdapter(getContext(), _categories, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                Object category_id = v.getTag(R.string.tag_value);
+                Object has_children = v.getTag(R.string.tag_has_children);
+                Object is_mp = v.getTag(R.string.tag_is_mp);
+
+                if (category_id != null) {
+                    bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
+                }
+
+                if (has_children != null) {
+                    bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
+                }
+
+                if (is_mp != null) {
+                    bundle.putString(getString(R.string.param_listing_type), (Boolean.valueOf(is_mp.toString()) ? "mp" : "gsd"));
+                }
+
+                NavigationFragment fragment = new NavigationFragment();
+                fragment.setFragmentListener(fragmentListener);
+                fragment.setParentListener(parentListener);
+                fragment.setArguments(bundle);
+
+                fragmentListener.onUpdateFragment(fragment);
+            }
+        });
+
+
+        getCategories();
+        gridView.setAdapter(categoryAdapter);
+
+        parentListener.receive(R.string.msg_show_sidebar, null);
+        parentListener.receive(R.string.msg_reset_menu, null);
 
         return view;
     }
 
-    private void bindMenuItems() {
-        final View.OnClickListener menuItemClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Object action = v.getTag(R.string.tag_action);
-
-                if (action.equals("welcome")) {
-                    WelcomeFragment fragment = new WelcomeFragment();
-                    childFragmentListener.onUpdateFragment(fragment);
-                } else {
-                    Bundle bundle = new Bundle();
-                    Object category_id = v.getTag(R.string.tag_value);
-                    Object has_children = v.getTag(R.string.tag_has_children);
-
-                    if (category_id != null) {
-                        bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
-                    }
-
-                    if (has_children != null) {
-                        bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
-                    }
-
-                    CategoryFragment fragment = new CategoryFragment();
-                    fragment.setFragmentListener(childFragmentListener);
-                    fragment.setArguments(bundle);
-
-                    childFragmentListener.onUpdateFragment(fragment);
-                }
-            }
-        };
-
-        new RetrieveSetting(getContext(),
-                "top_menu_item_1_show",
-                "top_menu_item_1_text",
-                "top_menu_item_2_show",
-                "top_menu_item_2_text",
-                "top_menu_item_2_category",
-                "top_menu_item_3_show",
-                "top_menu_item_3_text",
-                "top_menu_item_3_category",
-                "top_menu_item_4_show",
-                "top_menu_item_4_text",
-                "top_menu_item_4_category")
+    private void getCategories() {
+        new RetrieveCategories(getContext(), _category_id, null)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+                        if (result != null) {
+                            Category[] categories = (Category[]) result;
 
-                        if (values != null) {
-                            boolean enable_item = values.containsKey("top_menu_item_1_show") && values.get("top_menu_item_1_show").equals("1");
-                            String item_text = values.containsKey("top_menu_item_1_text") ? values.get("top_menu_item_1_text") : "";
-                            String category_id;
+                            _categories.clear();
+                            _categories.addAll(Arrays.asList(categories));
 
-                            menu_item_1.setVisibility(enable_item ? View.VISIBLE : View.INVISIBLE);
-                            menu_item_1.setText(item_text);
-                            menu_item_1.setTag(R.string.tag_action, "welcome");
-
-                            enable_item = values.containsKey("top_menu_item_2_show") && values.get("top_menu_item_2_show").equals("1");
-                            item_text = values.containsKey("top_menu_item_2_text") ? values.get("top_menu_item_2_text") : "";
-                            category_id = values.containsKey("top_menu_item_2_category") ? values.get("top_menu_item_2_category") : null;
-
-                            menu_item_2.setVisibility(enable_item ? View.VISIBLE : View.INVISIBLE);
-                            menu_item_2.setText(item_text);
-                            menu_item_2.setTag(R.string.tag_action, "category");
-                            menu_item_2.setTag(R.string.tag_value, category_id);
-
-                            if (category_id != null) {
-                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                        .onSuccess(new AsyncResultBag.Success() {
-                                            @Override
-                                            public void onSuccess(Object result) {
-                                                Category category = result != null ? (Category) result : null;
-
-                                                if (category != null) {
-                                                    menu_item_2.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
-                                                }
-                                            }
-                                        })
-                                        .execute();
-                            }
-
-                            enable_item = values.containsKey("top_menu_item_3_show") && values.get("top_menu_item_3_show").equals("1");
-                            item_text = values.containsKey("top_menu_item_3_text") ? values.get("top_menu_item_3_text") : "";
-                            category_id = values.containsKey("top_menu_item_3_category") ? values.get("top_menu_item_3_category") : null;
-
-                            menu_item_3.setVisibility(enable_item ? View.VISIBLE : View.INVISIBLE);
-                            menu_item_3.setText(item_text);
-                            menu_item_3.setTag(R.string.tag_action, "category");
-                            menu_item_3.setTag(R.string.tag_value, category_id);
-
-                            if (category_id != null) {
-                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                        .onSuccess(new AsyncResultBag.Success() {
-                                            @Override
-                                            public void onSuccess(Object result) {
-                                                Category category = result != null ? (Category) result : null;
-
-                                                if (category != null) {
-                                                    menu_item_3.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
-                                                }
-                                            }
-                                        })
-                                        .execute();
-                            }
-
-                            enable_item = values.containsKey("top_menu_item_4_show") && values.get("top_menu_item_4_show").equals("1");
-                            item_text = values.containsKey("top_menu_item_4_text") ? values.get("top_menu_item_4_text") : "";
-                            category_id = values.containsKey("top_menu_item_4_category") ? values.get("top_menu_item_4_category") : null;
-
-                            menu_item_4.setVisibility(enable_item ? View.VISIBLE : View.INVISIBLE);
-                            menu_item_4.setText(item_text);
-                            menu_item_4.setTag(R.string.tag_action, "category");
-                            menu_item_4.setTag(R.string.tag_value, category_id);
-
-                            if (category_id != null) {
-                                new RetrieveSingleCategory(getContext(), Integer.parseInt(category_id))
-                                        .onSuccess(new AsyncResultBag.Success() {
-                                            @Override
-                                            public void onSuccess(Object result) {
-                                                Category category = result != null ? (Category) result : null;
-
-                                                if (category != null) {
-                                                    menu_item_4.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
-                                                }
-                                            }
-                                        })
-                                        .execute();
-                            }
-
-                            menu_item_1.setOnClickListener(menuItemClickListener);
-                            menu_item_2.setOnClickListener(menuItemClickListener);
-                            menu_item_3.setOnClickListener(menuItemClickListener);
-                            menu_item_4.setOnClickListener(menuItemClickListener);
+                            categoryAdapter.notifyDataSetChanged();
                         }
                     }
-                })
-                .execute();
-    }
-
-    public void setFragmentListener(FragmentListener fragmentListener) {
-        mainFragmentListener = fragmentListener;
-    }
-
-    public void setChildFragment(Fragment fragment) {
-        _childFragment = fragment;
-    }
-
-    public Fragment getChildFragment() {
-        return _childFragment;
+                }).execute();
     }
 }

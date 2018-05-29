@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.models.HotelModel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveHotel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
@@ -20,9 +21,14 @@ import java.util.HashMap;
 public class WelcomeFragment extends Fragment {
     TextView txtHotelName, txtDescription;
     String _heading, _description, _new_heading, _new_description;
+    private FragmentActivityListener parentListener;
 
     public WelcomeFragment() {
 
+    }
+
+    public void setParentListener(FragmentActivityListener parentListener) {
+        this.parentListener = parentListener;
     }
 
     @Override
@@ -67,6 +73,9 @@ public class WelcomeFragment extends Fragment {
                     }
                 })
                 .execute();
+
+        parentListener.receive(R.string.msg_show_sidebar, null);
+        parentListener.receive(R.string.msg_reset_menu, null);
 
         return view;
     }

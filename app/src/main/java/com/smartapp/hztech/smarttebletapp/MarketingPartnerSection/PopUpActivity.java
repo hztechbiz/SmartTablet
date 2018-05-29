@@ -1,9 +1,11 @@
 package com.smartapp.hztech.smarttebletapp.MarketingPartnerSection;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.smartapp.hztech.smarttebletapp.R;
+
+import java.io.File;
 
 public class PopUpActivity extends FragmentActivity {
 
@@ -22,11 +26,19 @@ public class PopUpActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up);
 
-        int image_resource = getIntent().getIntExtra("IMAGE", R.drawable.gallery1);
+        String path = getIntent().getStringExtra("IMAGE");
 
-        popImage = (ImageView) findViewById(R.id.popUpGalleryImage);
+        popImage = findViewById(R.id.popUpGalleryImage);
 
-        popImage.setImageResource(image_resource);
+        File imgBG = new File(path);
+
+        if (imgBG.exists()) {
+            Resources res = getResources();
+            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
+            popImage.setImageDrawable(bd);
+        }
 
         Button close = (Button) findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +60,5 @@ public class PopUpActivity extends FragmentActivity {
         params.y = -20;
 
         getWindow().setAttributes(params);
-
-
     }
 }

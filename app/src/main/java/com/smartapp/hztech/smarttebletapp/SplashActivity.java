@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,14 +23,11 @@ import java.util.HashMap;
 public class SplashActivity extends Activity {
 
     private int SPLASH_TIME_OUT = 1000;
-    private String API_KEY = "ST@API_KEY";
-    private String SYNC_DONE = "ST@SYNC_DONE";
     private Boolean _isRegistered;
     private Boolean _isSyncDone;
     private Boolean _isLoaded;
     private Boolean _isTimeout;
-    private ImageView _splshBackground, _splshLogo;
-    private String FILE_PATH = "ST@FILE_PATH";
+    private ImageView _iv_background, _iv_logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,54 +40,61 @@ public class SplashActivity extends Activity {
 
         setContentView(R.layout.activity_splash);
 
-        _splshBackground = findViewById(R.id.splsh_background);
-        _splshLogo = findViewById(R.id.splsh_Logo);
+        _iv_background = findViewById(R.id.splsh_background);
+        _iv_logo = findViewById(R.id.splsh_Logo);
     }
 
     private void setSplashImage() {
-        new RetrieveSetting(this, FILE_PATH, SYNC_DONE)
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+        RetrieveSetting retrieveSetting = new RetrieveSetting(this, Constants.SETTING_LOGO, Constants.SETTING_BACKGROUND, Constants.SETTING_SYNC_DONE);
 
-                        if (values != null) {
-                            String is_synced = values.containsKey(SYNC_DONE) ? values.get(SYNC_DONE) : "1";
-                            String file_path = values.containsKey(FILE_PATH) ? values.get(FILE_PATH) : null;
+        retrieveSetting.setMediaKeys(Constants.SETTING_LOGO, Constants.SETTING_BACKGROUND);
+        retrieveSetting.onSuccess(new AsyncResultBag.Success() {
+            @Override
+            public void onSuccess(Object result) {
+                HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
-                            if (is_synced.equals("1")) {//image foran load horae hai ya delay ata hai? ho to foran rahi h per image
-                                // background cover nhi kar rahi. side or top bottom se choti h.
-                                if (file_path != null) {
+                if (values != null) {
+                    String is_synced = values.containsKey(Constants.SETTING_SYNC_DONE) ? values.get(Constants.SETTING_SYNC_DONE) : "1";
+                    String logo = values.containsKey(Constants.SETTING_LOGO) ? values.get(Constants.SETTING_LOGO) : null;
+                    String background = values.containsKey(Constants.SETTING_BACKGROUND) ? values.get(Constants.SETTING_BACKGROUND) : null;
 
-                                    File splshBG = new File(file_path + "/Background.jpg");
-                                    File splshLogo = new File(file_path + "/Logo.jpg");
+                    if (is_synced.equals("1")) {
+                        if (logo != null) {
 
-                                    if (splshBG.exists()) {
-                                        // Bitmap splshBitmap = BitmapFactory.decodeFile(splshBG.getAbsolutePath());
-                                        // _splshBackground.setImageBitmap(splshBitmap);
+                            File logo_file = new File(logo);
 
-                                        Resources res = getResources();
-                                        Bitmap bitmap = BitmapFactory.decodeFile(splshBG.getAbsolutePath());
-                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-                                        _splshBackground.setBackgroundDrawable(bd);
-                                    }
+                            if (logo_file.exists()) {
+                                Bitmap logo_bitmap = BitmapFactory.decodeFile(logo_file.getAbsolutePath());
 
-                                    if (splshLogo.exists()) {
-                                        Bitmap splshLogoBitmap = BitmapFactory.decodeFile(splshLogo.getAbsolutePath());
-                                        _splshLogo.setVisibility(View.VISIBLE);
-                                        _splshLogo.setImageBitmap(splshLogoBitmap);
-                                    }
-                                }
+                                _iv_logo.setVisibility(View.VISIBLE);
+                                _iv_logo.setImageBitmap(logo_bitmap);
                             }
-                        } else {
-                            Resources res1 = getResources();
-                            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
-                            BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
-                            _splshBackground.setBackgroundDrawable(bd);
                         }
 
+                        if (background != null) {
+
+                            File bg_file = new File(background);
+
+                            if (bg_file.exists()) {
+                                Resources res = getResources();
+                                Bitmap bg_bitmap = BitmapFactory.decodeFile(bg_file.getAbsolutePath());
+                                BitmapDrawable bd = new BitmapDrawable(res, bg_bitmap);
+
+                                _iv_background.setBackgroundDrawable(bd);
+                            }
+                        }
                     }
-                }).execute();
+                } else {
+                    Resources res1 = getResources();
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
+                    BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
+
+                    _iv_background.setBackgroundDrawable(bd);
+                }
+
+            }
+        });
+        retrieveSetting.execute();
     }
 
     @Override
@@ -113,10 +118,10 @@ public class SplashActivity extends Activity {
     }
 
     /*
-     * Asynchronous method to check if API_KEY exists in database
+     * Asynchronous method to check if Constants.API_KEY exists in database
      */
     private void checkSynchronized() {
-        new RetrieveSetting(this, API_KEY, SYNC_DONE)
+        new RetrieveSetting(this, Constants.API_KEY, Constants.SETTING_SYNC_DONE)
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
@@ -131,8 +136,8 @@ public class SplashActivity extends Activity {
                         _isLoaded = true;
 
                         if (values != null) {
-                            _isRegistered = values.containsKey(API_KEY) && !values.get(API_KEY).isEmpty();
-                            _isSyncDone = values.containsKey(SYNC_DONE) && !values.get(SYNC_DONE).isEmpty();
+                            _isRegistered = values.containsKey(Constants.API_KEY) && !values.get(Constants.API_KEY).isEmpty();
+                            _isSyncDone = values.containsKey(Constants.SETTING_SYNC_DONE) && !values.get(Constants.SETTING_SYNC_DONE).isEmpty();
                         }
 
                         decide();
@@ -148,7 +153,7 @@ public class SplashActivity extends Activity {
     private void decide() {
         if (_isLoaded && _isTimeout) {
             if (_isRegistered && _isSyncDone) {
-                switchScreen(MainActivityNew.class);
+                switchScreen(MainActivity.class);
             } else {
                 switchScreen(SetupActivity.class);
             }
