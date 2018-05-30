@@ -113,6 +113,7 @@ public class MainFragment extends Fragment {
 
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
+        parentListener.receive(R.string.msg_hide_home_button, null);
 
         return view;
     }

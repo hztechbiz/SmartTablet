@@ -27,9 +27,24 @@
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
     <string name="msg_show_sidebar">SHOW_SIDEBAR</string>
     <string name="msg_update_menu">UPDATE_MENU</string>
+    <string name="msg_show_home_button">SHOW_HOME_BUTTON</string>
+    <string name="msg_hide_home_button">HIDE_HOME_BUTTON</string>
+    <string name="msg_show_back_button">SHOW_BACK_BUTTON</string>
+    <string name="msg_hide_back_button">HIDE_BACK_BUTTON</string>
     <string name="msg_reset_menu">RESET_MENU</string>
+    <string name="msg_reset">RESET</string>
+
+    <!-- STRINGS -->
     <string name="address">Address</string>
     <string name="email">Email</string>
     <string name="phone">Phone</string>
     <string name="make_a_reservation">MAKE A RESERVATION</string>
+    <string name="book_now_here">BOOK NOW HERE</string>
+    <string name="menu">Menu</string>
+    <string name="book_now">BOOK NOW</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="_0">0%</string>
+    <string name="_00_00_pm">00:00 PM</string>
+    <string name="home">Home</string>
 </resources>

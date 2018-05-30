@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.smartapp.hztech.smarttebletapp.Constants;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
@@ -25,6 +31,10 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
     int _service_id;
     Service _service;
     Bundle _bundle;
+    GoogleMap _googleMap;
+    String _address;
+    Double _latitude, _longitude;
+    boolean _markerSetup;
     private FragmentActivityListener parentListener;
 
     public ServiceLocationFragment() {
@@ -42,6 +52,7 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
         _bundle = getArguments();
 
         _service_id = 0;
+        _markerSetup = false;
 
         if (_bundle != null) {
             _service_id = _bundle.getInt(getString(R.string.param_service_id));
@@ -99,7 +110,17 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
                                     txt_description.setText(meta_value);
                                     break;
                                 case Constants.META_LOCATION_ADDRESS:
+                                    _address = meta_value;
                                     txt_address.setText(meta_value);
+
+                                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                                        @Override
+                                        public void onMapReady(GoogleMap googleMap) {
+                                            _googleMap = googleMap;
+                                            setupMarker();
+                                        }
+                                    });
                                     break;
                                 case Constants.META_LOCATION_EMAIL:
                                     txt_email.setText(meta_value);
@@ -107,13 +128,39 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
                                 case Constants.META_LOCATION_PHONE:
                                     txt_phone.setText(meta_value);
                                     break;
+                                case Constants.META_LOCATION_LATITUDE:
+                                    _latitude = Double.parseDouble(meta_value);
+                                    setupMarker();
+                                    break;
+                                case Constants.META_LOCATION_LONGITUDE:
+                                    _longitude = Double.parseDouble(meta_value);
+                                    setupMarker();
+                                    break;
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+
+                    setupMarker();
                 }
             }
+        }
+    }
+
+    private void setupMarker() {
+        if (!_markerSetup && _googleMap != null && _latitude != null && _longitude != null && _address != null) {
+            LatLng latLng = new LatLng(_latitude, _longitude);
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            markerOptions.position(latLng);
+            markerOptions.title(_address);
+
+            _googleMap.clear();
+            _googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+            _googleMap.addMarker(markerOptions);
+
+            _markerSetup = true;
         }
     }
 }

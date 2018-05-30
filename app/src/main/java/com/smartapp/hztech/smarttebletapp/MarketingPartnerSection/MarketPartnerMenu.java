@@ -21,7 +21,7 @@ public class MarketPartnerMenu extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.market_partner_menu);
         menu = (TextView) findViewById(R.id.menu);
-        btnBooking = (Button) findViewById(R.id.btnBooking);
+        //btnBooking = (Button) findViewById(R.id.btnBooking);
 
         setLatoBold = ResourcesCompat.getFont(this, R.font.lato_bold);
         menu.setTypeface(setLatoBold);

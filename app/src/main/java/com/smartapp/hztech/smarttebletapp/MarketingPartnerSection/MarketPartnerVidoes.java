@@ -29,7 +29,7 @@ public class MarketPartnerVidoes extends FragmentActivity {
 
 //        String fileName = "Video";
 //        String filePlace = "android.resource://" + getPackageName() + "//raw/hotelvideo";
-        videoView = (VideoView) findViewById(R.id.testVideo);
+        //videoView = (VideoView) findViewById(R.id.testVideo);
 //
 //        videoView.setVideoURI(Uri.parse(filePlace));
 //

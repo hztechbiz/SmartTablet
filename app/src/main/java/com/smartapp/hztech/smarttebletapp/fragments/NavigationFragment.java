@@ -118,6 +118,8 @@ public class NavigationFragment extends Fragment {
 
         activityListener.receive(R.string.msg_show_sidebar, null);
         activityListener.receive(R.string.msg_reset_menu, null);
+        activityListener.receive(R.string.msg_hide_home_button, null);
+        activityListener.receive(R.string.msg_show_back_button, null);
 
         return view;
     }

@@ -33,6 +33,8 @@ public class Constants {
     public static final String META_LOCATION_ADDRESS = "location_address";
     public static final String META_LOCATION_EMAIL = "location_email";
     public static final String META_LOCATION_PHONE = "location_phone";
+    public static final String META_LOCATION_LATITUDE = "location_latitude";
+    public static final String META_LOCATION_LONGITUDE = "location_longitude";
     /*
      * Constants
      */

@@ -60,6 +60,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
 
         activityListener.receive(R.string.msg_show_sidebar, null);
         activityListener.receive(R.string.msg_reset_menu, null);
+        activityListener.receive(R.string.msg_hide_home_button, null);
 
         bind();
 
@@ -72,7 +73,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                 .execute();
     }
 
-    private void _setupImage(String image_id) {
+    private void setupImage(String image_id) {
         new RetrieveMedia(getContext(), Integer.parseInt(image_id))
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -133,7 +134,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                             JSONObject meta_obj = metas_arr.getJSONObject(i);
 
                             if (!service.isIs_marketing_partner() && meta_obj.getString("meta_key").equals("image")) {
-                                _setupImage(meta_obj.getString("meta_value"));
+                                setupImage(meta_obj.getString("meta_value"));
                             }
 
                             for (int j = 0; j < menu_items.length; j++) {
@@ -176,6 +177,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                         case Constants.TOP_MENU_SHOW_MENU:
                                             ServiceMenuFragment serviceMenuFragment = new ServiceMenuFragment();
                                             serviceMenuFragment.setArguments(_bundle);
+                                            serviceMenuFragment.setFragmentListener(fragmentListener);
 
                                             item.title = "MENUS";
                                             item.fragment = serviceMenuFragment;
@@ -200,6 +202,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
 
                     activityListener.receive(R.string.msg_hide_sidebar, null);
                     activityListener.receive(R.string.msg_update_menu, menu_items_objects);
+                    activityListener.receive(R.string.msg_show_home_button, null);
                 }
             }
         }

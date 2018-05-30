@@ -1,13 +1,18 @@
 package com.smartapp.hztech.smarttebletapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -18,22 +23,31 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SplashActivity extends Activity {
 
+    private String[] permissions = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
     private int SPLASH_TIME_OUT = 1000;
     private Boolean _isRegistered;
     private Boolean _isSyncDone;
     private Boolean _isLoaded;
     private Boolean _isTimeout;
+    private Boolean _permissionsGranted;
     private ImageView _iv_background, _iv_logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = false;
+        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = _permissionsGranted = false;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -104,6 +118,25 @@ public class SplashActivity extends Activity {
         checkSynchronized();
         setSplashImage();
         waitSplash();
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        List<String> revoked = new ArrayList<>();
+
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                revoked.add(permissions[i]);
+            }
+        }
+
+        if (!revoked.isEmpty()) {
+            String[] request_permissions = revoked.toArray(new String[0]);
+            ActivityCompat.requestPermissions(this, request_permissions, 1);
+        } else {
+            _permissionsGranted = true;
+            decide();
+        }
     }
 
     private void waitSplash() {
@@ -151,7 +184,7 @@ public class SplashActivity extends Activity {
      * after splash screen
      */
     private void decide() {
-        if (_isLoaded && _isTimeout) {
+        if (_isLoaded && _isTimeout && _permissionsGranted) {
             if (_isRegistered && _isSyncDone) {
                 switchScreen(MainActivity.class);
             } else {
@@ -166,5 +199,14 @@ public class SplashActivity extends Activity {
         finish();
 
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                checkPermissions();
+                break;
+        }
     }
 }

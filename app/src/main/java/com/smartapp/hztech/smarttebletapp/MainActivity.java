@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 
     private ImageView img_wifi_signals, img_battery_level, bg_image;
     private TextView txt_battery_percentage, txt_time;
-    private LinearLayout _sidebar;
+    private LinearLayout _sidebar, _btn_home, _btn_back;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
@@ -57,20 +57,27 @@ public class MainActivity extends FragmentActivity {
         public void receive(int message, Object arguments) {
             switch (message) {
                 case R.string.msg_hide_sidebar:
-                    hideSidebar();
+                    showSideBar(false);
                     break;
                 case R.string.msg_show_sidebar:
-                    showSideBar();
+                    showSideBar(true);
                     break;
-                case R.string.msg_update_menu:
-
+                case R.string.msg_show_home_button:
+                    showHomeButton(true);
                     break;
-                case R.string.msg_reset_menu:
-
+                case R.string.msg_hide_home_button:
+                    showHomeButton(false);
+                    break;
+                case R.string.msg_hide_back_button:
+                    showBackButton(false);
+                    break;
+                case R.string.msg_show_back_button:
+                    showBackButton(true);
                     break;
             }
         }
     };
+
     private FragmentListener fragmentListener = new FragmentListener() {
         @Override
         public void onUpdateFragment(Fragment newFragment) {
@@ -83,12 +90,16 @@ public class MainActivity extends FragmentActivity {
         }
     };
 
-    private void hideSidebar() {
-        _sidebar.setVisibility(View.GONE);
+    private void showHomeButton(boolean b) {
+        _btn_home.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
-    private void showSideBar() {
-        _sidebar.setVisibility(View.VISIBLE);
+    private void showSideBar(boolean b) {
+        _sidebar.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showBackButton(boolean b) {
+        _btn_back.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -103,6 +114,8 @@ public class MainActivity extends FragmentActivity {
         fragmentContainer = findViewById(R.id.fragment_container);
 
         _sidebar = findViewById(R.id.sidebar);
+        _btn_home = findViewById(R.id.btn_home);
+        _btn_back = findViewById(R.id.btn_back);
         img_wifi_signals = findViewById(R.id.wifi_connect);
         img_battery_level = findViewById(R.id.bettryStatus);
         txt_battery_percentage = findViewById(R.id.percentage_set);
@@ -307,7 +320,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onNavItemClick(View view) {
-        makeMenuItemActive(view, (view.getId() != R.id.itemHome));
+        makeMenuItemActive(view, (view.getId() != R.id.itemHome && view.getId() != R.id.btn_home));
 
         Object action = view.getTag(R.string.tag_action);
         Object value = view.getTag(R.string.tag_value);
@@ -404,6 +417,10 @@ public class MainActivity extends FragmentActivity {
                 break;
 
         }
+    }
+
+    public void onBackClick(View view) {
+        
     }
 
     public void setSignal(int wifi_signals_level) {
