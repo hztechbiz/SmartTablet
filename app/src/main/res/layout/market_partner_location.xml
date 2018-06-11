@@ -13,7 +13,9 @@
 
         <LinearLayout
             android:layout_width="430dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:background="@drawable/white_background_corner_radius">
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/map"
@@ -29,16 +31,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:paddingBottom="20dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="20dp">
 
                 <TextView
                     android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textColor="#25a8d0" />
+                    android:text="@string/get_in_touch_with_us"
+                    android:textColor="#25a8d0"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_description"
@@ -53,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="@string/address"
-                    android:textColor="#25a8d0" />
+                    android:textColor="#25a8d0"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="@string/email"
-                    android:textColor="#25a8d0" />
+                    android:textColor="#25a8d0"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -110,7 +118,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="@string/phone"
-                    android:textColor="#25a8d0" />
+                    android:textColor="#25a8d0"
+                    android:textStyle="bold" />
 
 
                 <LinearLayout
@@ -134,14 +143,10 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btnReserv"
+                    android:id="@+id/btn_reservation"
+                    style="@style/ButtonBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#25a8d0"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="10dp"
                     android:text="@string/make_a_reservation"
                     android:textColor="#fff" />
 

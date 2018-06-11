@@ -1,5 +1,7 @@
 package com.smartapp.hztech.smarttebletapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
@@ -24,14 +27,18 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.smartapp.hztech.smarttebletapp.fragments.CategoryFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
-import com.smartapp.hztech.smarttebletapp.fragments.ServiceFragment;
+import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.receivers.SyncAlarmReceiver;
+import com.smartapp.hztech.smarttebletapp.service.SyncService;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
@@ -44,14 +51,41 @@ public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
     private FrameLayout fragmentContainer;
-
     private ImageView img_wifi_signals, img_battery_level, bg_image;
-    private TextView txt_battery_percentage, txt_time;
-    private LinearLayout _sidebar, _btn_home, _btn_back;
+    private TextView txt_battery_percentage, txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text;
+    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box;
+    private RelativeLayout _sync_container;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
+    private int timerClicked;
+    private boolean timerClickedTimerAdded, isServiceRunning;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
+    private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(true);
+        }
+    };
+    private BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("SchedulingAlarms", "syncreceiver");
+            showSynchronizing(false);
+            isServiceRunning = false;
+        }
+    };
+    private FragmentListener fragmentListener = new FragmentListener() {
+        @Override
+        public void onUpdateFragment(Fragment newFragment) {
+            Log.d("FragmentUpdated", "From: MainActivity, Fragment: " + newFragment.getClass().getName());
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(fragmentContainer.getId(), newFragment);
+            transaction.addToBackStack(null);
+
+            transaction.commit();
+        }
+    };
     private FragmentActivityListener activityListener = new FragmentActivityListener() {
         @Override
         public void receive(int message, Object arguments) {
@@ -74,21 +108,25 @@ public class MainActivity extends FragmentActivity {
                 case R.string.msg_show_back_button:
                     showBackButton(true);
                     break;
+                case R.string.msg_update_background:
+                    if (arguments != null)
+                        setBackgroundImage(arguments.toString());
+                    break;
+                case R.string.msg_reset_background:
+                    setBranding();
+                    break;
             }
         }
     };
 
-    private FragmentListener fragmentListener = new FragmentListener() {
-        @Override
-        public void onUpdateFragment(Fragment newFragment) {
-            Log.d("FragmentUpdated", "From: MainActivity, Fragment: " + newFragment.getClass().getName());
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(fragmentContainer.getId(), newFragment);
-            transaction.addToBackStack(null);
+    private void showSynchronizing(boolean b) {
+        _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
 
-            transaction.commit();
+        if (!b) {
+            setupMenuItems();
+            setBranding();
         }
-    };
+    }
 
     private void showHomeButton(boolean b) {
         _btn_home.setVisibility(b ? View.VISIBLE : View.GONE);
@@ -111,11 +149,24 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        fragmentContainer = findViewById(R.id.fragment_container);
+        timerClicked = 0;
+        timerClickedTimerAdded = isServiceRunning = false;
 
+        fragmentContainer = findViewById(R.id.fragment_container);
         _sidebar = findViewById(R.id.sidebar);
         _btn_home = findViewById(R.id.btn_home);
         _btn_back = findViewById(R.id.btn_back);
+        _btn_home_text = findViewById(R.id.btn_home_text);
+        _btn_back_text = findViewById(R.id.btn_back_text);
+        _time_box = findViewById(R.id.time_box);
+        _sync_container = findViewById(R.id.syncContainer);
+        item_home_text = findViewById(R.id.item_home_text);
+        item_tv_text = findViewById(R.id.item_tv_text);
+        item_wifi_text = findViewById(R.id.item_wifi_text);
+        item_how_text = findViewById(R.id.item_how_text);
+        item_useful_info_text = findViewById(R.id.item_useful_info_text);
+        item_weather_text = findViewById(R.id.item_weather_text);
+        item_news_text = findViewById(R.id.item_news_text);
         img_wifi_signals = findViewById(R.id.wifi_connect);
         img_battery_level = findViewById(R.id.bettryStatus);
         txt_battery_percentage = findViewById(R.id.percentage_set);
@@ -144,6 +195,16 @@ public class MainActivity extends FragmentActivity {
                     .add(fragmentContainer.getId(), firstFragment).commit();
         }
 
+        _btn_home_text.setTypeface(Util.getTypeFace(this));
+        _btn_back_text.setTypeface(Util.getTypeFace(this));
+        item_home_text.setTypeface(Util.getTypeFace(this));
+        item_tv_text.setTypeface(Util.getTypeFace(this));
+        item_wifi_text.setTypeface(Util.getTypeFace(this));
+        item_how_text.setTypeface(Util.getTypeFace(this));
+        item_useful_info_text.setTypeface(Util.getTypeFace(this));
+        item_weather_text.setTypeface(Util.getTypeFace(this));
+        item_news_text.setTypeface(Util.getTypeFace(this));
+
         batteryBroadcastReceiver = new BatteryBroadcastReceiver();
         wifiScanReceiver = new WifiScanReceiver();
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -161,6 +222,22 @@ public class MainActivity extends FragmentActivity {
 
         setupMenuItems();
         setBranding();
+        scheduleAlarms();
+    }
+
+    private void scheduleAlarms() {
+        Log.d("SchedulingAlarms", "triggered");
+        Intent intent = new Intent(this, SyncAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long millis = System.currentTimeMillis();
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            long interval = AlarmManager.INTERVAL_HALF_DAY;
+            Log.d("SchedulingAlarms", "waiting");
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis + interval, interval, pendingIntent);
+        }
     }
 
     private void setBranding() {
@@ -179,6 +256,7 @@ public class MainActivity extends FragmentActivity {
                         if (imgBG.exists()) {
                             Resources res = getResources();
                             Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                            bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
                             BitmapDrawable bd = new BitmapDrawable(res, bitmap);
                             bg_image.setBackgroundDrawable(bd);
                         }
@@ -190,10 +268,27 @@ public class MainActivity extends FragmentActivity {
         setting.execute();
     }
 
+    private void setBackgroundImage(String filePath) {
+        File imgBG = new File(filePath);
+
+        if (imgBG.exists()) {
+            Resources res = getResources();
+            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+            bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
+            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
+            bg_image.setBackgroundDrawable(bd);
+        }
+    }
+
     @Override
     protected void onStart() {
+        registerReceiver(syncReceiver, new IntentFilter(SyncService.TRANSACTION_DONE));
+        registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        checkIfSyncServiceRunning();
 
         Thread t = new Thread() {
             @Override
@@ -221,6 +316,17 @@ public class MainActivity extends FragmentActivity {
         super.onStart();
     }
 
+    private void checkIfSyncServiceRunning() {
+        new RetrieveSetting(this, Constants.SYNC_SERVICE_RUNNING)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        showSynchronizing((result != null && result.equals("1")));
+                    }
+                })
+                .execute();
+    }
+
     @Override
     protected void onStop() {
         if (wifiScanReceiver != null)
@@ -228,6 +334,12 @@ public class MainActivity extends FragmentActivity {
 
         if (batteryBroadcastReceiver != null)
             unregisterReceiver(batteryBroadcastReceiver);
+
+        if (syncReceiver != null)
+            unregisterReceiver(syncReceiver);
+
+        if (syncStartReceiver != null)
+            unregisterReceiver(syncStartReceiver);
 
         super.onStop();
     }
@@ -332,10 +444,10 @@ public class MainActivity extends FragmentActivity {
 
         if (action != null && value != null) {
             if (action.equals(R.string.tag_action_category)) {
-                bundle.putInt(getString(R.string.param_category_id),
+                bundle.putInt(getString(R.string.param_main_category_id),
                         Integer.parseInt(value.toString()));
 
-                CategoryFragment fragment = new CategoryFragment();
+                MainFragment fragment = new MainFragment();
                 fragment.setFragmentListener(fragmentListener);
                 fragment.setParentListener(activityListener);
                 fragment.setArguments(bundle);
@@ -346,10 +458,11 @@ public class MainActivity extends FragmentActivity {
             } else if (action.equals(R.string.tag_action_service)) {
                 bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(value.toString()));
 
-                ServiceFragment fragment = new ServiceFragment();
+                MainFragment fragment = new MainFragment();
                 fragment.setArguments(bundle);
                 fragment.setFragmentListener(fragmentListener);
-                fragment.setActivityListener(activityListener);
+                fragment.setParentListener(activityListener);
+                //fragment.setActivityListener(activityListener);
 
                 //navigationFragment.setChildFragment(fragment);
                 fragmentListener.onUpdateFragment(fragment);
@@ -420,7 +533,58 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onBackClick(View view) {
-        
+        onBackPressed();
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public void onTimeClick(View view) {
+        if (isServiceRunning)
+            return;
+
+        if (timerClicked > 3) {
+            isServiceRunning = true;
+
+            Intent intent = new Intent(this, SyncService.class);
+            startService(intent);
+        } else {
+            timerClicked++;
+        }
+
+        if (!timerClickedTimerAdded) {
+            timerClickedTimerAdded = true;
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    timerClicked = 0;
+                    timerClickedTimerAdded = false;
+                }
+            }, 2000);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        boolean handled = false;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        for (Fragment fragment : fragmentManager.getFragments()) {
+            if (fragment.isVisible()) {
+                FragmentManager childFragmentManager = fragment.getChildFragmentManager();
+                if (childFragmentManager.getBackStackEntryCount() > 0) {
+                    childFragmentManager.popBackStack();
+                    handled = true;
+
+                    break;
+                }
+            }
+        }
+
+        if (!handled)
+            super.onBackPressed();
     }
 
     public void setSignal(int wifi_signals_level) {

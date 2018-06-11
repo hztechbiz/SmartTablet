@@ -28,6 +28,7 @@ public class Constants {
     public static final String TOP_MENU_SHOW_GALLERY = "show_gallery";
     public static final String TOP_MENU_SHOW_MENU = "show_menu";
     public static final String TOP_MENU_SHOW_BOOK = "show_booking";
+    public static final String TOP_MENU_SHOW_OFFERS = "show_offers";
     public static final String META_LOCATION_TITLE = "location_title";
     public static final String META_LOCATION_DESCRIPTION = "location_short_description";
     public static final String META_LOCATION_ADDRESS = "location_address";
@@ -35,6 +36,8 @@ public class Constants {
     public static final String META_LOCATION_PHONE = "location_phone";
     public static final String META_LOCATION_LATITUDE = "location_latitude";
     public static final String META_LOCATION_LONGITUDE = "location_longitude";
+    public static final String SYNC_SERVICE_RUNNING = "sync_service_running";
+    public static final long SYNC_WAIT = 5 * 60 * 1000;
     /*
      * Constants
      */

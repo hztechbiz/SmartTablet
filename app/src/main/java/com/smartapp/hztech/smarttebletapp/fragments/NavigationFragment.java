@@ -3,6 +3,7 @@ package com.smartapp.hztech.smarttebletapp.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.smartapp.hztech.smarttebletapp.Constants;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
@@ -43,6 +45,7 @@ public class NavigationFragment extends Fragment {
         @Override
         public void onUpdateFragment(Fragment newFragment) {
             Log.d("FragmentUpdated", "From: NavigationFragment, Fragment: " + newFragment.getClass().getName());
+
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
             transaction.replace(fragmentContainer.getId(), newFragment);
@@ -62,7 +65,7 @@ public class NavigationFragment extends Fragment {
                     }
                 default:
                     if (parentListener != null)
-                        parentListener.receive(message, null);
+                        parentListener.receive(message, arguments);
             }
         }
     };
@@ -74,6 +77,7 @@ public class NavigationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         Bundle bundle = getArguments();
+        final FragmentManager fragmentManager = getChildFragmentManager();
 
         menuItems = new ArrayList<>();
 
@@ -83,7 +87,7 @@ public class NavigationFragment extends Fragment {
 
         _category_id = 0;
         _has_children = false;
-        _listing_type = null;
+        _listing_type = "gsd";
 
         if (bundle != null) {
             if (bundle.containsKey(getString(R.string.param_category_id))) {
@@ -110,7 +114,7 @@ public class NavigationFragment extends Fragment {
                 _childFragment = categoryFragment;
             }
 
-            getChildFragmentManager().beginTransaction()
+            fragmentManager.beginTransaction()
                     .add(fragmentContainer.getId(), _childFragment).commit();
         }
 
@@ -120,6 +124,7 @@ public class NavigationFragment extends Fragment {
         activityListener.receive(R.string.msg_reset_menu, null);
         activityListener.receive(R.string.msg_hide_home_button, null);
         activityListener.receive(R.string.msg_show_back_button, null);
+        activityListener.receive(R.string.msg_reset_background, null);
 
         return view;
     }
@@ -142,7 +147,7 @@ public class NavigationFragment extends Fragment {
                                     fragment.setParentListener(parentListener);
 
                                     MenuItem item = new MenuItem();
-                                    item.title = (values.containsKey(Constants.TOP_MENU_WELCOME_TEXT) && !values.get(Constants.TOP_MENU_WELCOME_TEXT).isEmpty()) ? values.get(Constants.TOP_MENU_WELCOME_TEXT) : "Welcome";
+                                    item.title = ((values.containsKey(Constants.TOP_MENU_WELCOME_TEXT) && !values.get(Constants.TOP_MENU_WELCOME_TEXT).isEmpty()) ? values.get(Constants.TOP_MENU_WELCOME_TEXT) : "WELCOME").toUpperCase();
                                     item.fragment = fragment;
 
                                     menuItems.add(item);
@@ -194,7 +199,7 @@ public class NavigationFragment extends Fragment {
                                                             categoryFragment.setArguments(bundle);
 
                                                             MenuItem item1 = new MenuItem();
-                                                            item1.title = categories[i].getName();
+                                                            item1.title = categories[i].getName().toUpperCase();
                                                             item1.fragment = categoryFragment;
 
                                                             menuItems.add(item1);
@@ -222,8 +227,10 @@ public class NavigationFragment extends Fragment {
         for (int i = 0; i < menuItems.size(); i++) {
             final MenuItem menuItem = menuItems.get(i);
             LinearLayout view = (LinearLayout) inflater.inflate(R.layout.top_menu_item, null);
+            TextView txt_item = view.findViewById(R.id.menu_item_text);
 
-            ((TextView) view.findViewById(R.id.menu_item_text)).setText(menuItem.title);
+            txt_item.setTypeface(Util.getTypeFace(getContext()));
+            txt_item.setText(menuItem.title);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

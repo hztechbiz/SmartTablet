@@ -19,20 +19,25 @@
 
     <!-- PARAMS -->
     <string name="param_category_id">CATEGORY_ID</string>
+    <string name="param_main_category_id">MAIN_CATEGORY_ID</string>
     <string name="param_has_children">HAS_CHILDREN</string>
     <string name="param_service_id">SERVICE_ID</string>
+    <string name="param_offer_id">OFFER_ID</string>
     <string name="param_listing_type">LISTING_TYPE</string>
 
     <!-- MESSAGES -->
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
     <string name="msg_show_sidebar">SHOW_SIDEBAR</string>
     <string name="msg_update_menu">UPDATE_MENU</string>
+    <string name="msg_go_back">GO_BACK</string>
     <string name="msg_show_home_button">SHOW_HOME_BUTTON</string>
     <string name="msg_hide_home_button">HIDE_HOME_BUTTON</string>
     <string name="msg_show_back_button">SHOW_BACK_BUTTON</string>
     <string name="msg_hide_back_button">HIDE_BACK_BUTTON</string>
     <string name="msg_reset_menu">RESET_MENU</string>
     <string name="msg_reset">RESET</string>
+    <string name="msg_update_background">UPDATE_BACKGROUND</string>
+    <string name="msg_reset_background">RESET_BACKGROUND</string>
 
     <!-- STRINGS -->
     <string name="address">Address</string>
@@ -40,11 +45,25 @@
     <string name="phone">Phone</string>
     <string name="make_a_reservation">MAKE A RESERVATION</string>
     <string name="book_now_here">BOOK NOW HERE</string>
-    <string name="menu">Menu</string>
+    <string name="menu">MENU</string>
     <string name="book_now">BOOK NOW</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="_0">0%</string>
     <string name="_00_00_pm">00:00 PM</string>
-    <string name="home">Home</string>
+    <string name="home">HOME</string>
+    <string name="back">BACK</string>
+    <string name="get_in_touch_with_us">Get in touch with us</string>
+    <string name="operating_the_television">OPERATING THE TELEVISION</string>
+    <string name="connect_to_wifi">CONNECT TO WIFI</string>
+    <string name="how_to_use_smart_tablet">HOW TO USE SMART TABLET</string>
+    <string name="useful_information">USEFUL INFORMATION</string>
+    <string name="local_map">LOCAL MAP</string>
+    <string name="local_region">LOCAL REGION</string>
+    <string name="weather">WEATHER</string>
+    <string name="news">NEWS</string>
+    <string name="synchronizing_please_wait">Synchronizing, please wait...</string>
+    <string name="sync">Sync</string>
+    <string name="enter_hotel_key_here">ENTER HOTEL KEY HERE</string>
+    <string name="view_offer_detail">View Offer Detail</string>
 </resources>

@@ -90,7 +90,6 @@ public class SyncActivity extends Activity {
 
     private void sync() {
         String url = Constants.GetApiUrl("export");
-        //url = "http://hztech.biz/smarttablet/api.json";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

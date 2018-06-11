@@ -17,6 +17,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleCategory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +27,14 @@ public class MainFragment extends Fragment {
 
     private FragmentListener fragmentListener;
     private FragmentActivityListener parentListener;
+    private Fragment childFragment;
     private List<Category> _categories;
     private List<Service> _services;
     private GridView gridView;
     private ImageView _logoImageView, _bgImageView;
     private CategoryGridAdapter categoryAdapter;
     private ServicesGridAdapter servicesAdapter;
-    private int _category_id;
+    private int _category_id, _main_category_id, _service_id;
     private Boolean _has_children;
     private String _listing_type;
 
@@ -57,13 +59,21 @@ public class MainFragment extends Fragment {
 
         gridView = view.findViewById(R.id.gridview);
 
-        _category_id = 0;
+        _category_id = _main_category_id = _service_id = 0;
         _has_children = false;
         _listing_type = null;
 
         if (bundle != null) {
             if (bundle.containsKey(getString(R.string.param_category_id))) {
                 _category_id = bundle.getInt(getString(R.string.param_category_id));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_main_category_id))) {
+                _main_category_id = bundle.getInt(getString(R.string.param_main_category_id));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_service_id))) {
+                _service_id = bundle.getInt(getString(R.string.param_service_id));
             }
 
             if (bundle.containsKey(getString(R.string.param_has_children))) {
@@ -107,15 +117,67 @@ public class MainFragment extends Fragment {
             }
         });
 
-
-        getCategories();
-        gridView.setAdapter(categoryAdapter);
+        if (_service_id > 0) {
+            moveToServiceFragment();
+        } else if (_main_category_id > 0) {
+            moveToCategoryFragment();
+        } else {
+            getCategories();
+            gridView.setAdapter(categoryAdapter);
+        }
 
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_hide_home_button, null);
+        parentListener.receive(R.string.msg_hide_back_button, null);
+        parentListener.receive(R.string.msg_reset_background, null);
 
         return view;
+    }
+
+    private void moveToServiceFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.param_service_id), _service_id);
+        bundle.putString(getString(R.string.param_listing_type), "gsd");
+
+        ServiceFragment serviceFragment = new ServiceFragment();
+        serviceFragment.setFragmentListener(fragmentListener);
+        serviceFragment.setActivityListener(parentListener);
+        serviceFragment.setArguments(bundle);
+
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setFragmentListener(fragmentListener);
+        fragment.setParentListener(parentListener);
+        fragment.setChildFragment(serviceFragment);
+        fragment.setArguments(bundle);
+
+        fragmentListener.onUpdateFragment(fragment);
+    }
+
+    private void moveToCategoryFragment() {
+        new RetrieveSingleCategory(getContext(), _main_category_id)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Category category = (Category) result;
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putInt(getString(R.string.param_category_id), _main_category_id);
+                            bundle.putBoolean(getString(R.string.param_has_children), (category.getChildren_count() > 0));
+                            bundle.putString(getString(R.string.param_listing_type), (category.isIs_marketing_partner() ? "mp" : "gsd"));
+
+                            NavigationFragment fragment = new NavigationFragment();
+                            fragment.setFragmentListener(fragmentListener);
+                            fragment.setParentListener(parentListener);
+                            fragment.setArguments(bundle);
+
+                            fragmentListener.onUpdateFragment(fragment);
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void getCategories() {
@@ -133,5 +195,9 @@ public class MainFragment extends Fragment {
                         }
                     }
                 }).execute();
+    }
+
+    public void setChildFragment(Fragment childFragment) {
+        this.childFragment = childFragment;
     }
 }

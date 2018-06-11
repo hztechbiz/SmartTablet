@@ -1,6 +1,11 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +35,7 @@ import java.util.List;
 public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.Success {
     GridView gridView;
     List<String> _items;
+    List<Drawable> _items_drawables;
     int _service_id;
     Service _service;
     Bundle _bundle;
@@ -46,9 +53,10 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.market_partner_gallery, container, false);
+        View view = inflater.inflate(R.layout.mp_gallery, container, false);
         _bundle = getArguments();
         _items = new ArrayList<>();
+        _items_drawables = new ArrayList<>();
 
         _service_id = 0;
 
@@ -57,14 +65,15 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
         }
 
         gridView = view.findViewById(R.id.list_gallery);
-        adapter = new GalleryGridAdapter(getContext(), _items);
+
+        adapter = new GalleryGridAdapter(getContext(), _items_drawables);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getContext(), PopUpActivity.class);
-                i.putExtra("IMAGE", parent.getItemAtPosition(position).toString());
+                i.putExtra("IMAGE", _items.get(position));
 
                 startActivity(i);
             }
@@ -138,6 +147,16 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
                             for (String path : values.values()) {
                                 if (path != null) {
                                     _items.add(path);
+
+                                    File image_file = new File(path);
+
+                                    if (image_file.exists()) {
+                                        Resources res = getContext().getResources();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(image_file.getAbsolutePath());
+                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
+                                        _items_drawables.add(bd);
+                                    }
                                 }
                             }
                             adapter.notifyDataSetChanged();

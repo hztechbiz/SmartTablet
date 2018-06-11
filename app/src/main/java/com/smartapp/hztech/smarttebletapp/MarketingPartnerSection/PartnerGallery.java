@@ -6,10 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 
 import com.smartapp.hztech.smarttebletapp.R;
-import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
 
 import java.util.List;
 
@@ -32,8 +30,8 @@ public class PartnerGallery extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.market_partner_gallery);
-        final LinearLayout lnr = (LinearLayout) findViewById(R.id.mainBlur);
+        setContentView(R.layout.mp_gallery);
+        //final LinearLayout lnr = (LinearLayout) findViewById(R.id.mainBlur);
         gridView = (GridView) findViewById(R.id.list_gallery);
         //GalleryGridAdapter adapter = new GalleryGridAdapter(this, gallerThumb);
         //gridView.setAdapter(adapter);

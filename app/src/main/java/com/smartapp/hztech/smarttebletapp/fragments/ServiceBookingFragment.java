@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleService;
@@ -26,6 +28,7 @@ public class ServiceBookingFragment extends Fragment implements AsyncResultBag.S
     int _service_id;
     Service _service;
     Bundle _bundle;
+    TextView txt_heading;
     private FragmentActivityListener parentListener;
 
     public ServiceBookingFragment() {
@@ -50,6 +53,9 @@ public class ServiceBookingFragment extends Fragment implements AsyncResultBag.S
 
         webview = view.findViewById(R.id.webview);
         progressBar = view.findViewById(R.id.progressBar);
+        txt_heading = view.findViewById(R.id.heading);
+
+        txt_heading.setTypeface(Util.getTypeFace(getContext()));
 
         webview.setWebViewClient(new WebViewClient() {
             @Override

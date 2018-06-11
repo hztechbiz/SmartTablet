@@ -18,12 +18,19 @@ import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.ServiceModel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveServices;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +42,7 @@ public class CategoryFragment extends Fragment {
     private FragmentListener fragmentListener;
     private FragmentActivityListener parentListener;
     private List<Category> _categories;
-    private List<Service> _services;
+    private List<ServiceModel> _services;
     private GridView gridView;
     private ImageView _logoImageView, _bgImageView;
     private CategoryGridAdapter categoryAdapter;
@@ -139,6 +146,7 @@ public class CategoryFragment extends Fragment {
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_hide_home_button, null);
+        parentListener.receive(R.string.msg_reset_background, null);
 
         return view;
     }
@@ -206,9 +214,77 @@ public class CategoryFragment extends Fragment {
                     public void onSuccess(Object result) {
                         if (result != null) {
                             Service[] services = (Service[]) result;
+                            ServiceModel[] serviceModels = new ServiceModel[services.length];
+
+                            for (int j = 0; j < services.length; j++) {
+                                Service service = services[j];
+                                final ServiceModel serviceModel = new ServiceModel();
+
+                                serviceModels[j] = serviceModel;
+
+                                serviceModel.setCategory_id(service.getCategory_id());
+                                serviceModel.setDescription(service.getDescription());
+                                serviceModel.setHotel_id(service.getHotel_id());
+                                serviceModel.setId(service.getId());
+                                serviceModel.setIs_marketing_partner(service.isIs_marketing_partner());
+                                serviceModel.setMeta(service.getMeta());
+                                serviceModel.setStatus(service.getStatus());
+                                serviceModel.setTitle(service.getTitle());
+                                serviceModel.setImage(null);
+
+                                if (!service.getMeta().isEmpty()) {
+                                    JSONArray metas_arr = null;
+                                    try {
+                                        metas_arr = new JSONArray(service.getMeta());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (metas_arr != null) {
+                                        for (int i = 0; i < metas_arr.length(); i++) {
+                                            try {
+                                                JSONObject meta_obj = metas_arr.getJSONObject(i);
+
+                                                if (meta_obj.getString("meta_key").equals("image")) {
+                                                    String image_id = meta_obj.getString("meta_value");
+
+                                                    new RetrieveMedia(getContext(), Integer.parseInt(image_id))
+                                                            .onSuccess(new AsyncResultBag.Success() {
+                                                                @Override
+                                                                public void onSuccess(Object result) {
+                                                                    if (result != null) {
+                                                                        try {
+                                                                            String filePath = result.toString();
+
+                                                                            if (filePath != null) {
+                                                                                File imgBG = new File(filePath);
+
+                                                                                if (imgBG.exists()) {
+                                                                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                                                                    bitmap = ImageHelper.getResizedBitmap(bitmap, 300);
+
+                                                                                    serviceModel.setImage(bitmap);
+                                                                                    servicesAdapter.notifyDataSetChanged();
+                                                                                }
+                                                                            }
+                                                                        } catch (Exception ex) {
+                                                                            ex.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            })
+                                                            .execute();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                             _services.clear();
-                            _services.addAll(Arrays.asList(services));
+                            _services.addAll(Arrays.asList(serviceModels));
 
                             servicesAdapter.notifyDataSetChanged();
                         }

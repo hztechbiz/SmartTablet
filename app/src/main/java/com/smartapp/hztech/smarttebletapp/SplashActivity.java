@@ -13,12 +13,12 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
@@ -79,6 +79,7 @@ public class SplashActivity extends Activity {
 
                             if (logo_file.exists()) {
                                 Bitmap logo_bitmap = BitmapFactory.decodeFile(logo_file.getAbsolutePath());
+                                logo_bitmap = ImageHelper.getResizedBitmap(logo_bitmap, 500);
 
                                 _iv_logo.setVisibility(View.VISIBLE);
                                 _iv_logo.setImageBitmap(logo_bitmap);
@@ -92,6 +93,7 @@ public class SplashActivity extends Activity {
                             if (bg_file.exists()) {
                                 Resources res = getResources();
                                 Bitmap bg_bitmap = BitmapFactory.decodeFile(bg_file.getAbsolutePath());
+                                bg_bitmap = ImageHelper.getResizedBitmap(bg_bitmap, 1000);
                                 BitmapDrawable bd = new BitmapDrawable(res, bg_bitmap);
 
                                 _iv_background.setBackgroundDrawable(bd);
@@ -101,6 +103,7 @@ public class SplashActivity extends Activity {
                 } else {
                     Resources res1 = getResources();
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
+                    bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
                     BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
 
                     _iv_background.setBackgroundDrawable(bd);

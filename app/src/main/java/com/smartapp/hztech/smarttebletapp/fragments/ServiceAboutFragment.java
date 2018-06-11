@@ -3,21 +3,23 @@ package com.smartapp.hztech.smarttebletapp.fragments;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleService;
 
@@ -30,10 +32,12 @@ import java.io.File;
 public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Success {
     TextView txt_description;
     ImageView iv_image;
+    Button btn_booking;
     int _service_id;
     Service _service;
     Bundle _bundle;
     private FragmentActivityListener parentListener;
+    private FragmentListener fragmentListener;
 
     public ServiceAboutFragment() {
 
@@ -57,9 +61,21 @@ public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Suc
 
         txt_description = view.findViewById(R.id.txt_description);
         iv_image = view.findViewById(R.id.imageView);
+        btn_booking = view.findViewById(R.id.btn_booking);
 
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
-        txt_description.setTypeface(typeface);
+        txt_description.setTypeface(Util.getTypeFace(getContext()));
+        btn_booking.setTypeface(Util.getTypeFace(getContext()));
+
+        btn_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
+                serviceBookingFragment.setArguments(_bundle);
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceBookingFragment);
+            }
+        });
 
         bind();
 
@@ -86,6 +102,7 @@ public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Suc
                                 if (imgBG.exists()) {
                                     Resources res = getResources();
                                     Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                    bitmap = ImageHelper.getResizedBitmap(bitmap, 500);
                                     BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
                                     iv_image.setImageDrawable(bd);
@@ -129,5 +146,9 @@ public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Suc
                 }
             }
         }
+    }
+
+    public void setFragmentListener(FragmentListener fragmentListener) {
+        this.fragmentListener = fragmentListener;
     }
 }

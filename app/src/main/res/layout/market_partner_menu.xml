@@ -30,20 +30,24 @@
             <com.github.barteksc.pdfviewer.PDFView
                 android:id="@+id/pdf_viewer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_above="@id/footerContent" />
 
-            <Button
-                android:id="@+id/btn_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/pdf_viewer"
-                android:background="#25a8d0"
-                android:paddingBottom="10dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:paddingTop="10dp"
-                android:text="@string/book_now_here"
-                android:textColor="#fff" />
+            <LinearLayout
+                android:id="@+id/footerContent"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_alignParentBottom="true"
+                android:paddingTop="10dp">
+
+                <Button
+                    android:id="@+id/btn_booking"
+                    style="@style/ButtonBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/book_now_here"
+                    android:textColor="#fff" />
+            </LinearLayout>
         </RelativeLayout>
 
     </LinearLayout>

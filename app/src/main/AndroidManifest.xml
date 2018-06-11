@@ -86,6 +86,11 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".service.SyncService" />
+        <receiver
+            android:name=".receivers.SyncAlarmReceiver"
+            android:process=":remote" />
+
         <activity
             android:name=".topBarActivity"
             android:screenOrientation="landscape" />

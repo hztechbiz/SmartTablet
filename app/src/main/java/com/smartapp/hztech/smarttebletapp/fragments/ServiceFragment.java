@@ -1,20 +1,22 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.smartapp.hztech.smarttebletapp.Constants;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
@@ -31,7 +33,8 @@ import java.util.ArrayList;
 public class ServiceFragment extends Fragment implements AsyncResultBag.Success {
 
     TextView txt_title, txt_description;
-    ImageView iv_image;
+    RoundedImageView iv_image;
+    LinearLayout mainContent, footerContent;
     int _service_id;
     Service _service;
     Bundle _bundle;
@@ -57,6 +60,12 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
         txt_title = view.findViewById(R.id.txt_title);
         txt_description = view.findViewById(R.id.txt_description);
         iv_image = view.findViewById(R.id.imageView);
+        mainContent = view.findViewById(R.id.mainContent);
+        footerContent = view.findViewById(R.id.footerContent);
+
+        txt_description.setTypeface(Util.getTypeFace(getContext()));
+        txt_title.setTypeface(Util.getTypeFace(getContext()));
+        footerContent.setVisibility(View.GONE);
 
         activityListener.receive(R.string.msg_show_sidebar, null);
         activityListener.receive(R.string.msg_reset_menu, null);
@@ -85,11 +94,10 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                 File imgBG = new File(filePath);
 
                                 if (imgBG.exists()) {
-                                    Resources res = getResources();
                                     Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                    bitmap = ImageHelper.getResizedBitmap(bitmap, 500);
 
-                                    iv_image.setImageDrawable(bd);
+                                    iv_image.setImageBitmap(bitmap);
                                 }
                             }
                         }
@@ -110,7 +118,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     public void onSuccess(Object result) {
         Service service = result != null ? (Service) result : null;
         ArrayList<NavigationFragment.MenuItem> menu_items_objects = new ArrayList<>();
-        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK};
+        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS};
 
         if (service != null) {
             _service = service;
@@ -118,6 +126,8 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());
                 txt_description.setText(service.getDescription());
+            } else {
+                footerContent.setVisibility(View.VISIBLE);
             }
 
             if (!service.getMeta().isEmpty()) {
@@ -137,6 +147,10 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                 setupImage(meta_obj.getString("meta_value"));
                             }
 
+                            if (meta_obj.getString("meta_key").equals("background_image")) {
+                                setupBackgroundImage(meta_obj.getString("meta_value"));
+                            }
+
                             for (int j = 0; j < menu_items.length; j++) {
                                 if (meta_obj.getString("meta_key").equals(menu_items[j]) && meta_obj.getString("meta_value").equals("1")) {
                                     NavigationFragment.MenuItem item = new NavigationFragment.MenuItem();
@@ -145,6 +159,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                         case Constants.TOP_MENU_SHOW_ABOUT:
                                             ServiceAboutFragment serviceAboutFragment = new ServiceAboutFragment();
                                             serviceAboutFragment.setArguments(_bundle);
+                                            serviceAboutFragment.setFragmentListener(fragmentListener);
 
                                             item.title = "ABOUT US";
                                             item.fragment = serviceAboutFragment;
@@ -183,6 +198,15 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                             item.fragment = serviceMenuFragment;
 
                                             break;
+                                        case Constants.TOP_MENU_SHOW_OFFERS:
+                                            ServiceOffersFragment serviceOffersFragment = new ServiceOffersFragment();
+                                            serviceOffersFragment.setArguments(_bundle);
+                                            serviceOffersFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "OFFERS";
+                                            item.fragment = serviceOffersFragment;
+
+                                            break;
                                     }
 
                                     if (item.title != null)
@@ -196,9 +220,9 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                 }
 
                 if (service.isIs_marketing_partner() && !menu_items_objects.isEmpty()) {
-
-                    if (fragmentListener != null)
-                        fragmentListener.onUpdateFragment(menu_items_objects.get(0).fragment);
+                    mainContent.setVisibility(View.GONE);
+                    //if (fragmentListener != null)
+                    //fragmentListener.onUpdateFragment(menu_items_objects.get(0).fragment);
 
                     activityListener.receive(R.string.msg_hide_sidebar, null);
                     activityListener.receive(R.string.msg_update_menu, menu_items_objects);
@@ -206,5 +230,22 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                 }
             }
         }
+    }
+
+    private void setupBackgroundImage(String image_id) {
+        new RetrieveMedia(getContext(), Integer.parseInt(image_id))
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            String filePath = result.toString();
+
+                            if (filePath != null) {
+                                activityListener.receive(R.string.msg_update_background, filePath);
+                            }
+                        }
+                    }
+                })
+                .execute();
     }
 }

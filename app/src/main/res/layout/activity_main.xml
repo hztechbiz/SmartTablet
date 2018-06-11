@@ -25,11 +25,12 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -49,11 +50,12 @@
                         android:src="@drawable/home" />
 
                     <TextView
+                        android:id="@+id/item_home_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Home"
+                        android:text="@string/home"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,12 +83,13 @@
                         android:src="@drawable/operatingthetelevision" />
 
                     <TextView
+                        android:id="@+id/item_tv_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="OPERATING THE TELEVISION"
+                        android:text="@string/operating_the_television"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
 
                 </LinearLayout>
@@ -116,12 +119,13 @@
                         android:src="@drawable/connecttowifi" />
 
                     <TextView
+                        android:id="@+id/item_wifi_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="CONNECT TO WIFI"
+                        android:text="@string/connect_to_wifi"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -149,12 +153,13 @@
                         android:src="@drawable/usemobile" />
 
                     <TextView
+                        android:id="@+id/item_how_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="HOW TO USE SMART TABLET"
+                        android:text="@string/how_to_use_smart_tablet"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -182,12 +187,13 @@
                         android:src="@drawable/userinformation" />
 
                     <TextView
+                        android:id="@+id/item_useful_info_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="USEFUL INFROMATION"
+                        android:text="@string/useful_information"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -217,12 +223,13 @@
                         android:src="@drawable/localmap" />
 
                     <TextView
+                        android:id="@+id/item_local_map_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="LOCAL MAP"
+                        android:text="@string/local_map"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -252,12 +259,13 @@
                         android:src="@drawable/localregion" />
 
                     <TextView
+                        android:id="@+id/item_local_region_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="LOCAL REGION"
+                        android:text="@string/local_region"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -285,12 +293,13 @@
                         android:src="@drawable/weather" />
 
                     <TextView
+                        android:id="@+id/item_weather_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="WEATHER"
+                        android:text="@string/weather"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -318,12 +327,13 @@
                         android:src="@drawable/news" />
 
                     <TextView
+                        android:id="@+id/item_news_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="NEWS"
+                        android:text="@string/news"
                         android:textColor="#000"
-                        android:textSize="13dp" />
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -343,7 +353,6 @@
         </ScrollView>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -372,17 +381,26 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/btn_background_with_corner"
+                    android:background="@drawable/blue_radius"
                     android:gravity="center"
                     android:onClick="onBackClick"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:visibility="gone">
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/back" />
 
                     <TextView
+                        android:id="@+id/btn_back_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/home"
+                        android:text="@string/back"
                         android:textColor="#fff"
                         android:textColorHint="#fff" />
                 </LinearLayout>
@@ -393,14 +411,22 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/btn_background_with_corner"
+                    android:background="@drawable/blue_radius"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:visibility="gone">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/homeicon" />
 
                     <TextView
+                        android:id="@+id/btn_home_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/home"
@@ -426,7 +452,7 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/btn_background_with_corner"
+                    android:background="@drawable/blue_radius"
                     android:padding="5dp"
                     android:src="@drawable/wsignal" />
 
@@ -435,7 +461,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/btn_background_with_corner"
+                    android:background="@drawable/blue_radius"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="5dp"
@@ -458,12 +484,14 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/time_box"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/btn_background_with_corner"
+                    android:background="@drawable/blue_radius"
                     android:gravity="center"
+                    android:onClick="onTimeClick"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp">
 
@@ -483,8 +511,30 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp" />
+            android:padding="10dp" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/syncContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/syncProgressBar"
+            android:layout_centerInParent="true"
+            android:text="@string/synchronizing_please_wait"
+            android:textColor="#FFF"
+            android:textSize="17sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
