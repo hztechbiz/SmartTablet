@@ -630,6 +630,7 @@ public class MainActivity extends FragmentActivity {
 
                     if (enable_weather.equals("1")) {
                         weather_linear.setVisibility(View.VISIBLE);
+                        weather_linear.setTag(R.string.tag_action, R.string.tag_action_weather);
                     } else {
                         weather_linear.setVisibility(View.GONE);
                     }
@@ -655,8 +656,8 @@ public class MainActivity extends FragmentActivity {
         mainFragment.setFragmentListener(fragmentListener);
         mainFragment.setParentListener(activityListener);
 
-        if (action != null && value != null) {
-            if (action.equals(R.string.tag_action_category)) {
+        if (action != null) {
+            if (action.equals(R.string.tag_action_category) && value != null) {
                 bundle.putInt(getString(R.string.param_main_category_id),
                         Integer.parseInt(value.toString()));
 
@@ -667,7 +668,7 @@ public class MainActivity extends FragmentActivity {
 
                 fragmentListener.onUpdateFragment(fragment);
 
-            } else if (action.equals(R.string.tag_action_service)) {
+            } else if (action.equals(R.string.tag_action_service) && value != null) {
                 bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(value.toString()));
 
                 MainFragment fragment = new MainFragment();
@@ -676,7 +677,7 @@ public class MainActivity extends FragmentActivity {
                 fragment.setParentListener(activityListener);
 
                 fragmentListener.onUpdateFragment(fragment);
-            } else if (action.equals(R.string.tag_action_map)) {
+            } else if (action.equals(R.string.tag_action_map) && value != null) {
                 if (value instanceof MapMarker) {
                     MapMarker mapMarker = (MapMarker) value;
 
@@ -689,6 +690,15 @@ public class MainActivity extends FragmentActivity {
 
                     fragmentListener.onUpdateFragment(fragment);
                 }
+            } else if (action.equals(R.string.tag_action_weather)) {
+                bundle.putBoolean(getString(R.string.param_weather), true);
+
+                MainFragment fragment = new MainFragment();
+                fragment.setArguments(bundle);
+                fragment.setFragmentListener(fragmentListener);
+                fragment.setParentListener(activityListener);
+
+                fragmentListener.onUpdateFragment(fragment);
             }
         } else {
             fragmentListener.onUpdateFragment(mainFragment);

@@ -14,6 +14,7 @@
     <string name="tag_is_mp">IS_MP</string>
     <string name="tag_action">ACTION</string>
     <string name="tag_action_category">CATEGORY</string>
+    <string name="tag_action_weather">WEATHER</string>
     <string name="tag_action_map">MAP</string>
     <string name="tag_action_service">SERVICE</string>
     <string name="tag_value">VALUE</string>
@@ -26,6 +27,7 @@
     <string name="param_offer_id">OFFER_ID</string>
     <string name="param_listing_type">LISTING_TYPE</string>
     <string name="param_marker">MAP_MARKER</string>
+    <string name="param_weather">WEATHER</string>
     <string name="param_show_first">SHOW_FIRST</string>
 
     <!-- MESSAGES -->

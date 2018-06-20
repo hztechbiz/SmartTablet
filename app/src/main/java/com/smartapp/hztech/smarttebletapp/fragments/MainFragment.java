@@ -37,7 +37,7 @@ public class MainFragment extends Fragment {
     private ServicesGridAdapter servicesAdapter;
     private int _category_id, _main_category_id, _service_id;
     private MapMarker _map_marker;
-    private Boolean _has_children;
+    private Boolean _has_children, _is_weather;
     private String _listing_type;
     private Bundle _bundle;
 
@@ -66,6 +66,7 @@ public class MainFragment extends Fragment {
         _has_children = false;
         _listing_type = null;
         _map_marker = null;
+        _is_weather = false;
 
         if (_bundle != null) {
             if (_bundle.containsKey(getString(R.string.param_category_id))) {
@@ -90,6 +91,10 @@ public class MainFragment extends Fragment {
 
             if (_bundle.containsKey(getString(R.string.param_marker))) {
                 _map_marker = _bundle.getParcelable(getString(R.string.param_marker));
+            }
+
+            if (_bundle.containsKey(getString(R.string.param_weather))) {
+                _is_weather = _bundle.getBoolean(getString(R.string.param_weather));
             }
         }
 
@@ -125,7 +130,9 @@ public class MainFragment extends Fragment {
             }
         });
 
-        if (_map_marker != null) {
+        if (_is_weather) {
+            moveToWeatherFragment();
+        } else if (_map_marker != null) {
             moveToMapFragment();
         } else if (_service_id > 0) {
             moveToServiceFragment();
@@ -150,6 +157,20 @@ public class MainFragment extends Fragment {
         parentListener.receive(R.string.msg_hide_top_guest_button, null);
 
         return view;
+    }
+
+    private void moveToWeatherFragment() {
+        WeatherFragment weatherFragment = new WeatherFragment();
+        weatherFragment.setFragmentListener(fragmentListener);
+        weatherFragment.setParentListener(parentListener);
+        weatherFragment.setArguments(_bundle);
+
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setFragmentListener(fragmentListener);
+        fragment.setParentListener(parentListener);
+        fragment.setChildFragment(weatherFragment);
+
+        fragmentListener.onUpdateFragment(fragment);
     }
 
     private void moveToMapFragment() {
