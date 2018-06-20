@@ -8,40 +8,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp">
-
-            <Button
-                android:id="@+id/bck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#25a8d0"
-                android:drawableLeft="@drawable/back"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Back"
-                android:textColor="#fff"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"></LinearLayout>
-
-            <SearchView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="#fff" />
-
-        </LinearLayout>
-
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/blue_radius"
             android:padding="15dp"
             android:scrollbars="none">

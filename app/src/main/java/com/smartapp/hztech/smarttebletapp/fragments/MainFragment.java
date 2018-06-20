@@ -16,6 +16,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.MapMarker;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleCategory;
 
@@ -35,8 +36,10 @@ public class MainFragment extends Fragment {
     private CategoryGridAdapter categoryAdapter;
     private ServicesGridAdapter servicesAdapter;
     private int _category_id, _main_category_id, _service_id;
+    private MapMarker _map_marker;
     private Boolean _has_children;
     private String _listing_type;
+    private Bundle _bundle;
 
     public MainFragment() {
 
@@ -55,33 +58,38 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.category_fragment, container, false);
-        Bundle bundle = getArguments();
+        _bundle = getArguments();
 
         gridView = view.findViewById(R.id.gridview);
 
         _category_id = _main_category_id = _service_id = 0;
         _has_children = false;
         _listing_type = null;
+        _map_marker = null;
 
-        if (bundle != null) {
-            if (bundle.containsKey(getString(R.string.param_category_id))) {
-                _category_id = bundle.getInt(getString(R.string.param_category_id));
+        if (_bundle != null) {
+            if (_bundle.containsKey(getString(R.string.param_category_id))) {
+                _category_id = _bundle.getInt(getString(R.string.param_category_id));
             }
 
-            if (bundle.containsKey(getString(R.string.param_main_category_id))) {
-                _main_category_id = bundle.getInt(getString(R.string.param_main_category_id));
+            if (_bundle.containsKey(getString(R.string.param_main_category_id))) {
+                _main_category_id = _bundle.getInt(getString(R.string.param_main_category_id));
             }
 
-            if (bundle.containsKey(getString(R.string.param_service_id))) {
-                _service_id = bundle.getInt(getString(R.string.param_service_id));
+            if (_bundle.containsKey(getString(R.string.param_service_id))) {
+                _service_id = _bundle.getInt(getString(R.string.param_service_id));
             }
 
-            if (bundle.containsKey(getString(R.string.param_has_children))) {
-                _has_children = bundle.getBoolean(getString(R.string.param_has_children));
+            if (_bundle.containsKey(getString(R.string.param_has_children))) {
+                _has_children = _bundle.getBoolean(getString(R.string.param_has_children));
             }
 
-            if (bundle.containsKey(getString(R.string.param_listing_type))) {
-                _listing_type = bundle.getString(getString(R.string.param_listing_type));
+            if (_bundle.containsKey(getString(R.string.param_listing_type))) {
+                _listing_type = _bundle.getString(getString(R.string.param_listing_type));
+            }
+
+            if (_bundle.containsKey(getString(R.string.param_marker))) {
+                _map_marker = _bundle.getParcelable(getString(R.string.param_marker));
             }
         }
 
@@ -117,7 +125,9 @@ public class MainFragment extends Fragment {
             }
         });
 
-        if (_service_id > 0) {
+        if (_map_marker != null) {
+            moveToMapFragment();
+        } else if (_service_id > 0) {
             moveToServiceFragment();
         } else if (_main_category_id > 0) {
             moveToCategoryFragment();
@@ -131,8 +141,30 @@ public class MainFragment extends Fragment {
         parentListener.receive(R.string.msg_hide_home_button, null);
         parentListener.receive(R.string.msg_hide_back_button, null);
         parentListener.receive(R.string.msg_reset_background, null);
+        parentListener.receive(R.string.msg_hide_logo_button, null);
+        parentListener.receive(R.string.msg_show_main_logo, null);
+        parentListener.receive(R.string.msg_hide_welcome_button, null);
+        parentListener.receive(R.string.msg_show_guest_button, null);
+        parentListener.receive(R.string.msg_hide_app_heading, null);
+        parentListener.receive(R.string.msg_show_copyright, null);
+        parentListener.receive(R.string.msg_hide_top_guest_button, null);
 
         return view;
+    }
+
+    private void moveToMapFragment() {
+        MapFragment mapFragment = new MapFragment();
+        mapFragment.setFragmentListener(fragmentListener);
+        mapFragment.setParentListener(parentListener);
+        mapFragment.setArguments(_bundle);
+
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setFragmentListener(fragmentListener);
+        fragment.setParentListener(parentListener);
+        fragment.setChildFragment(mapFragment);
+        //fragment.setArguments(_bundle);
+
+        fragmentListener.onUpdateFragment(fragment);
     }
 
     private void moveToServiceFragment() {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.smartapp.hztech.smarttebletapp.ImagePopupActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PartnerGallery extends FragmentActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = (Integer) parent.getItemAtPosition(position);
 //              lnr.getBackground().setAlpha(100);
-                Intent i = new Intent(getApplicationContext(), PopUpActivity.class);
+                Intent i = new Intent(getApplicationContext(), ImagePopupActivity.class);
                 i.putExtra("IMAGE", selectedItem);
                 startActivity(i);
             }

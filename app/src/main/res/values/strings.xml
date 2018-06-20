@@ -14,6 +14,7 @@
     <string name="tag_is_mp">IS_MP</string>
     <string name="tag_action">ACTION</string>
     <string name="tag_action_category">CATEGORY</string>
+    <string name="tag_action_map">MAP</string>
     <string name="tag_action_service">SERVICE</string>
     <string name="tag_value">VALUE</string>
 
@@ -24,6 +25,8 @@
     <string name="param_service_id">SERVICE_ID</string>
     <string name="param_offer_id">OFFER_ID</string>
     <string name="param_listing_type">LISTING_TYPE</string>
+    <string name="param_marker">MAP_MARKER</string>
+    <string name="param_show_first">SHOW_FIRST</string>
 
     <!-- MESSAGES -->
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
@@ -38,6 +41,21 @@
     <string name="msg_reset">RESET</string>
     <string name="msg_update_background">UPDATE_BACKGROUND</string>
     <string name="msg_reset_background">RESET_BACKGROUND</string>
+    <string name="msg_show_main_logo">SHOW_MAIN_LOGO</string>
+    <string name="msg_hide_main_logo">HIDE_MAIN_LOGO</string>
+    <string name="msg_show_logo_button">SHOW_MAIN_LOGO_BUTTON</string>
+    <string name="msg_hide_logo_button">HIDE_MAIN_LOGO_BUTTON</string>
+    <string name="msg_show_welcome_button">SHOW_WELCOME_BUTTON</string>
+    <string name="msg_hide_welcome_button">HIDE_WELCOME_BUTTON</string>
+    <string name="msg_show_guest_button">SHOW_GUEST_BUTTON</string>
+    <string name="msg_hide_guest_button">HIDE_GUEST_BUTTON</string>
+    <string name="msg_show_app_heading">SHOW_APP_HEADING</string>
+    <string name="msg_hide_app_heading">HIDE_APP_HEADING</string>
+    <string name="msg_set_app_heading">SET_APP_HEADING</string>
+    <string name="msg_show_copyright">SHOW_COPYRIGHT</string>
+    <string name="msg_hide_copyright">HIDE_COPYRIGHT</string>
+    <string name="msg_show_top_guest_button">SHOW_TOP_GUEST_BUTTON</string>
+    <string name="msg_hide_top_guest_button">HIDE_TOP_GUEST_BUTTON</string>
 
     <!-- STRINGS -->
     <string name="address">Address</string>
@@ -66,4 +84,9 @@
     <string name="sync">Sync</string>
     <string name="enter_hotel_key_here">ENTER HOTEL KEY HERE</string>
     <string name="view_offer_detail">View Offer Detail</string>
+    <string name="powered_by_smart_tablet">Powered by Smart Tablet</string>
+    <string name="guest_information">Guest Information</string>
+    <string name="welcome">WELCOME</string>
+    <string name="what_people_say_about_us">What people say about us</string>
+    <string name="location">Location</string>
 </resources>

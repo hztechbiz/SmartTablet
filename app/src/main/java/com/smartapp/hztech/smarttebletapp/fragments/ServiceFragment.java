@@ -4,10 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,6 +38,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     int _service_id;
     Service _service;
     Bundle _bundle;
+    Button btn_booking;
     private FragmentActivityListener activityListener;
     private FragmentListener fragmentListener;
 
@@ -62,14 +63,29 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
         iv_image = view.findViewById(R.id.imageView);
         mainContent = view.findViewById(R.id.mainContent);
         footerContent = view.findViewById(R.id.footerContent);
+        btn_booking = view.findViewById(R.id.btn_booking);
 
+        btn_booking.setTypeface(Util.getTypeFace(getContext()));
         txt_description.setTypeface(Util.getTypeFace(getContext()));
         txt_title.setTypeface(Util.getTypeFace(getContext()));
         footerContent.setVisibility(View.GONE);
 
+        btn_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
+                serviceBookingFragment.setArguments(_bundle);
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceBookingFragment);
+            }
+        });
+
         activityListener.receive(R.string.msg_show_sidebar, null);
         activityListener.receive(R.string.msg_reset_menu, null);
         activityListener.receive(R.string.msg_hide_home_button, null);
+        activityListener.receive(R.string.msg_hide_app_heading, null);
+        activityListener.receive(R.string.msg_hide_copyright, null);
 
         bind();
 
@@ -118,7 +134,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     public void onSuccess(Object result) {
         Service service = result != null ? (Service) result : null;
         ArrayList<NavigationFragment.MenuItem> menu_items_objects = new ArrayList<>();
-        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS};
+        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_TESTIMONIALS};
 
         if (service != null) {
             _service = service;
@@ -127,6 +143,9 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                 txt_title.setText(service.getTitle());
                 txt_description.setText(service.getDescription());
             } else {
+                activityListener.receive(R.string.msg_show_app_heading, null);
+                activityListener.receive(R.string.msg_set_app_heading, service.getTitle().toUpperCase());
+
                 footerContent.setVisibility(View.VISIBLE);
             }
 
@@ -168,6 +187,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                         case Constants.TOP_MENU_SHOW_LOCATION:
                                             ServiceLocationFragment serviceLocationFragment = new ServiceLocationFragment();
                                             serviceLocationFragment.setArguments(_bundle);
+                                            serviceLocationFragment.setFragmentListener(fragmentListener);
 
                                             item.title = "LOCATION";
                                             item.fragment = serviceLocationFragment;
@@ -205,6 +225,15 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
 
                                             item.title = "OFFERS";
                                             item.fragment = serviceOffersFragment;
+
+                                            break;
+                                        case Constants.TOP_MENU_SHOW_TESTIMONIALS:
+                                            ServiceTestimonialsFragment serviceTestimonialsFragment = new ServiceTestimonialsFragment();
+                                            serviceTestimonialsFragment.setArguments(_bundle);
+                                            serviceTestimonialsFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "TESTIMONIALS";
+                                            item.fragment = serviceTestimonialsFragment;
 
                                             break;
                                     }

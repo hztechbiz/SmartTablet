@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.PREVENT_POWER_KEY" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -87,8 +89,12 @@
         </receiver>
 
         <service android:name=".service.SyncService" />
+
         <receiver
             android:name=".receivers.SyncAlarmReceiver"
+            android:process=":remote" />
+        <receiver
+            android:name=".receivers.WakeupReceiver"
             android:process=":remote" />
 
         <activity
@@ -98,11 +104,14 @@
         <activity android:name=".MarketingPartnerSection.MarketPartnerMenu" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerVidoes" />
         <activity
-            android:name=".MarketingPartnerSection.PopUpActivity"
+            android:name=".ImagePopupActivity"
             android:theme="@style/AppTheme.PopMe" />
         <activity android:name=".MarketingPartnerSection.MarketPartnerTestimonials" />
         <activity android:name=".PopUps.PoolPopUp" />
         <activity android:name=".PopUps.BatteryPopUp"></activity>
+        <activity
+            android:name=".LocationPopupActivity"
+            android:theme="@style/AppTheme.PopMe" />
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,8 +19,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.smartapp.hztech.smarttebletapp.Constants;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
+import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleService;
 
 import org.json.JSONArray;
@@ -35,7 +38,9 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
     String _address;
     Double _latitude, _longitude;
     boolean _markerSetup;
+    Button btn_booking;
     private FragmentActivityListener parentListener;
+    private FragmentListener fragmentListener;
 
     public ServiceLocationFragment() {
 
@@ -63,6 +68,19 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
         txt_address = view.findViewById(R.id.txt_address);
         txt_email = view.findViewById(R.id.txt_email);
         txt_phone = view.findViewById(R.id.txt_phone);
+        btn_booking = view.findViewById(R.id.btn_booking);
+
+        btn_booking.setTypeface(Util.getTypeFace(getContext()));
+        btn_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
+                serviceBookingFragment.setArguments(_bundle);
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceBookingFragment);
+            }
+        });
 
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
         txt_description.setTypeface(typeface);
@@ -157,10 +175,14 @@ public class ServiceLocationFragment extends Fragment implements AsyncResultBag.
             markerOptions.title(_address);
 
             _googleMap.clear();
-            _googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+            _googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
             _googleMap.addMarker(markerOptions);
 
             _markerSetup = true;
         }
+    }
+
+    public void setFragmentListener(FragmentListener fragmentListener) {
+        this.fragmentListener = fragmentListener;
     }
 }

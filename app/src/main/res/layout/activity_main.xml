@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     tools:context="com.smartapp.hztech.smarttebletapp.MainActivity">
 
     <ImageView
@@ -202,8 +203,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:background="#c5c6c9"
-                    android:visibility="gone" />
+                    android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemMap"
@@ -213,8 +213,7 @@
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:visibility="gone">
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/map"
@@ -238,8 +237,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:background="#c5c6c9"
-                    android:visibility="gone" />
+                    android:background="#c5c6c9" />
 
                 <LinearLayout
                     android:id="@+id/itemLocalRegion"
@@ -249,8 +247,7 @@
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:visibility="gone">
+                    android:paddingTop="10dp">
 
                     <ImageView
                         android:id="@+id/region"
@@ -354,7 +351,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toEndOf="@id/sidebar"
@@ -362,9 +359,11 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:layout_alignParentTop="true"
+            android:weightSum="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -372,8 +371,24 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
+                android:layout_weight="0.3"
                 android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/main_logo"
+                    android:layout_width="250dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/white_background_corner_radius"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/main_logo_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn_back"
@@ -434,85 +449,256 @@
                         android:textColorHint="#fff" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/small_logo"
+                    android:layout_width="90dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/white_background_corner_radius"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/small_logo_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_welcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/black_transparent_with_radius"
+                    android:gravity="center"
+                    android:onClick="onWelcomeClick"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/btn_welcome_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/welcome"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_top_guest_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/black_transparent_with_radius"
+                    android:gravity="center"
+                    android:onClick="onGuestInfoClick"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/btn_top_guest_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/guest_information"
+                        android:textAllCaps="true"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/app_heading_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="horizontal">
+                android:layout_weight="0.4"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/wifi_connect"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/blue_radius"
-                    android:padding="5dp"
-                    android:src="@drawable/wsignal" />
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/app_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/blue_radius"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp">
+                    android:background="@drawable/white_transparent"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/top_bar_right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="0.7"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/bettryStatus"
+                        android:id="@+id/wifi_connect"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:padding="3dp"
-                        android:src="@drawable/battery_icon" />
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/blue_radius"
+                        android:padding="5dp"
+                        android:src="@drawable/wsignal" />
 
-                    <TextView
-                        android:id="@+id/percentage_set"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/_0"
-                        android:textColor="#fff"
-                        android:textColorHint="#fff" />
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/blue_radius"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
+
+                        <ImageView
+                            android:id="@+id/bettryStatus"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="3dp"
+                            android:src="@drawable/battery_icon" />
+
+                        <TextView
+                            android:id="@+id/percentage_set"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/_0"
+                            android:textColor="#fff"
+                            android:textColorHint="#fff" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/time_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/blue_radius"
+                        android:gravity="center"
+                        android:onClick="onTimeClick"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
+
+                        <TextView
+                            android:id="@+id/getTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/_00_00_pm"
+                            android:textColor="#fff"
+                            android:textColorHint="#fff" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/time_box"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/blue_radius"
-                    android:gravity="center"
-                    android:onClick="onTimeClick"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp">
+                    android:id="@+id/btn_guest_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="end"
+                    android:onClick="onGuestInfoClick">
 
-                    <TextView
-                        android:id="@+id/getTime"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/_00_00_pm"
-                        android:textColor="#fff"
-                        android:textColorHint="#fff" />
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/black_transparent_with_radius"
+                        android:padding="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp">
+
+                        <TextView
+                            android:id="@+id/btn_guest_info_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/guest_information"
+                            android:textColor="#FFF"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/fragment_container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/top_bar">
+
+            <LinearLayout
+                android:id="@+id/fragment_main_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/bottom_bar"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bottom_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/txt_copyright"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/powered_by_smart_tablet"
+                        android:textColor="#FFF" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/syncContainer"

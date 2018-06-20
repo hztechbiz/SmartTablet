@@ -16,6 +16,7 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,14 +32,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.NavigationFragment;
+import com.smartapp.hztech.smarttebletapp.fragments.WelcomeFragment;
 import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.MapMarker;
 import com.smartapp.hztech.smarttebletapp.receivers.SyncAlarmReceiver;
+import com.smartapp.hztech.smarttebletapp.receivers.WakeupReceiver;
 import com.smartapp.hztech.smarttebletapp.service.SyncService;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
@@ -51,15 +59,17 @@ public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
     private FrameLayout fragmentContainer;
-    private ImageView img_wifi_signals, img_battery_level, bg_image;
-    private TextView txt_battery_percentage, txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text;
-    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box;
+    private ImageView img_wifi_signals, img_battery_level, bg_image, small_logo, main_logo;
+    private TextView txt_battery_percentage, txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
+    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right;
     private RelativeLayout _sync_container;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private int timerClicked;
     private boolean timerClickedTimerAdded, isServiceRunning;
+    private Handler _handler;
+    private Runnable _runnable;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
@@ -67,7 +77,21 @@ public class MainActivity extends FragmentActivity {
             showSynchronizing(true);
         }
     };
+    private BroadcastReceiver syncHeartBeatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(true);
+        }
+    };
     private BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("SchedulingAlarms", "syncreceiver");
+            showSynchronizing(false);
+            isServiceRunning = false;
+        }
+    };
+    private BroadcastReceiver syncCompleteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("SchedulingAlarms", "syncreceiver");
@@ -115,9 +139,88 @@ public class MainActivity extends FragmentActivity {
                 case R.string.msg_reset_background:
                     setBranding();
                     break;
+                case R.string.msg_show_main_logo:
+                    showMainLogo(true);
+                    break;
+                case R.string.msg_hide_main_logo:
+                    showMainLogo(false);
+                    break;
+                case R.string.msg_show_logo_button:
+                    showSmallLogo(true);
+                    break;
+                case R.string.msg_hide_logo_button:
+                    showSmallLogo(false);
+                    break;
+                case R.string.msg_show_welcome_button:
+                    showWelcomeButton(true);
+                    break;
+                case R.string.msg_hide_welcome_button:
+                    showWelcomeButton(false);
+                    break;
+                case R.string.msg_show_guest_button:
+                    showGuestButton(true);
+                    break;
+                case R.string.msg_hide_guest_button:
+                    showGuestButton(false);
+                    break;
+                case R.string.msg_set_app_heading:
+                    if (arguments != null)
+                        _app_heading.setText(arguments.toString());
+                    break;
+                case R.string.msg_show_app_heading:
+                    showAppHeading(true);
+                    break;
+                case R.string.msg_hide_app_heading:
+                    showAppHeading(false);
+                    break;
+                case R.string.msg_show_copyright:
+                    showCopyright(true);
+                    break;
+                case R.string.msg_hide_copyright:
+                    showCopyright(false);
+                    break;
+                case R.string.msg_show_top_guest_button:
+                    showTopGuestInfoButton(true);
+                    break;
+                case R.string.msg_hide_top_guest_button:
+                    showTopGuestInfoButton(false);
+                    break;
             }
         }
     };
+
+    private void showCopyright(boolean b) {
+        _bottom_bar.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showAppHeading(boolean b) {
+        _app_heading_container.setVisibility(b ? View.VISIBLE : View.GONE);
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) _top_bar_right.getLayoutParams();
+        layoutParams.weight = (b ? 0.3f : 0.7f);
+
+        _top_bar_right.setLayoutParams(layoutParams);
+    }
+
+    private void showGuestButton(boolean b) {
+        _btn_guest_info.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showWelcomeButton(boolean b) {
+        _btn_welcome.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showTopGuestInfoButton(boolean b) {
+        _btn_top_guest_info.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showSmallLogo(boolean b) {
+        small_logo_container.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showMainLogo(boolean b) {
+        main_logo_container.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
 
     private void showSynchronizing(boolean b) {
         _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
@@ -145,19 +248,33 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
+
+        _handler = new Handler();
+        _runnable = new Runnable() {
+            @Override
+            public void run() {
+                moveToHome();
+            }
+        };
 
         timerClicked = 0;
         timerClickedTimerAdded = isServiceRunning = false;
 
         fragmentContainer = findViewById(R.id.fragment_container);
         _sidebar = findViewById(R.id.sidebar);
+        _top_bar_right = findViewById(R.id.top_bar_right);
         _btn_home = findViewById(R.id.btn_home);
         _btn_back = findViewById(R.id.btn_back);
         _btn_home_text = findViewById(R.id.btn_home_text);
         _btn_back_text = findViewById(R.id.btn_back_text);
+        _btn_welcome = findViewById(R.id.btn_welcome);
+        _btn_guest_info = findViewById(R.id.btn_guest_info);
+        _btn_guest_info_text = findViewById(R.id.btn_guest_info_text);
+        _btn_top_guest_info_text = findViewById(R.id.btn_top_guest_info_text);
+        _btn_top_guest_info = findViewById(R.id.btn_top_guest_info);
         _time_box = findViewById(R.id.time_box);
         _sync_container = findViewById(R.id.syncContainer);
         item_home_text = findViewById(R.id.item_home_text);
@@ -171,7 +288,15 @@ public class MainActivity extends FragmentActivity {
         img_battery_level = findViewById(R.id.bettryStatus);
         txt_battery_percentage = findViewById(R.id.percentage_set);
         txt_time = findViewById(R.id.getTime);
+        _app_heading = findViewById(R.id.app_heading);
+        _app_heading_container = findViewById(R.id.app_heading_container);
+        _txt_copyright = findViewById(R.id.txt_copyright);
         bg_image = findViewById(R.id.main_bg_img);
+        small_logo = findViewById(R.id.small_logo_img);
+        main_logo = findViewById(R.id.main_logo_img);
+        small_logo_container = findViewById(R.id.small_logo);
+        main_logo_container = findViewById(R.id.main_logo);
+        _bottom_bar = findViewById(R.id.bottom_bar);
         item_icon_1 = findViewById(R.id.tv);
         item_icon_2 = findViewById(R.id.wifi);
         item_icon_3 = findViewById(R.id.useTablet);
@@ -196,6 +321,8 @@ public class MainActivity extends FragmentActivity {
         }
 
         _btn_home_text.setTypeface(Util.getTypeFace(this));
+        _btn_top_guest_info_text.setTypeface(Util.getTypeFace(this));
+        _btn_guest_info_text.setTypeface(Util.getTypeFace(this));
         _btn_back_text.setTypeface(Util.getTypeFace(this));
         item_home_text.setTypeface(Util.getTypeFace(this));
         item_tv_text.setTypeface(Util.getTypeFace(this));
@@ -204,6 +331,7 @@ public class MainActivity extends FragmentActivity {
         item_useful_info_text.setTypeface(Util.getTypeFace(this));
         item_weather_text.setTypeface(Util.getTypeFace(this));
         item_news_text.setTypeface(Util.getTypeFace(this));
+        _app_heading.setTypeface(Util.getTypeFace(this));
 
         batteryBroadcastReceiver = new BatteryBroadcastReceiver();
         wifiScanReceiver = new WifiScanReceiver();
@@ -223,10 +351,38 @@ public class MainActivity extends FragmentActivity {
         setupMenuItems();
         setBranding();
         scheduleAlarms();
+
+        wakeupScreen();
+    }
+
+    private void wakeupScreen() {
+        PowerManager powerManager = ((PowerManager) getSystemService(Context.POWER_SERVICE));
+        if (powerManager != null) {
+            PowerManager.WakeLock screenLock = powerManager.newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+            screenLock.acquire(10 * 60 * 1000L);
+        }
     }
 
     private void scheduleAlarms() {
-        Log.d("SchedulingAlarms", "triggered");
+        scheduleSyncAlarm();
+        scheduleWakeupAlarm();
+    }
+
+    private void scheduleWakeupAlarm() {
+        Intent intent = new Intent(this, WakeupReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, WakeupReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long millis = System.currentTimeMillis();
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            long interval = Constants.SCREEN_WAKEUP_WAIT;
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis + interval, interval, pendingIntent);
+        }
+    }
+
+    private void scheduleSyncAlarm() {
         Intent intent = new Intent(this, SyncAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long millis = System.currentTimeMillis();
@@ -235,36 +391,52 @@ public class MainActivity extends FragmentActivity {
 
         if (alarmManager != null) {
             long interval = AlarmManager.INTERVAL_HALF_DAY;
-            Log.d("SchedulingAlarms", "waiting");
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis + interval, interval, pendingIntent);
         }
     }
 
     private void setBranding() {
-        RetrieveSetting setting = new RetrieveSetting(this, Constants.SETTING_BACKGROUND);
+        RetrieveSetting setting = new RetrieveSetting(this, Constants.SETTING_BACKGROUND, Constants.SETTING_LOGO);
 
         setting.onSuccess(new AsyncResultBag.Success() {
             @Override
             public void onSuccess(Object result) {
+                HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
-                if (result != null) {
-                    String filePath = result.toString();
+                if (values != null) {
+                    String filePath = values.get(Constants.SETTING_BACKGROUND);
 
                     if (filePath != null) {
-                        File imgBG = new File(filePath);
+                        File imageFile = new File(filePath);
 
-                        if (imgBG.exists()) {
+                        if (imageFile.exists()) {
                             Resources res = getResources();
-                            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                             bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
                             BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
                             bg_image.setBackgroundDrawable(bd);
+                        }
+                    }
+
+                    filePath = values.get(Constants.SETTING_LOGO);
+
+                    if (filePath != null) {
+                        File imageFile = new File(filePath);
+
+                        if (imageFile.exists()) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                            Bitmap bitmap_small = ImageHelper.getResizedBitmap(bitmap, 500);
+                            Bitmap bitmap_large = ImageHelper.getResizedBitmap(bitmap, 1000);
+
+                            small_logo.setImageBitmap(bitmap_small);
+                            main_logo.setImageBitmap(bitmap_large);
                         }
                     }
                 }
             }
         });
-        setting.setMediaKeys(Constants.SETTING_BACKGROUND);
+        setting.setMediaKeys(Constants.SETTING_BACKGROUND, Constants.SETTING_LOGO);
         setting.execute();
     }
 
@@ -282,13 +454,21 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+
+        stopHandler();
+        startHandler();
+    }
+
+    @Override
     protected void onStart() {
         registerReceiver(syncReceiver, new IntentFilter(SyncService.TRANSACTION_DONE));
+        registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
+        registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-        checkIfSyncServiceRunning();
 
         Thread t = new Thread() {
             @Override
@@ -338,8 +518,14 @@ public class MainActivity extends FragmentActivity {
         if (syncReceiver != null)
             unregisterReceiver(syncReceiver);
 
+        if (syncCompleteReceiver != null)
+            unregisterReceiver(syncCompleteReceiver);
+
         if (syncStartReceiver != null)
             unregisterReceiver(syncStartReceiver);
+
+        if (syncHeartBeatReceiver != null)
+            unregisterReceiver(syncHeartBeatReceiver);
 
         super.onStop();
     }
@@ -350,53 +536,64 @@ public class MainActivity extends FragmentActivity {
                 "enable_connect_to_wifi",
                 "enable_how_use_tablet",
                 "enable_useful_information_category",
+                "enable_local_region_category",
+                "enable_local_map",
                 "enable_weather",
                 "enable_news",
-                "operating_the_television_service",
-                "connect_to_wifi_service",
+                "operating_the_television_category",
+                "connect_to_wifi_category",
                 "how_use_tablet_category",
-                "useful_information_category"
+                "useful_information_category",
+                "local_region_category",
+                "local_map_address",
+                "local_map_latitude",
+                "local_map_longitude"
         ).onSuccess(new AsyncResultBag.Success() {
             @Override
             public void onSuccess(Object result) {
                 HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
                 if (values != null) {
-                    String enable_operating_the_television = values.containsKey("enable_operating_the_television") ? values.get("enable_operating_the_television") : "1";
-                    String enable_connect_to_wifi = values.containsKey("enable_connect_to_wifi") ? values.get("enable_connect_to_wifi") : "1";
-                    String enable_how_use_tablet = values.containsKey("enable_how_use_tablet") ? values.get("enable_how_use_tablet") : "1";
-                    String enable_useful_information_category = values.containsKey("enable_useful_information_category") ? values.get("enable_useful_information_category") : "1";
-                    String enable_weather = values.containsKey("enable_weather")
-                            ? values.get("enable_weather") : "1";
-                    String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "1";
-                    String operating_the_television_service = values.containsKey("operating_the_television_service") ? values.get("operating_the_television_service") : "0";
-                    String connect_to_wifi_service = values.containsKey("connect_to_wifi_service") ? values.get("connect_to_wifi_service") : "0";
+                    String enable_operating_the_television = values.containsKey("enable_operating_the_television") ? values.get("enable_operating_the_television") : "0";
+                    String enable_connect_to_wifi = values.containsKey("enable_connect_to_wifi") ? values.get("enable_connect_to_wifi") : "0";
+                    String enable_how_use_tablet = values.containsKey("enable_how_use_tablet") ? values.get("enable_how_use_tablet") : "0";
+                    String enable_useful_information_category = values.containsKey("enable_useful_information_category") ? values.get("enable_useful_information_category") : "0";
+                    String enable_local_region_category = values.containsKey("enable_local_region_category") ? values.get("enable_local_region_category") : "0";
+                    String enable_local_map = values.containsKey("enable_local_map") ? values.get("enable_local_map") : "0";
+                    String enable_weather = values.containsKey("enable_weather") ? values.get("enable_weather") : "0";
+                    String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "0";
+                    String operating_the_television_category = values.containsKey("operating_the_television_category") ? values.get("operating_the_television_category") : "0";
+                    String connect_to_wifi_category = values.containsKey("connect_to_wifi_category") ? values.get("connect_to_wifi_category") : "0";
                     String how_use_tablet_category = values.containsKey("how_use_tablet_category") ? values.get("how_use_tablet_category") : "0";
                     String useful_information_category = values.containsKey("useful_information_category") ? values.get("useful_information_category") : "0";
+                    String local_region_category = values.containsKey("local_region_category") ? values.get("local_region_category") : "0";
+                    String local_map_address = values.containsKey("local_map_address") ? values.get("local_map_address") : null;
+                    double local_map_latitude = values.containsKey("local_map_latitude") ? Double.parseDouble(values.get("local_map_latitude")) : 0;
+                    double local_map_longitude = values.containsKey("local_map_longitude") ? Double.parseDouble(values.get("local_map_longitude")) : 0;
 
                     LinearLayout ott_linear = findViewById(R.id.ott);
                     LinearLayout wifi_linear = findViewById(R.id.itemWifi);
                     LinearLayout howTo_linear = findViewById(R.id.itemHow);
                     LinearLayout Info_linear = findViewById(R.id.itemInfo);
-                    //LinearLayout map_linear = findViewById(R.id.itemMap);
-                    //LinearLayout localReg_linear = findViewById(R.id.itemLocalRegion);
                     LinearLayout weather_linear = findViewById(R.id.itemWeather);
                     LinearLayout news_linear = findViewById(R.id.itemNews);
+                    LinearLayout local_region = findViewById(R.id.itemLocalRegion);
+                    LinearLayout local_map = findViewById(R.id.itemMap);
 
                     if (enable_operating_the_television.equals("1")) {
                         ott_linear.setVisibility(View.VISIBLE);
-                        ott_linear.setTag(R.string.tag_value, operating_the_television_service);
-                        ott_linear.setTag(R.string.tag_action, R.string.tag_action_service);
+                        ott_linear.setTag(R.string.tag_value, operating_the_television_category);
+                        ott_linear.setTag(R.string.tag_action, R.string.tag_action_category);
                     } else {
-                        ott_linear.setVisibility(View.INVISIBLE);
+                        ott_linear.setVisibility(View.GONE);
                     }
 
                     if (enable_connect_to_wifi.equals("1")) {
                         wifi_linear.setVisibility(View.VISIBLE);
-                        wifi_linear.setTag(R.string.tag_value, connect_to_wifi_service);
-                        wifi_linear.setTag(R.string.tag_action, R.string.tag_action_service);
+                        wifi_linear.setTag(R.string.tag_value, connect_to_wifi_category);
+                        wifi_linear.setTag(R.string.tag_action, R.string.tag_action_category);
                     } else {
-                        wifi_linear.setVisibility(View.INVISIBLE);
+                        wifi_linear.setVisibility(View.GONE);
                     }
 
                     if (enable_how_use_tablet.equals("1")) {
@@ -404,7 +601,23 @@ public class MainActivity extends FragmentActivity {
                         howTo_linear.setTag(R.string.tag_value, how_use_tablet_category);
                         howTo_linear.setTag(R.string.tag_action, R.string.tag_action_category);
                     } else {
-                        howTo_linear.setVisibility(View.INVISIBLE);
+                        howTo_linear.setVisibility(View.GONE);
+                    }
+
+                    if (enable_local_region_category.equals("1")) {
+                        local_region.setVisibility(View.VISIBLE);
+                        local_region.setTag(R.string.tag_value, local_region_category);
+                        local_region.setTag(R.string.tag_action, R.string.tag_action_category);
+                    } else {
+                        local_region.setVisibility(View.GONE);
+                    }
+
+                    if (enable_local_map.equals("1") && Math.abs(local_map_latitude) > 0 && Math.abs(local_map_longitude) > 0) {
+                        local_map.setVisibility(View.VISIBLE);
+                        local_map.setTag(R.string.tag_value, new MapMarker(new LatLng(local_map_latitude, local_map_longitude), local_map_address));
+                        local_map.setTag(R.string.tag_action, R.string.tag_action_map);
+                    } else {
+                        local_map.setVisibility(View.GONE);
                     }
 
                     if (enable_useful_information_category.equals("1")) {
@@ -412,19 +625,19 @@ public class MainActivity extends FragmentActivity {
                         Info_linear.setTag(R.string.tag_value, useful_information_category);
                         Info_linear.setTag(R.string.tag_action, R.string.tag_action_category);
                     } else {
-                        Info_linear.setVisibility(View.INVISIBLE);
+                        Info_linear.setVisibility(View.GONE);
                     }
 
                     if (enable_weather.equals("1")) {
                         weather_linear.setVisibility(View.VISIBLE);
                     } else {
-                        weather_linear.setVisibility(View.INVISIBLE);
+                        weather_linear.setVisibility(View.GONE);
                     }
 
                     if (enable_news.equals("1")) {
                         news_linear.setVisibility(View.VISIBLE);
                     } else {
-                        news_linear.setVisibility(View.INVISIBLE);
+                        news_linear.setVisibility(View.GONE);
                     }
                 }
             }
@@ -452,7 +665,6 @@ public class MainActivity extends FragmentActivity {
                 fragment.setParentListener(activityListener);
                 fragment.setArguments(bundle);
 
-                //navigationFragment.setChildFragment(fragment);
                 fragmentListener.onUpdateFragment(fragment);
 
             } else if (action.equals(R.string.tag_action_service)) {
@@ -462,14 +674,66 @@ public class MainActivity extends FragmentActivity {
                 fragment.setArguments(bundle);
                 fragment.setFragmentListener(fragmentListener);
                 fragment.setParentListener(activityListener);
-                //fragment.setActivityListener(activityListener);
 
-                //navigationFragment.setChildFragment(fragment);
                 fragmentListener.onUpdateFragment(fragment);
+            } else if (action.equals(R.string.tag_action_map)) {
+                if (value instanceof MapMarker) {
+                    MapMarker mapMarker = (MapMarker) value;
+
+                    bundle.putParcelable(getString(R.string.param_marker), mapMarker);
+
+                    MainFragment fragment = new MainFragment();
+                    fragment.setArguments(bundle);
+                    fragment.setFragmentListener(fragmentListener);
+                    fragment.setParentListener(activityListener);
+
+                    fragmentListener.onUpdateFragment(fragment);
+                }
             }
         } else {
             fragmentListener.onUpdateFragment(mainFragment);
         }
+    }
+
+    public void onWelcomeClick(View view) {
+        WelcomeFragment welcomeFragment = new WelcomeFragment();
+        welcomeFragment.setParentListener(activityListener);
+
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setChildFragment(welcomeFragment);
+        fragment.setFragmentListener(fragmentListener);
+        fragment.setParentListener(activityListener);
+
+        fragmentListener.onUpdateFragment(fragment);
+    }
+
+    public void onGuestInfoClick(View view) {
+        new RetrieveCategories(this, 0, "gsd")
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Category[] categories = (Category[]) result;
+
+                            if (categories.length > 0) {
+                                Category category = categories[0];
+                                Bundle bundle = new Bundle();
+
+                                bundle.putInt(getString(R.string.param_category_id), category.getId());
+                                bundle.putBoolean(getString(R.string.param_has_children), (category.getChildren_count() > 0));
+                                bundle.putString(getString(R.string.param_listing_type), "gsd");
+
+                                NavigationFragment fragment = new NavigationFragment();
+                                fragment.setFragmentListener(fragmentListener);
+                                fragment.setParentListener(activityListener);
+                                fragment.setArguments(bundle);
+
+                                fragmentListener.onUpdateFragment(fragment);
+                            }
+                        }
+                    }
+                })
+                .execute();
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {
@@ -487,13 +751,12 @@ public class MainActivity extends FragmentActivity {
 
         for (LinearLayout all_item : all_items) {
             all_item.setBackgroundColor(0);
-
         }
 
-        if (makeActive) {
+        if (makeActive && view != null) {
             view.setBackgroundColor(Color.parseColor("#2cb3dc"));
-            // view.setBackground(R.drawable.sidemenu_gradient_bg);
         }
+
         item_icon_1.setImageResource(R.drawable.operatingthetelevision);
         item_icon_2.setImageResource(R.drawable.connecttowifi);
         item_icon_3.setImageResource(R.drawable.usemobile);
@@ -503,32 +766,33 @@ public class MainActivity extends FragmentActivity {
         item_icon_7.setImageResource(R.drawable.weather);
         item_icon_8.setImageResource(R.drawable.news);
 
-        switch (view.getId()) {
-            case R.id.ott:
-                item_icon_1.setImageResource(R.drawable.operating_the_television_black);
-                break;
-            case R.id.itemWifi:
-                item_icon_2.setImageResource(R.drawable.connect_to_wifi_black);
-                break;
-            case R.id.itemHow:
-                item_icon_3.setImageResource(R.drawable.how_to_use_smart_tablet_black);
-                break;
-            case R.id.itemInfo:
-                item_icon_4.setImageResource(R.drawable.useful_info_black);
-                break;
-            case R.id.itemMap:
-                item_icon_5.setImageResource(R.drawable.local_map_black);
-                break;
-            case R.id.itemLocalRegion:
-                item_icon_6.setImageResource(R.drawable.the_local_region_black);
-                break;
-            case R.id.itemWeather:
-                item_icon_7.setImageResource(R.drawable.weather_black);
-                break;
-            case R.id.itemNews:
-                item_icon_8.setImageResource(R.drawable.news_black);
-                break;
-
+        if (view != null) {
+            switch (view.getId()) {
+                case R.id.ott:
+                    item_icon_1.setImageResource(R.drawable.operating_the_television_black);
+                    break;
+                case R.id.itemWifi:
+                    item_icon_2.setImageResource(R.drawable.connect_to_wifi_black);
+                    break;
+                case R.id.itemHow:
+                    item_icon_3.setImageResource(R.drawable.how_to_use_smart_tablet_black);
+                    break;
+                case R.id.itemInfo:
+                    item_icon_4.setImageResource(R.drawable.useful_info_black);
+                    break;
+                case R.id.itemMap:
+                    item_icon_5.setImageResource(R.drawable.local_map_black);
+                    break;
+                case R.id.itemLocalRegion:
+                    item_icon_6.setImageResource(R.drawable.the_local_region_black);
+                    break;
+                case R.id.itemWeather:
+                    item_icon_7.setImageResource(R.drawable.weather_black);
+                    break;
+                case R.id.itemNews:
+                    item_icon_8.setImageResource(R.drawable.news_black);
+                    break;
+            }
         }
     }
 
@@ -584,7 +848,22 @@ public class MainActivity extends FragmentActivity {
         }
 
         if (!handled)
-            super.onBackPressed();
+            try {
+                moveToHome();
+                //super.onBackPressed();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+    }
+
+    private void moveToHome() {
+        MainFragment firstFragment = new MainFragment();
+        firstFragment.setFragmentListener(fragmentListener);
+        firstFragment.setParentListener(activityListener);
+
+        fragmentListener.onUpdateFragment(firstFragment);
+
+        makeMenuItemActive(null, false);
     }
 
     public void setSignal(int wifi_signals_level) {
@@ -658,6 +937,14 @@ public class MainActivity extends FragmentActivity {
 
         Bitmap battery_icon = BitmapFactory.decodeResource(getResources(), res);
         img_battery_level.setImageBitmap(battery_icon);
+    }
+
+    private void startHandler() {
+        _handler.postDelayed(_runnable, Constants.BACK_TO_HOME_WAIT);
+    }
+
+    private void stopHandler() {
+        _handler.removeCallbacks(_runnable);
     }
 
     class BatteryBroadcastReceiver extends BroadcastReceiver {

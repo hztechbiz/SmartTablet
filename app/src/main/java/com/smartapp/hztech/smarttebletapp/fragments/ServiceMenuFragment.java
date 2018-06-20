@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
@@ -54,6 +55,7 @@ public class ServiceMenuFragment extends Fragment implements AsyncResultBag.Succ
         pdfView = view.findViewById(R.id.pdf_viewer);
         btn_booking = view.findViewById(R.id.btn_booking);
 
+        btn_booking.setTypeface(Util.getTypeFace(getContext()));
         btn_booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +124,7 @@ public class ServiceMenuFragment extends Fragment implements AsyncResultBag.Succ
 
                             if (file.exists()) {
                                 pdfView.fromFile(file).load();
+                                pdfView.zoomTo(3);
                             }
                         }
                     }

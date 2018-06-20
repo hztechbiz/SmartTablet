@@ -39,7 +39,7 @@ public class NavigationFragment extends Fragment {
     private ArrayList<MenuItem> menuItems;
     private LayoutInflater _inflater;
     private int _category_id;
-    private Boolean _has_children;
+    private Boolean _has_children, _show_first;
     private String _listing_type;
     private FragmentListener childFragmentListener = new FragmentListener() {
         @Override
@@ -88,6 +88,7 @@ public class NavigationFragment extends Fragment {
         _category_id = 0;
         _has_children = false;
         _listing_type = "gsd";
+        _show_first = false;
 
         if (bundle != null) {
             if (bundle.containsKey(getString(R.string.param_category_id))) {
@@ -100,6 +101,10 @@ public class NavigationFragment extends Fragment {
 
             if (bundle.containsKey(getString(R.string.param_listing_type))) {
                 _listing_type = bundle.getString(getString(R.string.param_listing_type));
+            }
+
+            if (bundle.containsKey(getString(R.string.param_show_first))) {
+                _show_first = bundle.getBoolean(getString(R.string.param_show_first));
             }
         }
 
@@ -125,6 +130,13 @@ public class NavigationFragment extends Fragment {
         activityListener.receive(R.string.msg_hide_home_button, null);
         activityListener.receive(R.string.msg_show_back_button, null);
         activityListener.receive(R.string.msg_reset_background, null);
+        activityListener.receive(R.string.msg_hide_main_logo, null);
+        activityListener.receive(R.string.msg_show_logo_button, null);
+        activityListener.receive(R.string.msg_hide_welcome_button, null);
+        activityListener.receive(R.string.msg_hide_guest_button, null);
+        activityListener.receive(R.string.msg_hide_app_heading, null);
+        activityListener.receive(R.string.msg_show_copyright, null);
+        activityListener.receive(R.string.msg_hide_top_guest_button, null);
 
         return view;
     }
@@ -150,7 +162,8 @@ public class NavigationFragment extends Fragment {
                                     item.title = ((values.containsKey(Constants.TOP_MENU_WELCOME_TEXT) && !values.get(Constants.TOP_MENU_WELCOME_TEXT).isEmpty()) ? values.get(Constants.TOP_MENU_WELCOME_TEXT) : "WELCOME").toUpperCase();
                                     item.fragment = fragment;
 
-                                    menuItems.add(item);
+                                    //menuItems.add(item);
+                                    activityListener.receive(R.string.msg_show_welcome_button, null);
                                 }
 
                                 JSONArray categories = new JSONArray();

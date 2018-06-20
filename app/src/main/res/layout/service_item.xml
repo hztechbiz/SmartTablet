@@ -30,9 +30,12 @@
                 android:id="@+id/offer_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Main Heading"
+                android:hint=""
                 android:textColor="#000"
-                android:textSize="22dp" />
+                android:maxLines="1"
+                android:minLines="1"
+                android:lines="1"
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/offer_descrip"
@@ -41,7 +44,11 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="8dp"
-                android:hint="Description Here" />
+                android:maxLines="3"
+                android:minLines="3"
+                android:lines="3"
+                android:hint=""
+                android:layout_marginEnd="5dp" />
 
             <Button
                 android:id="@+id/btn_more"

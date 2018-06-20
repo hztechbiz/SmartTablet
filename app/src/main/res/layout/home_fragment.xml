@@ -28,7 +28,8 @@
             android:background="@drawable/white_background_corner_radius"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="15dp" />
+            android:paddingTop="15dp"
+            android:layout_marginStart="30dp" />
 
         <GridView
             android:id="@+id/list_calllog"
@@ -36,6 +37,7 @@
             android:layout_height="match_parent"
             android:layout_margin="15dp"
             android:numColumns="auto_fit"
+            android:scrollbars="none"
             android:stretchMode="columnWidth"></GridView>
 
     </LinearLayout>

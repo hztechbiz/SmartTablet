@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     tools:context="com.smartapp.hztech.smarttebletapp.ServicesSection.ServicesHome">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="260dp"
             android:layout_marginBottom="20dp"
@@ -19,26 +19,57 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/white_bg_border_radius_opacity"
             android:orientation="vertical"
-            android:paddingTop="35dp"
-            android:paddingBottom="35dp">
+            android:paddingBottom="35dp"
+            android:paddingTop="35dp">
 
-            <TextView
-                android:id="@+id/txt_hotel_name"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#000"
-                android:textSize="30dp" />
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
-            <TextView
-                android:id="@+id/txt_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:gravity="center"
-                android:padding="15dp"
-                android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_hotel_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#000"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/txt_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:gravity="center"
+                        android:padding="15dp"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/footerContent"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@id/container"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="end"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/btn_location"
+                style="@style/ButtonBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location"
+                android:textColor="#fff" />
+        </LinearLayout>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

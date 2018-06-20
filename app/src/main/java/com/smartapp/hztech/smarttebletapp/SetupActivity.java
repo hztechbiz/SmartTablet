@@ -3,12 +3,16 @@ package com.smartapp.hztech.smarttebletapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,6 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.service.SyncService;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreSetting;
 
 import org.json.JSONException;
@@ -29,6 +35,81 @@ public class SetupActivity extends Activity {
     private ProgressDialog _progressDialog;
     private String API_KEY = Constants.API_KEY;
     private String TOKEN = Constants.TOKEN_KEY;
+    private RelativeLayout _sync_container;
+    private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(true);
+        }
+    };
+    private BroadcastReceiver syncHeartBeatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(true);
+        }
+    };
+    private BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(false);
+        }
+    };
+    private BroadcastReceiver syncCompleteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switchScreen(MainActivity.class);
+        }
+    };
+
+    private void switchScreen(Class activityClass) {
+        Intent intent = new Intent(SetupActivity.this, activityClass);
+        startActivity(intent);
+        finish();
+
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+    private void showSynchronizing(boolean b) {
+        _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onStart() {
+        registerReceiver(syncReceiver, new IntentFilter(SyncService.TRANSACTION_DONE));
+        registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
+        registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
+        registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
+
+        super.onStart();
+    }
+
+    private void checkIfSyncServiceRunning() {
+        new RetrieveSetting(this, Constants.SYNC_SERVICE_RUNNING)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        showSynchronizing((result != null && result.equals("1")));
+                    }
+                })
+                .execute();
+    }
+
+    @Override
+    protected void onStop() {
+        if (syncReceiver != null)
+            unregisterReceiver(syncReceiver);
+
+        if (syncStartReceiver != null)
+            unregisterReceiver(syncStartReceiver);
+
+        if (syncHeartBeatReceiver != null)
+            unregisterReceiver(syncHeartBeatReceiver);
+
+        if (syncCompleteReceiver != null)
+            unregisterReceiver(syncCompleteReceiver);
+
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +121,7 @@ public class SetupActivity extends Activity {
         setContentView(R.layout.activity_setup);
 
         _progressDialog = new ProgressDialog(this);
+        _sync_container = findViewById(R.id.syncContainer);
 
         findViewById(R.id.btn_sync).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +129,7 @@ public class SetupActivity extends Activity {
                 final String key = ((EditText) findViewById(R.id.txt_key)).getText().toString();
 
                 if (key.isEmpty()) {
-                    showMessage("Please enter API key provided by the HotelModel Manager");
+                    showMessage("Please enter API key provided by the Hotel Manager");
                 } else {
                     showProgressDialog("Please wait...");
 
@@ -128,11 +210,15 @@ public class SetupActivity extends Activity {
                     public void onSuccess(Object result) {
                         hideProgressDialog();
 
+                        /*
                         Intent syncActivityIntent = new Intent(SetupActivity.this, SyncActivity.class);
                         startActivity(syncActivityIntent);
                         finish();
 
                         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                        */
+                        Intent intent = new Intent(SetupActivity.this, SyncService.class);
+                        startService(intent);
                     }
                 })
                 .execute();

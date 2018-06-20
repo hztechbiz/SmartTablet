@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.PopUpActivity;
+import com.smartapp.hztech.smarttebletapp.ImagePopupActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.GalleryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
@@ -72,7 +72,7 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getContext(), PopUpActivity.class);
+                Intent i = new Intent(getContext(), ImagePopupActivity.class);
                 i.putExtra("IMAGE", _items.get(position));
 
                 startActivity(i);

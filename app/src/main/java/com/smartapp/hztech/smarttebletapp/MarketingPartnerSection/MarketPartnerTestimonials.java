@@ -21,8 +21,8 @@ public class MarketPartnerTestimonials extends FragmentActivity implements View.
         setContentView(R.layout.market_partner_testimonials);
 
         flipper = (ViewFlipper) findViewById(R.id.viewFlip);
-        next = (ImageView) findViewById(R.id.nxt);
-        Back = (ImageView) findViewById(R.id.pre);
+        //next = (ImageView) findViewById(R.id.nxt);
+        //Back = (ImageView) findViewById(R.id.pre);
 
 
         next.setOnClickListener(this);

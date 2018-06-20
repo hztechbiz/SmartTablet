@@ -1,30 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flipperContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="30dp"
-    tools:context="com.smartapp.hztech.smarttebletapp.MarketingPartnerSection.MarketPartnerTestimonials">
+    android:background="@drawable/white_bg_border_radius_opacity"
+    android:padding="30dp">
 
+    <LinearLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:id="@+id/btn_prev"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/pre" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/what_people_say_about_us"
+                android:textColor="#000"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/nxt" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ViewFlipper
         android:id="@+id/viewFlip"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/controls">
 
+        <!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/linearLayout1"
                 android:layout_width="400dp"
                 android:layout_height="160dp"
-                android:background="#03507f"
                 android:layout_marginRight="20dp"
+                android:background="#03507f"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -54,18 +107,18 @@
             </LinearLayout>
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="400dp"
                 android:layout_height="160dp"
-                android:background="#25a8d0"
                 android:layout_marginRight="20dp"
+                android:background="#25a8d0"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -94,33 +147,7 @@
 
             </LinearLayout>
         </LinearLayout>
-
-
+        -->
     </ViewFlipper>
-
-
-    <ImageView
-        android:id="@+id/pre"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/pre" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="What people say about us"
-        android:textSize="30dp" />
-
-    <ImageView
-        android:id="@+id/nxt"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/nxt" />
-
 
 </RelativeLayout>

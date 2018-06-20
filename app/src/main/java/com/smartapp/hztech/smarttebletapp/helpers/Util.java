@@ -10,4 +10,8 @@ public class Util {
     public static Typeface getTypeFace(Context context) {
         return ResourcesCompat.getFont(context, R.font.lato_regular);
     }
+
+    public static Typeface getBoldTypeFace(Context context) {
+        return ResourcesCompat.getFont(context, R.font.lato_bold);
+    }
 }

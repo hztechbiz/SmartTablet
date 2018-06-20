@@ -147,6 +147,12 @@ public class CategoryFragment extends Fragment {
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_hide_home_button, null);
         parentListener.receive(R.string.msg_reset_background, null);
+        parentListener.receive(R.string.msg_hide_main_logo, null);
+        parentListener.receive(R.string.msg_show_logo_button, null);
+        parentListener.receive(R.string.msg_hide_guest_button, null);
+        parentListener.receive(R.string.msg_hide_app_heading, null);
+        parentListener.receive(R.string.msg_show_copyright, null);
+        parentListener.receive(R.string.msg_hide_top_guest_button, null);
 
         return view;
     }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,7 +21,9 @@ import com.smartapp.hztech.smarttebletapp.entities.Media;
 import com.smartapp.hztech.smarttebletapp.entities.Offer;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
+import com.smartapp.hztech.smarttebletapp.entities.Testimonial;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.tasks.DeleteMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreCategory;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreHotel;
@@ -28,21 +31,26 @@ import com.smartapp.hztech.smarttebletapp.tasks.StoreMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreOffer;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreService;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreSetting;
+import com.smartapp.hztech.smarttebletapp.tasks.StoreTestimonial;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SyncService extends IntentService {
 
     public static final String TRANSACTION_DONE = SyncService.class.getName() + ":DONE";
+    public static final String TRANSACTION_COMPLETE = SyncService.class.getName() + ":COMPLETE";
     public static final String TRANSACTION_START = SyncService.class.getName() + ":START";
+    public static final String TRANSACTION_HEART_BEAT = SyncService.class.getName() + ":HEART_BEAT";
     private static final String TAG = SyncService.class.getName();
-    public static boolean isRunning = false;
+    private boolean isRunning = false;
     private String SYNC_DONE = "ST@SYNC_DONE";
     private String TOKEN = "ST@TOKEN";
     private String FILE_PATH = "ST@FILE_PATH";
@@ -75,6 +83,27 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "notifyFinish: " + error);
+                        sendFinishBroadcast();
+                    }
+                })
+                .execute();
+    }
+
+    private void notifyComplete() {
+        isRunning = false;
+
+        new StoreSetting(this, new Setting(Constants.SYNC_SERVICE_RUNNING, "0"))
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        sendCompleteBroadcast();
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        Log.e(TAG, "notifyComplete: " + error);
                         sendFinishBroadcast();
                     }
                 })
@@ -86,8 +115,19 @@ public class SyncService extends IntentService {
         sendBroadcast(i);
     }
 
+    private void sendCompleteBroadcast() {
+        Intent i = new Intent(TRANSACTION_COMPLETE);
+        sendBroadcast(i);
+    }
+
     private void sendStartBroadcast() {
         Intent i = new Intent(TRANSACTION_START);
+        sendBroadcast(i);
+    }
+
+    private void sendHeartBeat() {
+        Log.d("SchedulingAlarms", "heart beat sent");
+        Intent i = new Intent(TRANSACTION_HEART_BEAT);
         sendBroadcast(i);
     }
 
@@ -121,11 +161,34 @@ public class SyncService extends IntentService {
                     .onError(new AsyncResultBag.Error() {
                         @Override
                         public void onError(Object error) {
-                            notifyFinish();
+                            Log.e(TAG, "init: " + error);
+
+                            _hasError = true;
+                            _error = error;
+
+                            decide();
                         }
                     })
                     .execute();
+
+            //scheduleHeartBeat();
         }
+    }
+
+    private void scheduleHeartBeat() {
+        Log.d("SchedulingAlarms", "heart beat scheduled");
+        try {
+            Thread.sleep(1000);
+            sendHeartBeat();
+        } catch (InterruptedException e) {
+            Log.e(TAG, "scheduleHeartBeat: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        if (isRunning)
+            scheduleHeartBeat();
+        else
+            notifyFinish();
     }
 
     private void retrieveTokenAndStartSync() {
@@ -143,7 +206,12 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "retrieveToken: " + error);
 
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
@@ -166,16 +234,29 @@ public class SyncService extends IntentService {
                     if (response.getBoolean("status")) {
                         startSync(response);
                     } else {
-                        //showMessage(response.get("message").toString());
+                        _hasError = true;
+                        _error = response.get("message").toString();
+
+                        decide();
                     }
                 } catch (Exception e) {
-                    //showMessage("Error: " + e.getMessage());
+                    Log.e(TAG, "sync: " + e.getMessage());
+
+                    _hasError = true;
+                    _error = e;
+
+                    decide();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //showMessage("Error: " + error.getMessage());
+                Log.e(TAG, "sync: " + error.getMessage());
+
+                _hasError = true;
+                _error = error;
+
+                decide();
             }
         }) {
             @Override
@@ -216,8 +297,25 @@ public class SyncService extends IntentService {
         JSONArray services_arr = data.getJSONArray("services");
         storeServices(services_arr);
 
-        JSONArray media_arr = data.getJSONArray("objects");
-        storeMedias(media_arr);
+        final JSONArray media_arr = data.getJSONArray("objects");
+
+        new DeleteMedia(this)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        try {
+                            storeMedias(media_arr);
+                        } catch (JSONException e) {
+                            Log.e(TAG, "deleteMedia: " + e.getMessage());
+
+                            _hasError = true;
+                            _error = e;
+
+                            decide();
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void storeMedias(JSONArray media_arr) throws JSONException {
@@ -245,8 +343,12 @@ public class SyncService extends IntentService {
                     .onError(new AsyncResultBag.Error() {
                         @Override
                         public void onError(Object error) {
+                            Log.e(TAG, "storeMedia: " + error);
+
                             _hasError = true;
                             _error = error;
+
+                            decide();
                         }
                     })
                     .execute();
@@ -284,7 +386,12 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "storeCategory: " + error);
 
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
@@ -296,6 +403,7 @@ public class SyncService extends IntentService {
         for (int i = 0; i < services_arr.length(); i++) {
             JSONObject s = services_arr.getJSONObject(i);
             JSONArray offers = s.getJSONArray("offers");
+            JSONArray testimonials = s.getJSONArray("testimonials");
 
             Service service = new Service();
             service.setId(s.getInt("id"));
@@ -313,6 +421,10 @@ public class SyncService extends IntentService {
                 storeOffers(offers);
             }
 
+            if (testimonials.length() > 0) {
+                storeTestimonials(testimonials);
+            }
+
             services[i] = service;
         }
 
@@ -327,10 +439,36 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "storeService: " + error);
 
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
+    }
+
+    private void storeTestimonials(JSONArray testimonials_arr) throws JSONException {
+        Testimonial[] testimonials = new Testimonial[testimonials_arr.length()];
+
+        for (int i = 0; i < testimonials_arr.length(); i++) {
+            JSONObject o = testimonials_arr.getJSONObject(i);
+
+            Testimonial testimonial = new Testimonial();
+
+            testimonial.setId(o.getInt("id"));
+            testimonial.setCite(o.getString("cite"));
+            testimonial.setContent(o.getString("content"));
+            testimonial.setService_id(o.getInt("service_id"));
+
+            testimonials[i] = testimonial;
+        }
+
+        if (testimonials.length > 0) {
+            new StoreTestimonial(this, testimonials).execute();
+        }
     }
 
     private void storeOffers(JSONArray offers_arr) throws JSONException {
@@ -384,7 +522,12 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "storeSetting: " + error);
 
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
@@ -402,7 +545,12 @@ public class SyncService extends IntentService {
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
+                        Log.e(TAG, "storeHotelInfo: " + error);
 
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
@@ -417,16 +565,26 @@ public class SyncService extends IntentService {
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
-                            notifyFinish();
+                            notifyComplete();
                         }
                     })
                     .onError(new AsyncResultBag.Error() {
                         @Override
                         public void onError(Object error) {
-                            notifyFinish();
+                            _hasError = true;
+                            _error = error;
+
+                            decide();
                         }
                     })
                     .execute();
+        } else if (_hasError) {
+            if (_error instanceof ConnectException || _error instanceof UnknownHostException || _error instanceof NetworkError) {
+                _error = "Connection failed, please try again later";
+            }
+
+            notifyFinish();
+            showMessage(_error + "");
         }
     }
 

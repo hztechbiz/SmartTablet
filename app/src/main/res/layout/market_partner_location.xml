@@ -143,11 +143,11 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_reservation"
+                    android:id="@+id/btn_booking"
                     style="@style/ButtonBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/make_a_reservation"
+                    android:text="@string/book_now_here"
                     android:textColor="#fff" />
 
             </LinearLayout>

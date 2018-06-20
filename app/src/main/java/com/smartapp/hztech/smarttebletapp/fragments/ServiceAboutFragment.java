@@ -121,7 +121,7 @@ public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Suc
         if (service != null) {
             _service = service;
 
-            txt_description.setText(service.getDescription());
+            //txt_description.setText(service.getDescription());
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;
@@ -135,9 +135,15 @@ public class ServiceAboutFragment extends Fragment implements AsyncResultBag.Suc
                     for (int i = 0; i < metas_arr.length(); i++) {
                         try {
                             JSONObject meta_obj = metas_arr.getJSONObject(i);
+                            String meta_key = meta_obj.getString("meta_key");
+                            String meta_value = meta_obj.getString("meta_value");
 
-                            if (meta_obj.getString("meta_key").equals("image")) {
+                            if (meta_key.equals("image")) {
                                 _setupImage(meta_obj.getString("meta_value"));
+                            }
+
+                            if (meta_key.equals("about_text")) {
+                                txt_description.setText(meta_value);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

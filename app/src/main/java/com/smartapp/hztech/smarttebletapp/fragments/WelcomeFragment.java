@@ -1,15 +1,17 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.smartapp.hztech.smarttebletapp.LocationPopupActivity;
 import com.smartapp.hztech.smarttebletapp.R;
+import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.models.HotelModel;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 public class WelcomeFragment extends Fragment {
     TextView txtHotelName, txtDescription;
     String _heading, _description, _new_heading, _new_description;
+    Button _btn_location;
     private FragmentActivityListener parentListener;
 
     public WelcomeFragment() {
@@ -38,12 +41,30 @@ public class WelcomeFragment extends Fragment {
 
         txtHotelName = view.findViewById(R.id.txt_hotel_name);
         txtDescription = view.findViewById(R.id.txt_description);
+        _btn_location = view.findViewById(R.id.btn_location);
 
-        Typeface LatoBold = ResourcesCompat.getFont(getContext(), R.font.lato_bold);
-        txtHotelName.setTypeface(LatoBold);
-        Typeface LatoRegular = ResourcesCompat.getFont(getContext(), R.font.lato_regular);
-        txtDescription.setTypeface(LatoRegular);
+        txtHotelName.setTypeface(Util.getBoldTypeFace(getContext()));
+        txtDescription.setTypeface(Util.getTypeFace(getContext()));
 
+        bind();
+
+        _btn_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LocationPopupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        parentListener.receive(R.string.msg_show_sidebar, null);
+        parentListener.receive(R.string.msg_reset_menu, null);
+        parentListener.receive(R.string.msg_reset_background, null);
+        parentListener.receive(R.string.msg_show_top_guest_button, null);
+
+        return view;
+    }
+
+    private void bind() {
         new RetrieveHotel(getContext())
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -73,12 +94,6 @@ public class WelcomeFragment extends Fragment {
                     }
                 })
                 .execute();
-
-        parentListener.receive(R.string.msg_show_sidebar, null);
-        parentListener.receive(R.string.msg_reset_menu, null);
-        parentListener.receive(R.string.msg_reset_background, null);
-
-        return view;
     }
 
     private void setup() {
