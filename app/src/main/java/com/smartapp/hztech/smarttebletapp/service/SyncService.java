@@ -369,6 +369,9 @@ public class SyncService extends IntentService {
             category.setDescription(c.getString("description"));
             category.setIs_marketing_partner((c.getInt("is_marketing_partner") == 1));
 
+            if (!c.isNull("embed_url"))
+                category.setEmbed_url(c.getString("embed_url"));
+
             if (!c.isNull("parent_id"))
                 category.setParent_id(c.getInt("parent_id"));
 

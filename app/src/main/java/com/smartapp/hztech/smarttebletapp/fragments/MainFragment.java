@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.smartapp.hztech.smarttebletapp.MainActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
@@ -16,6 +17,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.MapMarker;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleCategory;
@@ -40,6 +42,7 @@ public class MainFragment extends Fragment {
     private Boolean _has_children, _is_weather;
     private String _listing_type;
     private Bundle _bundle;
+    private MainActivity _activity;
 
     public MainFragment() {
 
@@ -59,6 +62,7 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.category_fragment, container, false);
         _bundle = getArguments();
+        _activity = (MainActivity) getActivity();
 
         gridView = view.findViewById(R.id.gridview);
 
@@ -108,6 +112,7 @@ public class MainFragment extends Fragment {
                 Object category_id = v.getTag(R.string.tag_value);
                 Object has_children = v.getTag(R.string.tag_has_children);
                 Object is_mp = v.getTag(R.string.tag_is_mp);
+                Object embed_url = v.getTag(R.string.tag_embed_url);
 
                 if (category_id != null) {
                     bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
@@ -115,6 +120,10 @@ public class MainFragment extends Fragment {
 
                 if (has_children != null) {
                     bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
+                }
+
+                if (embed_url != null) {
+                    //bundle.putString(getString(R.string.param_embed_url), embed_url.toString());
                 }
 
                 if (is_mp != null) {
@@ -143,6 +152,24 @@ public class MainFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
+        ArrayList<ActivityAction> actions = new ArrayList<>();
+
+        actions.add(new ActivityAction((R.string.msg_show_sidebar), null));
+        actions.add(new ActivityAction((R.string.msg_reset_menu), null));
+        actions.add(new ActivityAction((R.string.msg_hide_home_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_back_button), null));
+        actions.add(new ActivityAction((R.string.msg_reset_background), null));
+        actions.add(new ActivityAction((R.string.msg_hide_logo_button), null));
+        actions.add(new ActivityAction((R.string.msg_show_main_logo), null));
+        actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
+        actions.add(new ActivityAction((R.string.msg_show_guest_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_show_copyright), null));
+        actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));
+
+        _activity.takeActions(actions);
+
+        /*
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_hide_home_button, null);
@@ -155,6 +182,7 @@ public class MainFragment extends Fragment {
         parentListener.receive(R.string.msg_hide_app_heading, null);
         parentListener.receive(R.string.msg_show_copyright, null);
         parentListener.receive(R.string.msg_hide_top_guest_button, null);
+        */
 
         return view;
     }
@@ -220,6 +248,7 @@ public class MainFragment extends Fragment {
                             bundle.putInt(getString(R.string.param_category_id), _main_category_id);
                             bundle.putBoolean(getString(R.string.param_has_children), (category.getChildren_count() > 0));
                             bundle.putString(getString(R.string.param_listing_type), (category.isIs_marketing_partner() ? "mp" : "gsd"));
+                            bundle.putString(getString(R.string.param_embed_url), category.getEmbed_url());
 
                             NavigationFragment fragment = new NavigationFragment();
                             fragment.setFragmentListener(fragmentListener);

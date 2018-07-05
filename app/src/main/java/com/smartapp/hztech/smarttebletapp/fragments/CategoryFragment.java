@@ -6,13 +6,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.smartapp.hztech.smarttebletapp.Constants;
+import com.smartapp.hztech.smarttebletapp.MainActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.adapters.CategoryGridAdapter;
 import com.smartapp.hztech.smarttebletapp.adapters.ServicesGridAdapter;
@@ -22,6 +28,7 @@ import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.ServiceModel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveMedia;
@@ -44,15 +51,24 @@ public class CategoryFragment extends Fragment {
     private List<Category> _categories;
     private List<ServiceModel> _services;
     private GridView gridView;
+    private WebView webView;
+    private RelativeLayout webview_container;
+    private ProgressBar progressBar;
     private ImageView _logoImageView, _bgImageView;
     private CategoryGridAdapter categoryAdapter;
     private ServicesGridAdapter servicesAdapter;
     private int _category_id;
     private Boolean _has_children;
-    private String _listing_type;
+    private String _listing_type, _embed_url;
+    private MainActivity _activity;
 
     public CategoryFragment() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public void setFragmentListener(FragmentListener fragmentListener) {
@@ -70,11 +86,17 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.category_fragment, container, false);
         Bundle bundle = getArguments();
 
+        _activity = (MainActivity) getActivity();
+
         gridView = view.findViewById(R.id.gridview);
+        webView = view.findViewById(R.id.webview);
+        webview_container = view.findViewById(R.id.webview_container);
+        progressBar = view.findViewById(R.id.progressBar);
 
         _category_id = 0;
         _has_children = false;
         _listing_type = null;
+        _embed_url = null;
 
         if (bundle != null) {
             if (bundle.containsKey(getString(R.string.param_category_id))) {
@@ -88,6 +110,10 @@ public class CategoryFragment extends Fragment {
             if (bundle.containsKey(getString(R.string.param_listing_type))) {
                 _listing_type = bundle.getString(getString(R.string.param_listing_type));
             }
+
+            if (bundle.containsKey(getString(R.string.param_embed_url))) {
+                _embed_url = bundle.getString(getString(R.string.param_embed_url));
+            }
         }
 
         _categories = new ArrayList<>();
@@ -99,6 +125,7 @@ public class CategoryFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 Object category_id = v.getTag(R.string.tag_value);
                 Object has_children = v.getTag(R.string.tag_has_children);
+                Object embed_url = v.getTag(R.string.tag_embed_url);
 
                 if (category_id != null) {
                     bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
@@ -106,6 +133,10 @@ public class CategoryFragment extends Fragment {
 
                 if (has_children != null) {
                     bundle.putBoolean(getString(R.string.param_has_children), Boolean.valueOf(has_children.toString()));
+                }
+
+                if (embed_url != null) {
+                    bundle.putString(getString(R.string.param_embed_url), embed_url.toString());
                 }
 
                 CategoryFragment fragment = new CategoryFragment();
@@ -135,6 +166,40 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+                super.onPageFinished(view, url);
+            }
+        });
+
+        ArrayList<ActivityAction> actions = new ArrayList<>();
+
+        actions.add(new ActivityAction((R.string.msg_show_sidebar), null));
+        actions.add(new ActivityAction((R.string.msg_reset_menu), null));
+        actions.add(new ActivityAction((R.string.msg_hide_home_button), null));
+        actions.add(new ActivityAction((R.string.msg_reset_background), null));
+        actions.add(new ActivityAction((R.string.msg_show_logo_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
+        actions.add(new ActivityAction((R.string.msg_hide_guest_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_show_copyright), null));
+
+        if (_listing_type != null && _listing_type.equals("mp")) {
+            actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
+        } else {
+            actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));
+        }
+
+        _activity.takeActions(actions);
+
         if (_category_id > 0 && !_has_children) {
             getServices();
             gridView.setAdapter(servicesAdapter);
@@ -143,6 +208,11 @@ public class CategoryFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
+        if (_embed_url != null) {
+            showWebView();
+        }
+
+        /*
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_hide_home_button, null);
@@ -153,8 +223,16 @@ public class CategoryFragment extends Fragment {
         parentListener.receive(R.string.msg_hide_app_heading, null);
         parentListener.receive(R.string.msg_show_copyright, null);
         parentListener.receive(R.string.msg_hide_top_guest_button, null);
+        */
 
         return view;
+    }
+
+    private void showWebView() {
+        webView.loadUrl(_embed_url);
+
+        gridView.setVisibility(View.GONE);
+        webview_container.setVisibility(View.VISIBLE);
     }
 
     private void setBranding() {

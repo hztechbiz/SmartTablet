@@ -67,6 +67,9 @@ public class CategoryGridAdapter extends BaseAdapter {
         box_categories.setTag(R.string.tag_has_children, (category.getChildren_count() > 0));
         box_categories.setTag(R.string.tag_is_mp, category.isIs_marketing_partner());
 
+        if (category.getEmbed_url() != null && !category.getEmbed_url().isEmpty())
+            box_categories.setTag(R.string.tag_embed_url, category.getEmbed_url());
+
         box_categories.setOnClickListener(itemClickListener);
 
         return gridView;

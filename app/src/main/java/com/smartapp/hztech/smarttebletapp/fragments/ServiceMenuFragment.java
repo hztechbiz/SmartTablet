@@ -124,7 +124,7 @@ public class ServiceMenuFragment extends Fragment implements AsyncResultBag.Succ
 
                             if (file.exists()) {
                                 pdfView.fromFile(file).load();
-                                pdfView.zoomTo(3);
+                                pdfView.zoomTo(1.5f);
                             }
                         }
                     }

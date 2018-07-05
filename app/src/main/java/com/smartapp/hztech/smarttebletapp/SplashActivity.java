@@ -41,13 +41,14 @@ public class SplashActivity extends Activity {
     private Boolean _isLoaded;
     private Boolean _isTimeout;
     private Boolean _permissionsGranted;
+    private Boolean _hasEntryPage;
     private ImageView _iv_background, _iv_logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = _permissionsGranted = false;
+        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = _permissionsGranted = _hasEntryPage = false;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -157,7 +158,7 @@ public class SplashActivity extends Activity {
      * Asynchronous method to check if Constants.API_KEY exists in database
      */
     private void checkSynchronized() {
-        new RetrieveSetting(this, Constants.API_KEY, Constants.SETTING_SYNC_DONE)
+        new RetrieveSetting(this, Constants.API_KEY, Constants.SETTING_SYNC_DONE, Constants.SETTING_HAS_ENTRY_PAGE)
                 .onError(new AsyncResultBag.Error() {
                     @Override
                     public void onError(Object error) {
@@ -174,6 +175,7 @@ public class SplashActivity extends Activity {
                         if (values != null) {
                             _isRegistered = values.containsKey(Constants.API_KEY) && !values.get(Constants.API_KEY).isEmpty();
                             _isSyncDone = values.containsKey(Constants.SETTING_SYNC_DONE) && !values.get(Constants.SETTING_SYNC_DONE).isEmpty();
+                            _hasEntryPage = values.containsKey(Constants.SETTING_HAS_ENTRY_PAGE) && values.get(Constants.SETTING_HAS_ENTRY_PAGE).equals("1");
                         }
 
                         decide();
@@ -198,10 +200,15 @@ public class SplashActivity extends Activity {
 
     private void switchScreen(Class activityClass) {
         Intent intent = new Intent(SplashActivity.this, activityClass);
+
+        if (_hasEntryPage) {
+            intent.putExtra(getString(R.string.param_has_entry_page), true);
+        }
+
         startActivity(intent);
         finish();
 
-        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override

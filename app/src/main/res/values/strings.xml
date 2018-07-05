@@ -12,6 +12,7 @@
     <!-- TAGS -->
     <string name="tag_has_children">HAS_CHILDREN</string>
     <string name="tag_is_mp">IS_MP</string>
+    <string name="tag_embed_url">EMBED_URL</string>
     <string name="tag_action">ACTION</string>
     <string name="tag_action_category">CATEGORY</string>
     <string name="tag_action_weather">WEATHER</string>
@@ -23,12 +24,21 @@
     <string name="param_category_id">CATEGORY_ID</string>
     <string name="param_main_category_id">MAIN_CATEGORY_ID</string>
     <string name="param_has_children">HAS_CHILDREN</string>
+    <string name="param_embed_url">EMBED_URL</string>
     <string name="param_service_id">SERVICE_ID</string>
     <string name="param_offer_id">OFFER_ID</string>
     <string name="param_listing_type">LISTING_TYPE</string>
     <string name="param_marker">MAP_MARKER</string>
     <string name="param_weather">WEATHER</string>
     <string name="param_show_first">SHOW_FIRST</string>
+    <string name="param_has_entry_page">HAS_ENTRY_PAGE</string>
+    <string name="param_message_title">MESSAGE_TITLE</string>
+    <string name="param_message_body">MESSAGE_BODY</string>
+    <string name="param_activity_action">ACTIVITY_ACTION</string>
+    <string name="param_navigation_fragment_action">NAV_FRAGMENT_ACTION</string>
+    <string name="param_activity_actions">ACTIVITY_ACTIONS</string>
+    <string name="param_navigation_fragment_actions">NAV_FRAGMENT_ACTIONS</string>
+    <string name="param_activity_menu_items">ACTIVITY_MENU_ITEMS</string>
 
     <!-- MESSAGES -->
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
@@ -58,6 +68,8 @@
     <string name="msg_hide_copyright">HIDE_COPYRIGHT</string>
     <string name="msg_show_top_guest_button">SHOW_TOP_GUEST_BUTTON</string>
     <string name="msg_hide_top_guest_button">HIDE_TOP_GUEST_BUTTON</string>
+    <string name="msg_show_top_right_guest_button">SHOW_TOP_RIGHT_GUEST_BUTTON</string>
+    <string name="msg_hide_top_right_guest_button">HIDE_TOP_RIGHT_GUEST_BUTTON</string>
 
     <!-- STRINGS -->
     <string name="address">Address</string>
@@ -91,4 +103,13 @@
     <string name="welcome">WELCOME</string>
     <string name="what_people_say_about_us">What people say about us</string>
     <string name="location">Location</string>
+    <string name="sydney">Sydney</string>
+    <string name="melbourne">Melbourne</string>
+    <string name="brisbane">Brisbane</string>
+    <string name="canberra">Canberra</string>
+    <string name="darwin">Darwin</string>
+    <string name="hobart">Hobart</string>
+    <string name="gold_coast">Gold Coast</string>
+    <string name="perth">Perth</string>
+    <string name="enter">Enter</string>
 </resources>

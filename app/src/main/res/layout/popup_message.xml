@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.smartapp.hztech.smarttebletapp.PopUps.PoolPopUp">
-
+    android:background="@drawable/white_background_corner_radius"
+    tools:context="com.smartapp.hztech.smarttebletapp.MessagePopupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="100dp"
-        android:background="@drawable/white_background_corner_radius"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:textAllCaps="true"
             android:textColor="#000"
-            android:textSize="40dp"
-            android:text="POOL CLOSED"/>
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/txt_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:paddingLeft="200dp"
-            android:paddingRight="200dp"
-            android:layout_marginTop="10dp"
-            android:textSize="18dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="THE POOL WILL BE CLOSED TODAY BUT WILL RE-OPEN TOMORROW. WE APOLOGIES FOR ANY INCONVENIENCE"/>
-
+            android:maxLines="3"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
         <Button
+            android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/blue_radius"
-            android:textColor="#fff"
-            android:layout_marginTop="10dp"
-            android:textSize="16dp"
-            android:paddingRight="40dp"
             android:paddingLeft="40dp"
+            android:paddingRight="40dp"
             android:text="OK"
-            android:id="@+id/closepool"
-            />
+            android:textColor="#fff"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

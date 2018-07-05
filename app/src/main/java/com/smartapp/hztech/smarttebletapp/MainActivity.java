@@ -42,34 +42,40 @@ import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.MapMarker;
 import com.smartapp.hztech.smarttebletapp.receivers.SyncAlarmReceiver;
 import com.smartapp.hztech.smarttebletapp.receivers.WakeupReceiver;
+import com.smartapp.hztech.smarttebletapp.service.MyFirebaseMessagingService;
 import com.smartapp.hztech.smarttebletapp.service.SyncService;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
-    private FrameLayout fragmentContainer;
-    private ImageView img_wifi_signals, img_battery_level, bg_image, small_logo, main_logo;
-    private TextView txt_battery_percentage, txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
-    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right;
-    private RelativeLayout _sync_container;
+    private String entryPageStart, entryPageEnd;
+    private FrameLayout _fragment_container;
+    private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img;
+    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
+    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left;
+    private RelativeLayout _sync_container, _entry_page_container, _main_activity;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private int timerClicked;
-    private boolean timerClickedTimerAdded, isServiceRunning;
-    private Handler _handler;
-    private Runnable _runnable;
+    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp;
+    private Handler _activeScreenHandler, _entryPageHandler;
+    private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
@@ -99,12 +105,21 @@ public class MainActivity extends FragmentActivity {
             isServiceRunning = false;
         }
     };
+    private BroadcastReceiver firebaseReceiver = new BatteryBroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String title = intent.getStringExtra("title");
+            String message = intent.getStringExtra("body");
+
+            showPopupMessage(title, message);
+        }
+    };
     private FragmentListener fragmentListener = new FragmentListener() {
         @Override
         public void onUpdateFragment(Fragment newFragment) {
             Log.d("FragmentUpdated", "From: MainActivity, Fragment: " + newFragment.getClass().getName());
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(fragmentContainer.getId(), newFragment);
+            transaction.replace(_fragment_container.getId(), newFragment);
             transaction.addToBackStack(null);
 
             transaction.commit();
@@ -113,6 +128,7 @@ public class MainActivity extends FragmentActivity {
     private FragmentActivityListener activityListener = new FragmentActivityListener() {
         @Override
         public void receive(int message, Object arguments) {
+
             switch (message) {
                 case R.string.msg_hide_sidebar:
                     showSideBar(false);
@@ -188,6 +204,27 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+    private BroadcastReceiver activityListener1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<ActivityAction> actions = intent.getParcelableArrayListExtra(getString(R.string.param_activity_actions));
+
+            if (actions != null) {
+                for (ActivityAction action :
+                        actions) {
+                    activityListener.receive(action.getKey(), action.getData());
+                }
+            }
+        }
+    };
+
+    private void showPopupMessage(String title, String message) {
+        Intent intent = new Intent(this, MessagePopupActivity.class);
+        intent.putExtra(getString(R.string.param_message_title), title);
+        intent.putExtra(getString(R.string.param_message_body), message);
+
+        startActivity(intent);
+    }
 
     private void showCopyright(boolean b) {
         _bottom_bar.setVisibility(b ? View.VISIBLE : View.GONE);
@@ -252,20 +289,33 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        _handler = new Handler();
-        _runnable = new Runnable() {
+        _hasEntryPage = getIntent().getBooleanExtra(getString(R.string.param_has_entry_page), false);
+        _activeScreenHandler = new Handler();
+        _entryPageHandler = new Handler();
+        _activeScreenRunnable = new Runnable() {
             @Override
             public void run() {
-                moveToHome();
+                if (_isActivityUp)
+                    moveToHome();
+            }
+        };
+        _entryPageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (_isActivityUp)
+                    showEntryPage(true);
             }
         };
 
         timerClicked = 0;
         timerClickedTimerAdded = isServiceRunning = false;
+        _isActivityUp = true;
 
-        fragmentContainer = findViewById(R.id.fragment_container);
+        _fragment_container = findViewById(R.id.fragment_container);
+        _main_activity = findViewById(R.id.main_activity);
         _sidebar = findViewById(R.id.sidebar);
         _top_bar_right = findViewById(R.id.top_bar_right);
+        _top_bar_left = findViewById(R.id.top_bar_left);
         _btn_home = findViewById(R.id.btn_home);
         _btn_back = findViewById(R.id.btn_back);
         _btn_home_text = findViewById(R.id.btn_home_text);
@@ -277,6 +327,7 @@ public class MainActivity extends FragmentActivity {
         _btn_top_guest_info = findViewById(R.id.btn_top_guest_info);
         _time_box = findViewById(R.id.time_box);
         _sync_container = findViewById(R.id.syncContainer);
+        _entry_page_container = findViewById(R.id.entryPageContainer);
         item_home_text = findViewById(R.id.item_home_text);
         item_tv_text = findViewById(R.id.item_tv_text);
         item_wifi_text = findViewById(R.id.item_wifi_text);
@@ -285,15 +336,21 @@ public class MainActivity extends FragmentActivity {
         item_weather_text = findViewById(R.id.item_weather_text);
         item_news_text = findViewById(R.id.item_news_text);
         img_wifi_signals = findViewById(R.id.wifi_connect);
+        entry_page_img_wifi_signals = findViewById(R.id.entry_page_wifi_connect);
         img_battery_level = findViewById(R.id.bettryStatus);
+        entry_page_img_battery_level = findViewById(R.id.entry_page_bettryStatus);
         txt_battery_percentage = findViewById(R.id.percentage_set);
+        entry_page_txt_battery_percentage = findViewById(R.id.entry_page_percentage_set);
         txt_time = findViewById(R.id.getTime);
+        entry_page_txt_time = findViewById(R.id.entry_page_getTime);
         _app_heading = findViewById(R.id.app_heading);
         _app_heading_container = findViewById(R.id.app_heading_container);
         _txt_copyright = findViewById(R.id.txt_copyright);
         bg_image = findViewById(R.id.main_bg_img);
+        entry_bg_img = findViewById(R.id.entry_bg_img);
         small_logo = findViewById(R.id.small_logo_img);
         main_logo = findViewById(R.id.main_logo_img);
+        entry_logo = findViewById(R.id.entryLogo);
         small_logo_container = findViewById(R.id.small_logo);
         main_logo_container = findViewById(R.id.main_logo);
         _bottom_bar = findViewById(R.id.bottom_bar);
@@ -306,7 +363,7 @@ public class MainActivity extends FragmentActivity {
         item_icon_7 = findViewById(R.id.weather);
         item_icon_8 = findViewById(R.id.news);
 
-        if (fragmentContainer != null) {
+        if (_fragment_container != null) {
 
             if (savedInstanceState != null) {
                 return;
@@ -317,7 +374,7 @@ public class MainActivity extends FragmentActivity {
             firstFragment.setParentListener(activityListener);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(fragmentContainer.getId(), firstFragment).commit();
+                    .add(_fragment_container.getId(), firstFragment).commit();
         }
 
         _btn_home_text.setTypeface(Util.getTypeFace(this));
@@ -348,11 +405,36 @@ public class MainActivity extends FragmentActivity {
             }
         }, 1000);
 
+        getEntryPageTimings();
         setupMenuItems();
         setBranding();
         scheduleAlarms();
 
         wakeupScreen();
+
+        if (_hasEntryPage) {
+            showEntryPage(true);
+        }
+    }
+
+    private void getEntryPageTimings() {
+        new RetrieveSetting(this, Constants.SETTING_ENTRY_PAGE_START_TIME, Constants.SETTING_ENTRY_PAGE_END_TIME)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+
+                        if (values != null) {
+                            entryPageStart = values.containsKey("entry_page_start_time") ? values.get("entry_page_start_time") : null;
+                            entryPageEnd = values.containsKey("entry_page_end_time") ? values.get("entry_page_end_time") : null;
+                        }
+                    }
+                })
+                .execute();
+    }
+
+    private void showEntryPage(boolean b) {
+        _entry_page_container.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     private void wakeupScreen() {
@@ -416,6 +498,7 @@ public class MainActivity extends FragmentActivity {
                             BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
                             bg_image.setBackgroundDrawable(bd);
+                            entry_bg_img.setBackgroundDrawable(bd);
                         }
                     }
 
@@ -425,12 +508,17 @@ public class MainActivity extends FragmentActivity {
                         File imageFile = new File(filePath);
 
                         if (imageFile.exists()) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                            Bitmap bitmap_small = ImageHelper.getResizedBitmap(bitmap, 500);
-                            Bitmap bitmap_large = ImageHelper.getResizedBitmap(bitmap, 1000);
+                            try {
+                                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                                Bitmap bitmap_small = ImageHelper.getResizedBitmap(bitmap, 500);
+                                Bitmap bitmap_large = ImageHelper.getResizedBitmap(bitmap, 1000);
 
-                            small_logo.setImageBitmap(bitmap_small);
-                            main_logo.setImageBitmap(bitmap_large);
+                                small_logo.setImageBitmap(bitmap_small);
+                                main_logo.setImageBitmap(bitmap_large);
+                                entry_logo.setImageBitmap(bitmap_large);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -457,8 +545,23 @@ public class MainActivity extends FragmentActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        stopHandler();
-        startHandler();
+        stopCheckingActiveScreen();
+        stopCheckingToShowEntryPage();
+
+        startCheckingActiveScreen();
+        startCheckingToShowEntryPage();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        _isActivityUp = false;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        _isActivityUp = true;
     }
 
     @Override
@@ -469,6 +572,8 @@ public class MainActivity extends FragmentActivity {
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        registerReceiver(firebaseReceiver, new IntentFilter(MyFirebaseMessagingService.MESSAGE_RECEIVED));
+        registerReceiver(activityListener1, new IntentFilter(getString(R.string.param_activity_action)));
 
         Thread t = new Thread() {
             @Override
@@ -481,7 +586,11 @@ public class MainActivity extends FragmentActivity {
                             public void run() {
                                 DateFormat df = new SimpleDateFormat("hh:mm a");
                                 String date = df.format(Calendar.getInstance().getTime());
+
                                 txt_time.setText(date);
+                                entry_page_txt_time.setText(date);
+
+                                checkEntryPageConditions();
                             }
                         });
                     }
@@ -494,6 +603,25 @@ public class MainActivity extends FragmentActivity {
         t.start();
 
         super.onStart();
+    }
+
+    private void checkEntryPageConditions() {
+        if (entryPageStart == null || entryPageEnd == null || entryPageStart.isEmpty() || entryPageEnd.isEmpty())
+            return;
+
+        DateFormat df = new SimpleDateFormat("HH:mm");
+        String date = df.format(Calendar.getInstance().getTime());
+        try {
+            Date d1 = df.parse(entryPageStart);
+            Date d2 = df.parse(entryPageEnd);
+
+            Util.DateDifference diff = Util.getDateDifference(d1, d2);
+            Log.d("entryPageDate", entryPageStart + " - " + entryPageEnd);
+            Log.d("entryPageDate", diff.toString());
+        } catch (ParseException e) {
+            Log.e("entryPageDate", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void checkIfSyncServiceRunning() {
@@ -509,6 +637,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onStop() {
+
         if (wifiScanReceiver != null)
             unregisterReceiver(wifiScanReceiver);
 
@@ -526,6 +655,15 @@ public class MainActivity extends FragmentActivity {
 
         if (syncHeartBeatReceiver != null)
             unregisterReceiver(syncHeartBeatReceiver);
+
+        if (firebaseReceiver != null)
+            unregisterReceiver(firebaseReceiver);
+
+        if (activityListener1 != null)
+            unregisterReceiver(activityListener1);
+
+        stopCheckingActiveScreen();
+        stopCheckingToShowEntryPage();
 
         super.onStop();
     }
@@ -645,6 +783,10 @@ public class MainActivity extends FragmentActivity {
         }).execute();
     }
 
+    public void onEntryPageEnter(View view) {
+        showEntryPage(false);
+    }
+
     public void onNavItemClick(View view) {
         makeMenuItemActive(view, (view.getId() != R.id.itemHome && view.getId() != R.id.btn_home));
 
@@ -718,6 +860,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onGuestInfoClick(View view) {
+        showEntryPage(false);
+
         new RetrieveCategories(this, 0, "gsd")
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -881,45 +1025,27 @@ public class MainActivity extends FragmentActivity {
         if (wifi_signals_level == 4) {
             Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.wsignal);
             img_wifi_signals.setImageBitmap(btm);
+            entry_page_img_wifi_signals.setImageBitmap(btm);
         } else if (wifi_signals_level == 3) {
             Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.wsignal3);
             img_wifi_signals.setImageBitmap(btm);
+            entry_page_img_wifi_signals.setImageBitmap(btm);
         } else if (wifi_signals_level == 2) {
             Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.wsignal2);
             img_wifi_signals.setImageBitmap(btm);
+            entry_page_img_wifi_signals.setImageBitmap(btm);
         } else if (wifi_signals_level == 1) {
             Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.wsignal1);
             img_wifi_signals.setImageBitmap(btm);
+            entry_page_img_wifi_signals.setImageBitmap(btm);
         } else {
             Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.wifi_signals_in_active);
             img_wifi_signals.setImageBitmap(btm);
+            entry_page_img_wifi_signals.setImageBitmap(btm);
         }
     }
 
     public void setBattery(float percentage) {
-//        int res = R.drawable.btfull;
-//
-//        if (percentage < 10) {
-//            res = R.drawable.batterydown;
-//        } else if (percentage < 20) {
-//            res = R.drawable.bt20;
-//        } else if (percentage < 30) {
-//            res = R.drawable.bt30;
-//        } else if (percentage < 40) {
-//            res = R.drawable.bt40;
-//        } else if (percentage < 50) {
-//            res = R.drawable.bt50;
-//        } else if (percentage < 60) {
-//            res = R.drawable.bt60;
-//        } else if (percentage < 70) {
-//            res = R.drawable.bt70;
-//        } else if (percentage < 80) {
-//            res = R.drawable.bt80;
-//        } else if (percentage < 90) {
-//            res = R.drawable.bt90;
-//        } else if (percentage <= 100) {
-//            res = R.drawable.btfull;
-//        } int res = R.drawable.btfull;
         int res = R.drawable.battery_icon;
         if (percentage < 10) {
             res = R.drawable.batterydown;
@@ -947,14 +1073,32 @@ public class MainActivity extends FragmentActivity {
 
         Bitmap battery_icon = BitmapFactory.decodeResource(getResources(), res);
         img_battery_level.setImageBitmap(battery_icon);
+        entry_page_img_battery_level.setImageBitmap(battery_icon);
     }
 
-    private void startHandler() {
-        _handler.postDelayed(_runnable, Constants.BACK_TO_HOME_WAIT);
+    private void startCheckingActiveScreen() {
+        _activeScreenHandler.postDelayed(_activeScreenRunnable, Constants.BACK_TO_HOME_WAIT);
     }
 
-    private void stopHandler() {
-        _handler.removeCallbacks(_runnable);
+    private void stopCheckingActiveScreen() {
+        _activeScreenHandler.removeCallbacks(_activeScreenRunnable);
+    }
+
+    private void startCheckingToShowEntryPage() {
+        _entryPageHandler.postDelayed(_entryPageRunnable, Constants.BACK_TO_ENTRY_PAGE);
+    }
+
+    private void stopCheckingToShowEntryPage() {
+        _entryPageHandler.removeCallbacks(_entryPageRunnable);
+    }
+
+    public void takeActions(ArrayList<ActivityAction> actions) {
+        if (actions != null) {
+            for (ActivityAction action :
+                    actions) {
+                activityListener.receive(action.getKey(), action.getData());
+            }
+        }
     }
 
     class BatteryBroadcastReceiver extends BroadcastReceiver {
@@ -965,6 +1109,7 @@ public class MainActivity extends FragmentActivity {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
 
             txt_battery_percentage.setText(level + "%");
+            entry_page_txt_battery_percentage.setText(level + "%");
 
             setBattery(level);
         }

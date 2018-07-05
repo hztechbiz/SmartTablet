@@ -7,6 +7,7 @@ public class Constants {
     public static final String TOKEN_KEY = "ST@TOKEN";
     public static final String API_KEY = "ST@API_KEY";
     public static final String FILE_PATH_KEY = "ST@FILE_PATH";
+    public static final String DEVICE_ID = "ST@DEVICE_ID";
     /*
      * Setting keys
      */
@@ -18,6 +19,9 @@ public class Constants {
     public static final String SETTING_ADDRESS = "hotel_address";
     public static final String SETTING_EMAIL = "hotel_email";
     public static final String SETTING_PHONE = "hotel_phone";
+    public static final String SETTING_HAS_ENTRY_PAGE = "entry_page_enable";
+    public static final String SETTING_ENTRY_PAGE_START_TIME = "entry_page_start_time";
+    public static final String SETTING_ENTRY_PAGE_END_TIME = "entry_page_end_time";
     public static final String TOP_GUEST_CATEGORIES = "top_menu_item_guest_categories";
     public static final String TOP_MENU_SHOW_WELCOME = "show_welcome";
     public static final String TOP_MENU_WELCOME_TEXT = "welcome_text";
@@ -47,8 +51,17 @@ public class Constants {
      * Numeric Constants
      */
     public static final long SYNC_WAIT = 5 * 60 * 1000;
-    public static final long BACK_TO_HOME_WAIT = 5 * 60 * 1000;
+    public static final long BACK_TO_HOME_WAIT = 3 * 60 * 1000;
+    public static final long BACK_TO_ENTRY_PAGE = 5 * 60 * 1000;
     public static final long SCREEN_WAKEUP_WAIT = 60 * 1000;
+    public static final String CITY_SYDNEY = "nsw/sydney";
+    public static final String CITY_MELBOURNE = "vic/melbourne";
+    public static final String CITY_BRISBANE = "qld/brisbane";
+    public static final String CITY_CANBERRA = "act/canberra";
+    public static final String CITY_DARWIN = "nt/darwin";
+    public static final String CITY_HOBART = "tas/hobart";
+    public static final String CITY_GOLD_COAST = "qld/gold-coast";
+    public static final String CITY_PERTH = "wa/perth";
     /*
      * Constants
      */

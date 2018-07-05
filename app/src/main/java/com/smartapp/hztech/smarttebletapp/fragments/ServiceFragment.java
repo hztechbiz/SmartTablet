@@ -1,9 +1,11 @@
 package com.smartapp.hztech.smarttebletapp.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.smartapp.hztech.smarttebletapp.AppController;
 import com.smartapp.hztech.smarttebletapp.Constants;
+import com.smartapp.hztech.smarttebletapp.MainActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
@@ -20,7 +28,9 @@ import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
+import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveMedia;
+import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSingleService;
 
 import org.json.JSONArray;
@@ -29,6 +39,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServiceFragment extends Fragment implements AsyncResultBag.Success {
 
@@ -41,6 +53,8 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     Button btn_booking;
     private FragmentActivityListener activityListener;
     private FragmentListener fragmentListener;
+    private MainActivity _activity;
+    private NavigationFragment _parentFragment;
 
     public ServiceFragment() {
 
@@ -51,6 +65,8 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detailed_service_fragment, container, false);
         _bundle = getArguments();
+        _activity = (MainActivity) getActivity();
+        _parentFragment = (NavigationFragment) getParentFragment();
 
         _service_id = 0;
 
@@ -81,15 +97,74 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
             }
         });
 
+        ArrayList<ActivityAction> actions = new ArrayList<>();
+
+        actions.add(new ActivityAction((R.string.msg_show_sidebar), null));
+        actions.add(new ActivityAction((R.string.msg_reset_menu), null));
+        actions.add(new ActivityAction((R.string.msg_hide_home_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_hide_copyright), null));
+
+        _activity.takeActions(actions);
+
+        /*
         activityListener.receive(R.string.msg_show_sidebar, null);
         activityListener.receive(R.string.msg_reset_menu, null);
         activityListener.receive(R.string.msg_hide_home_button, null);
         activityListener.receive(R.string.msg_hide_app_heading, null);
         activityListener.receive(R.string.msg_hide_copyright, null);
+        */
 
         bind();
+        sendReport();
 
         return view;
+    }
+
+    private void sendReport() {
+        new RetrieveSetting(getContext(), Constants.TOKEN_KEY)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Log.d("SendReport", result + "");
+                            final String token = result.toString();
+                            String url = Constants.GetApiUrl("analytics/report");
+
+                            JSONObject jsonRequest = new JSONObject();
+                            try {
+                                jsonRequest.put("object_id", _service_id);
+                                jsonRequest.put("object_type", "service");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.d("SendReport", response + "");
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("SendReport", error + "");
+                                }
+                            }) {
+                                @Override
+                                public Map<String, String> getHeaders() {
+                                    Map<String, String> params = new HashMap<String, String>();
+
+                                    params.put("AppKey", Constants.APP_KEY);
+                                    params.put("Authorization", token);
+
+                                    return params;
+                                }
+                            };
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void bind() {
@@ -143,9 +218,16 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                 txt_title.setText(service.getTitle());
                 txt_description.setText(service.getDescription());
             } else {
+                ArrayList<ActivityAction> actions = new ArrayList<>();
+                actions.add(new ActivityAction((R.string.msg_show_app_heading), null));
+                actions.add(new ActivityAction((R.string.msg_set_app_heading), service.getTitle().toUpperCase()));
+
+                _activity.takeActions(actions);
+
+                /*
                 activityListener.receive(R.string.msg_show_app_heading, null);
                 activityListener.receive(R.string.msg_set_app_heading, service.getTitle().toUpperCase());
-
+                */
                 footerContent.setVisibility(View.VISIBLE);
             }
 
@@ -253,9 +335,19 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                     //if (fragmentListener != null)
                     //fragmentListener.onUpdateFragment(menu_items_objects.get(0).fragment);
 
+                    ArrayList<ActivityAction> actions = new ArrayList<>();
+                    actions.add(new ActivityAction((R.string.msg_hide_sidebar), null));
+                    actions.add(new ActivityAction((R.string.msg_show_home_button), null));
+                    actions.add(new ActivityAction((R.string.msg_update_menu), _service_id + ""));
+
+                    _parentFragment.takeActions(actions);
+
+                    //activityListener.receive(R.string.msg_update_menu, menu_items_objects);
+                    /*
                     activityListener.receive(R.string.msg_hide_sidebar, null);
                     activityListener.receive(R.string.msg_update_menu, menu_items_objects);
                     activityListener.receive(R.string.msg_show_home_button, null);
+                    */
                 }
             }
         }
@@ -270,7 +362,15 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                             String filePath = result.toString();
 
                             if (filePath != null) {
-                                activityListener.receive(R.string.msg_update_background, filePath);
+                                ArrayList<ActivityAction> actions = new ArrayList<>();
+                                actions.add(new ActivityAction((R.string.msg_update_background), filePath));
+
+                                Intent intent = new Intent(getString(R.string.param_activity_action));
+                                intent.putParcelableArrayListExtra(getString(R.string.param_activity_actions), actions);
+
+                                getContext().sendBroadcast(intent);
+
+                                //activityListener.receive(R.string.msg_update_background, filePath);
                             }
                         }
                     }

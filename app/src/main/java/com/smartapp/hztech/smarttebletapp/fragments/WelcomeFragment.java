@@ -10,14 +10,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.smartapp.hztech.smarttebletapp.LocationPopupActivity;
+import com.smartapp.hztech.smarttebletapp.MainActivity;
 import com.smartapp.hztech.smarttebletapp.R;
 import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
+import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.HotelModel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveHotel;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WelcomeFragment extends Fragment {
@@ -25,6 +28,7 @@ public class WelcomeFragment extends Fragment {
     String _heading, _description, _new_heading, _new_description;
     Button _btn_location;
     private FragmentActivityListener parentListener;
+    private MainActivity _activity;
 
     public WelcomeFragment() {
 
@@ -38,6 +42,7 @@ public class WelcomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.services_home, container, false);
+        _activity = (MainActivity) getActivity();
 
         txtHotelName = view.findViewById(R.id.txt_hotel_name);
         txtDescription = view.findViewById(R.id.txt_description);
@@ -56,10 +61,21 @@ public class WelcomeFragment extends Fragment {
             }
         });
 
+        ArrayList<ActivityAction> actions = new ArrayList<>();
+
+        actions.add(new ActivityAction((R.string.msg_show_sidebar), null));
+        actions.add(new ActivityAction((R.string.msg_reset_menu), null));
+        actions.add(new ActivityAction((R.string.msg_reset_background), null));
+        actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
+
+        _activity.takeActions(actions);
+
+        /*
         parentListener.receive(R.string.msg_show_sidebar, null);
         parentListener.receive(R.string.msg_reset_menu, null);
         parentListener.receive(R.string.msg_reset_background, null);
         parentListener.receive(R.string.msg_show_top_guest_button, null);
+        */
 
         return view;
     }

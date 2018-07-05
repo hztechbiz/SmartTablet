@@ -22,6 +22,8 @@ public class Category {
 
     private boolean is_marketing_partner;
 
+    private String embed_url;
+
     public int getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class Category {
 
     public void setIs_marketing_partner(boolean is_marketing_partner) {
         this.is_marketing_partner = is_marketing_partner;
+    }
+
+    public String getEmbed_url() {
+        return embed_url;
+    }
+
+    public void setEmbed_url(String embed_url) {
+        this.embed_url = embed_url;
     }
 }

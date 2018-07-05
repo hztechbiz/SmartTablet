@@ -7,7 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,6 +38,7 @@ public class SetupActivity extends Activity {
     private ProgressDialog _progressDialog;
     private String API_KEY = Constants.API_KEY;
     private String TOKEN = Constants.TOKEN_KEY;
+    private String _token;
     private RelativeLayout _sync_container;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
@@ -80,7 +84,22 @@ public class SetupActivity extends Activity {
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
 
+        fetchDeviceToken();
+
         super.onStart();
+    }
+
+    private void fetchDeviceToken() {
+        new RetrieveSetting(this, Constants.DEVICE_ID)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            _token = result.toString();
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void checkIfSyncServiceRunning() {
@@ -137,8 +156,9 @@ public class SetupActivity extends Activity {
                     JSONObject jsonRequest = new JSONObject();
 
                     try {
-                        jsonRequest.put("udid", Math.random() + "");
+                        jsonRequest.put("udid", _token);
                         jsonRequest.put("api_key", key);
+                        jsonRequest.put("mac_address", getMacAddress());
                     } catch (Exception ex) {
                         showMessage(ex.getMessage());
                     }
@@ -177,6 +197,16 @@ public class SetupActivity extends Activity {
                 }
             }
         });
+    }
+
+    private String getMacAddress() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        if (wifiManager != null) {
+            WifiInfo wInfo = wifiManager.getConnectionInfo();
+            return wInfo != null ? wInfo.getMacAddress() : null;
+        }
+        return null;
     }
 
     @Override
