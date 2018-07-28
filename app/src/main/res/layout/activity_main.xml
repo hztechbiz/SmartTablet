@@ -373,7 +373,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.35"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -522,7 +522,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="0.4"
+                android:layout_weight="0.3"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
@@ -550,7 +550,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="0.7"
+                android:layout_weight="0.65"
                 android:gravity="end"
                 android:orientation="vertical">
 
@@ -559,6 +559,19 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_night_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/black_transparent_with_radius"
+                        android:onClick="toggleNightMode"
+                        android:padding="5dp"
+                        android:text="@string/night_mode"
+                        android:textAllCaps="false"
+                        android:textColor="#FFF" />
 
                     <ImageView
                         android:id="@+id/wifi_connect"
@@ -676,13 +689,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:padding="10dp"
                 android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:padding="10dp">
 
                 </LinearLayout>
 
@@ -695,9 +708,21 @@
                     <TextView
                         android:id="@+id/txt_copyright"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:text="@string/powered_by_smart_tablet"
                         android:textColor="#FFF" />
+
+                    <ImageButton
+                        android:id="@+id/btn_kiosk"
+                        android:layout_width="170dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="0dp"
+                        android:background="@android:color/transparent"
+                        android:padding="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/smart_tablet_logo" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -856,6 +881,26 @@
                 android:textColor="#FFF"
                 android:textSize="25sp" />
         </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/nightModeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_transparent_with_radius_green"
+            android:onClick="toggleNightMode"
+            android:padding="10dp"
+            android:text="@string/wake_me_up"
+            android:textAllCaps="true"
+            android:textColor="#7ee08f" />
+
     </RelativeLayout>
 
 </RelativeLayout>

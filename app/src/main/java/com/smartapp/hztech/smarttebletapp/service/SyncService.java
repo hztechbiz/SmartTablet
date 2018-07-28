@@ -60,11 +60,14 @@ public class SyncService extends IntentService {
     private boolean _isServicesStored;
     private boolean _isFilesDownloaded;
     private boolean _isOffersStored;
+    private boolean _imageProcessing;
     private String _token;
     private int _extraFieldsLength;
     private int _indexesFilled;
     private boolean _hasError;
     private Object _error;
+    private int _totalMedia = 0;
+    private int _processedMedia = 0;
 
     public SyncService() {
         super(TAG);
@@ -321,16 +324,21 @@ public class SyncService extends IntentService {
     private void storeMedias(JSONArray media_arr) throws JSONException {
         Media[] medias = new Media[media_arr.length()];
 
-        for (int i = 0; i < media_arr.length(); i++) {
-            JSONObject m = media_arr.getJSONObject(i);
+        if (media_arr.length() > 0) {
+            _totalMedia = media_arr.length();
 
-            Media media = new Media();
-            media.setId(m.getInt("id"));
-            media.setUrl(m.getString("url"));
+            Log.d("MediaFile", "total medias: " + _totalMedia);
 
-            medias[i] = media;
+            for (int i = 0; i < _totalMedia; i++) {
+                JSONObject m = media_arr.getJSONObject(i);
+
+                Media media = new Media();
+                media.setId(m.getInt("id"));
+                media.setUrl(m.getString("url"));
+
+                medias[i] = media;
+            }
         }
-
         if (medias.length > 0) {
             new StoreMedia(this, getFilePath(null), medias)
                     .onSuccess(new AsyncResultBag.Success() {
@@ -592,6 +600,7 @@ public class SyncService extends IntentService {
     }
 
     private void showMessage(String message) {
+        Log.d("SYNCMESSAGE", message);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 

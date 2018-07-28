@@ -6,10 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.GridView;
@@ -166,6 +166,9 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -190,6 +193,7 @@ public class CategoryFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
         actions.add(new ActivityAction((R.string.msg_hide_guest_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
 
         if (_listing_type != null && _listing_type.equals("mp")) {

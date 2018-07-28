@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -56,6 +57,9 @@ public class ServiceBookingFragment extends Fragment implements AsyncResultBag.S
         txt_heading = view.findViewById(R.id.heading);
 
         txt_heading.setTypeface(Util.getTypeFace(getContext()));
+
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
         webview.setWebViewClient(new WebViewClient() {
             @Override

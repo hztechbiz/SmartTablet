@@ -292,6 +292,7 @@ public class NavigationFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_guest_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
 
         if (_listing_type != null && _listing_type.equals("mp")) {

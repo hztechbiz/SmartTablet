@@ -2,8 +2,11 @@ package com.smartapp.hztech.smarttebletapp;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -14,18 +17,25 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,6 +47,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.fragments.MainFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.NavigationFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.WelcomeFragment;
+import com.smartapp.hztech.smarttebletapp.helpers.Common;
 import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
@@ -44,6 +55,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.MapMarker;
+import com.smartapp.hztech.smarttebletapp.receivers.AdminReceiver;
 import com.smartapp.hztech.smarttebletapp.receivers.SyncAlarmReceiver;
 import com.smartapp.hztech.smarttebletapp.receivers.WakeupReceiver;
 import com.smartapp.hztech.smarttebletapp.service.MyFirebaseMessagingService;
@@ -63,12 +75,13 @@ import java.util.HashMap;
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
-    private String entryPageStart, entryPageEnd;
+    private String entryPageStart, entryPageEnd, kioskPassword;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img;
     private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
     private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left;
-    private RelativeLayout _sync_container, _entry_page_container, _main_activity;
+    private Button _btn_night_mode;
+    private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
@@ -76,6 +89,7 @@ public class MainActivity extends FragmentActivity {
     private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp;
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
+    private ImageButton _btn_kiosk;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
@@ -201,6 +215,12 @@ public class MainActivity extends FragmentActivity {
                 case R.string.msg_hide_top_guest_button:
                     showTopGuestInfoButton(false);
                     break;
+                case R.string.msg_show_night_mode_button:
+                    showNightModeButton(true);
+                    break;
+                case R.string.msg_hide_night_mode_button:
+                    showNightModeButton(false);
+                    break;
             }
         }
     };
@@ -217,6 +237,10 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+    private boolean inKioskMode = false;
+    private DevicePolicyManager dpm;
+    private ComponentName deviceAdmin;
+    private boolean _isNightMode;
 
     private void showPopupMessage(String title, String message) {
         Intent intent = new Intent(this, MessagePopupActivity.class);
@@ -234,9 +258,13 @@ public class MainActivity extends FragmentActivity {
         _app_heading_container.setVisibility(b ? View.VISIBLE : View.GONE);
 
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) _top_bar_right.getLayoutParams();
-        layoutParams.weight = (b ? 0.3f : 0.7f);
+        layoutParams.weight = (b ? 0.35f : 0.65f);
 
         _top_bar_right.setLayoutParams(layoutParams);
+    }
+
+    private void showNightModeButton(boolean b) {
+        _btn_night_mode.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     private void showGuestButton(boolean b) {
@@ -280,6 +308,10 @@ public class MainActivity extends FragmentActivity {
         _btn_back.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
+    private void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -288,6 +320,9 @@ public class MainActivity extends FragmentActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
+
+        deviceAdmin = new ComponentName(this, AdminReceiver.class);
+        dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 
         _hasEntryPage = getIntent().getBooleanExtra(getString(R.string.param_has_entry_page), false);
         _activeScreenHandler = new Handler();
@@ -302,14 +337,14 @@ public class MainActivity extends FragmentActivity {
         _entryPageRunnable = new Runnable() {
             @Override
             public void run() {
-                if (_isActivityUp)
-                    showEntryPage(true);
+                showEntryPage(true);
             }
         };
 
         timerClicked = 0;
-        timerClickedTimerAdded = isServiceRunning = false;
+        timerClickedTimerAdded = isServiceRunning = _isNightMode = false;
         _isActivityUp = true;
+        inKioskMode = dpm.isLockTaskPermitted(this.getPackageName());
 
         _fragment_container = findViewById(R.id.fragment_container);
         _main_activity = findViewById(R.id.main_activity);
@@ -325,9 +360,12 @@ public class MainActivity extends FragmentActivity {
         _btn_guest_info_text = findViewById(R.id.btn_guest_info_text);
         _btn_top_guest_info_text = findViewById(R.id.btn_top_guest_info_text);
         _btn_top_guest_info = findViewById(R.id.btn_top_guest_info);
+        _btn_night_mode = findViewById(R.id.btn_night_mode);
+        _btn_kiosk = findViewById(R.id.btn_kiosk);
         _time_box = findViewById(R.id.time_box);
         _sync_container = findViewById(R.id.syncContainer);
         _entry_page_container = findViewById(R.id.entryPageContainer);
+        _night_mode_container = findViewById(R.id.nightModeContainer);
         item_home_text = findViewById(R.id.item_home_text);
         item_tv_text = findViewById(R.id.item_tv_text);
         item_wifi_text = findViewById(R.id.item_wifi_text);
@@ -394,6 +432,14 @@ public class MainActivity extends FragmentActivity {
         wifiScanReceiver = new WifiScanReceiver();
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
+        _btn_kiosk.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                toggleKioskMode(v);
+                return false;
+            }
+        });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -406,6 +452,7 @@ public class MainActivity extends FragmentActivity {
         }, 1000);
 
         getEntryPageTimings();
+        getKioskPassword();
         setupMenuItems();
         setBranding();
         scheduleAlarms();
@@ -415,6 +462,10 @@ public class MainActivity extends FragmentActivity {
         if (_hasEntryPage) {
             showEntryPage(true);
         }
+    }
+
+    private void getKioskPassword() {
+        kioskPassword = "test";
     }
 
     private void getEntryPageTimings() {
@@ -602,6 +653,18 @@ public class MainActivity extends FragmentActivity {
 
         t.start();
 
+        if (!dpm.isAdminActive(deviceAdmin)) {
+            showToast("This app is not a device admin!");
+        }
+
+        if (dpm.isDeviceOwnerApp(getPackageName())) {
+            dpm.setLockTaskPackages(deviceAdmin,
+                    new String[]{getPackageName()});
+            setKioskMode(true);
+        } else {
+            showToast("This app is not the device owner!");
+        }
+
         super.onStart();
     }
 
@@ -785,6 +848,26 @@ public class MainActivity extends FragmentActivity {
 
     public void onEntryPageEnter(View view) {
         showEntryPage(false);
+    }
+
+    public void toggleNightMode(View view) {
+        _isNightMode = !_isNightMode;
+        showNightMode(_isNightMode);
+    }
+
+    private void showNightMode(boolean b) {
+        _night_mode_container.setVisibility(b ? View.VISIBLE : View.GONE);
+
+        boolean has_permit = true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            has_permit = Settings.System.canWrite(getApplicationContext());
+        }
+
+        if (has_permit) {
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, (b ? 0 : 100));
+        }
     }
 
     public void onNavItemClick(View view) {
@@ -1099,6 +1182,72 @@ public class MainActivity extends FragmentActivity {
                 activityListener.receive(action.getKey(), action.getData());
             }
         }
+    }
+
+    private void setKioskMode(boolean on) {
+        try {
+            if (on) {
+                if (dpm.isLockTaskPermitted(this.getPackageName())) {
+
+                    startLockTask();
+                    setLauncher();
+
+                    inKioskMode = true;
+
+                } else {
+                    showToast("Kiosk Mode not permitted");
+                }
+            } else {
+                stopLockTask();
+                restoreLauncher();
+
+                inKioskMode = false;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e);
+        }
+    }
+
+    public void toggleKioskMode(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Password");
+
+        final EditText input = new EditText(this);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String text = input.getText().toString();
+
+                if (text.equals(kioskPassword)) {
+                    setKioskMode(false);
+                } else {
+                    showToast("Wrong Password");
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void restoreLauncher() {
+        dpm.clearPackagePersistentPreferredActivities(deviceAdmin,
+                this.getPackageName());
+        showToast("Home activity: " + Common.getHomeActivity(this));
+    }
+
+    public void setLauncher() {
+        Common.becomeHomeActivity(this);
     }
 
     class BatteryBroadcastReceiver extends BroadcastReceiver {

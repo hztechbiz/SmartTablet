@@ -18,7 +18,7 @@ import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.entities.Testimonial;
 
-@Database(entities = {Setting.class, Hotel.class, Category.class, Service.class, Media.class, Offer.class, Testimonial.class}, version = 25)
+@Database(entities = {Setting.class, Hotel.class, Category.class, Service.class, Media.class, Offer.class, Testimonial.class}, version = 26, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SettingDao settingDao();
 

@@ -103,6 +103,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
         actions.add(new ActivityAction((R.string.msg_reset_menu), null));
         actions.add(new ActivityAction((R.string.msg_hide_home_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_copyright), null));
 
         _activity.takeActions(actions);

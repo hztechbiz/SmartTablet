@@ -5,6 +5,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_maps">Map</string>
+    <string name="device_admin">Smart Tablet</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -70,6 +71,8 @@
     <string name="msg_hide_top_guest_button">HIDE_TOP_GUEST_BUTTON</string>
     <string name="msg_show_top_right_guest_button">SHOW_TOP_RIGHT_GUEST_BUTTON</string>
     <string name="msg_hide_top_right_guest_button">HIDE_TOP_RIGHT_GUEST_BUTTON</string>
+    <string name="msg_show_night_mode_button">SHOW_NIGHT_MODE_BUTTON</string>
+    <string name="msg_hide_night_mode_button">HIDE_NIGHT_MODE_BUTTON</string>
 
     <!-- STRINGS -->
     <string name="address">Address</string>
@@ -112,4 +115,6 @@
     <string name="gold_coast">Gold Coast</string>
     <string name="perth">Perth</string>
     <string name="enter">Enter</string>
+    <string name="night_mode">Sleep</string>
+    <string name="wake_me_up">Wake me up</string>
 </resources>

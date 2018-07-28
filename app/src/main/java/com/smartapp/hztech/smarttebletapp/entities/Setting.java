@@ -1,6 +1,7 @@
 package com.smartapp.hztech.smarttebletapp.entities;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -17,6 +18,7 @@ public class Setting {
         this.value = value;
     }
 
+    @Ignore
     public Setting() {
     }
 

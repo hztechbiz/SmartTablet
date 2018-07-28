@@ -164,6 +164,7 @@ public class MainFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
         actions.add(new ActivityAction((R.string.msg_show_guest_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
+        actions.add(new ActivityAction((R.string.msg_show_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
         actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));
 

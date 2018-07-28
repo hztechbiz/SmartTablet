@@ -2,6 +2,9 @@ package com.smartapp.hztech.smarttebletapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -13,22 +16,28 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.smartapp.hztech.smarttebletapp.helpers.Common;
 import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
+import com.smartapp.hztech.smarttebletapp.receivers.AdminReceiver;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SplashActivity extends Activity {
 
+    private String TAG = this.getClass().getName();
     private String[] permissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -43,6 +52,9 @@ public class SplashActivity extends Activity {
     private Boolean _permissionsGranted;
     private Boolean _hasEntryPage;
     private ImageView _iv_background, _iv_logo;
+    private boolean inKioskMode = false;
+    private DevicePolicyManager dpm;
+    private ComponentName deviceAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,49 @@ public class SplashActivity extends Activity {
 
         _iv_background = findViewById(R.id.splsh_background);
         _iv_logo = findViewById(R.id.splsh_Logo);
+
+        deviceAdmin = new ComponentName(this, AdminReceiver.class);
+        dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+    }
+
+    private void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setKioskMode(boolean on) {
+        try {
+            if (on) {
+                if (dpm.isLockTaskPermitted(this.getPackageName())) {
+
+                    startLockTask();
+                    setLauncher();
+
+                    inKioskMode = true;
+
+                } else {
+                    showToast("Kiosk Mode not permitted");
+                }
+            } else {
+                stopLockTask();
+                restoreLauncher();
+
+                //dpm.setLockTaskPackages(deviceAdmin, new String[]{});
+
+                inKioskMode = false;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e);
+        }
+    }
+
+    public void restoreLauncher() {
+        dpm.clearPackagePersistentPreferredActivities(deviceAdmin,
+                this.getPackageName());
+        showToast("Home activity: " + Common.getHomeActivity(this));
+    }
+
+    public void setLauncher() {
+        Common.becomeHomeActivity(this);
     }
 
     private void setSplashImage() {
@@ -123,6 +178,18 @@ public class SplashActivity extends Activity {
         setSplashImage();
         waitSplash();
         checkPermissions();
+
+        if (!dpm.isAdminActive(deviceAdmin)) {
+            showToast("This app is not a device admin!");
+        }
+
+        if (dpm.isDeviceOwnerApp(getPackageName())) {
+            dpm.setLockTaskPackages(deviceAdmin,
+                    new String[]{getPackageName()});
+            setKioskMode(true);
+        } else {
+            showToast("This app is not the device owner!");
+        }
     }
 
     private void checkPermissions() {
