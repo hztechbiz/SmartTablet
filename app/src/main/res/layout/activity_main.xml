@@ -373,7 +373,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="0.35"
+                android:layout_weight="0.45"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -550,7 +550,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_weight="0.65"
+                android:layout_weight="0.55"
                 android:gravity="end"
                 android:orientation="vertical">
 
@@ -562,7 +562,7 @@
 
                     <Button
                         android:id="@+id/btn_night_mode"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
@@ -570,6 +570,7 @@
                         android:onClick="toggleNightMode"
                         android:padding="5dp"
                         android:text="@string/night_mode"
+                        android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="#FFF" />
 
@@ -612,7 +613,7 @@
 
                     <LinearLayout
                         android:id="@+id/time_box"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
@@ -624,10 +625,11 @@
 
                         <TextView
                             android:id="@+id/getTime"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/_00_00_pm"
                             android:textColor="#fff"
+                            android:textAlignment="center"
                             android:textColorHint="#fff" />
                     </LinearLayout>
                 </LinearLayout>
@@ -726,29 +728,6 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/syncContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/syncProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/syncProgressBar"
-            android:layout_centerInParent="true"
-            android:text="@string/synchronizing_please_wait"
-            android:textColor="#FFF"
-            android:textSize="17sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -901,6 +880,29 @@
             android:textAllCaps="true"
             android:textColor="#7ee08f" />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/syncContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/syncProgressBar"
+            android:layout_centerInParent="true"
+            android:text="@string/synchronizing_please_wait"
+            android:textColor="#FFF"
+            android:textSize="17sp" />
     </RelativeLayout>
 
 </RelativeLayout>

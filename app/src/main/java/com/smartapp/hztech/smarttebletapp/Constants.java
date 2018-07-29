@@ -50,7 +50,7 @@ public class Constants {
     /*
      * Numeric Constants
      */
-    public static final long SYNC_WAIT = 5 * 60 * 1000;
+    public static final long SYNC_WAIT = 10 * 60 * 1000;
     public static final long BACK_TO_HOME_WAIT = 3 * 60 * 1000;
     public static final long BACK_TO_ENTRY_PAGE = 5 * 60 * 1000;
     public static final long SCREEN_WAKEUP_WAIT = 60 * 1000;

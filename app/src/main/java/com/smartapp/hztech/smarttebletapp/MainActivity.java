@@ -1,7 +1,5 @@
 package com.smartapp.hztech.smarttebletapp;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -49,6 +48,7 @@ import com.smartapp.hztech.smarttebletapp.fragments.NavigationFragment;
 import com.smartapp.hztech.smarttebletapp.fragments.WelcomeFragment;
 import com.smartapp.hztech.smarttebletapp.helpers.Common;
 import com.smartapp.hztech.smarttebletapp.helpers.ImageHelper;
+import com.smartapp.hztech.smarttebletapp.helpers.ScheduledJobs;
 import com.smartapp.hztech.smarttebletapp.helpers.Util;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.listeners.FragmentActivityListener;
@@ -56,8 +56,7 @@ import com.smartapp.hztech.smarttebletapp.listeners.FragmentListener;
 import com.smartapp.hztech.smarttebletapp.models.ActivityAction;
 import com.smartapp.hztech.smarttebletapp.models.MapMarker;
 import com.smartapp.hztech.smarttebletapp.receivers.AdminReceiver;
-import com.smartapp.hztech.smarttebletapp.receivers.SyncAlarmReceiver;
-import com.smartapp.hztech.smarttebletapp.receivers.WakeupReceiver;
+import com.smartapp.hztech.smarttebletapp.receivers.BootReceiver;
 import com.smartapp.hztech.smarttebletapp.service.MyFirebaseMessagingService;
 import com.smartapp.hztech.smarttebletapp.service.SyncService;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveCategories;
@@ -257,10 +256,18 @@ public class MainActivity extends FragmentActivity {
     private void showAppHeading(boolean b) {
         _app_heading_container.setVisibility(b ? View.VISIBLE : View.GONE);
 
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) _top_bar_right.getLayoutParams();
-        layoutParams.weight = (b ? 0.35f : 0.65f);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) _top_bar_left.getLayoutParams();
+        layoutParams.weight = (b ? 0.35f : 0.45f);
 
-        _top_bar_right.setLayoutParams(layoutParams);
+        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) _app_heading_container.getLayoutParams();
+        layoutParams1.weight = (b ? 0.3f : 0.3f);
+
+        LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams) _top_bar_right.getLayoutParams();
+        layoutParams2.weight = (b ? 0.35f : 0.55f);
+
+        _top_bar_left.setLayoutParams(layoutParams);
+        _app_heading_container.setLayoutParams(layoutParams1);
+        _top_bar_right.setLayoutParams(layoutParams2);
     }
 
     private void showNightModeButton(boolean b) {
@@ -498,34 +505,18 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void scheduleAlarms() {
-        scheduleSyncAlarm();
-        scheduleWakeupAlarm();
+        ScheduledJobs.scheduleSyncAlarm(this);
+        ScheduledJobs.scheduleWakeupAlarm(this);
+
+        setBootReceiverEnabled(PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
     }
 
-    private void scheduleWakeupAlarm() {
-        Intent intent = new Intent(this, WakeupReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, WakeupReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long millis = System.currentTimeMillis();
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-
-        if (alarmManager != null) {
-            long interval = Constants.SCREEN_WAKEUP_WAIT;
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis + interval, interval, pendingIntent);
-        }
-    }
-
-    private void scheduleSyncAlarm() {
-        Intent intent = new Intent(this, SyncAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long millis = System.currentTimeMillis();
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-
-        if (alarmManager != null) {
-            long interval = AlarmManager.INTERVAL_HALF_DAY;
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, millis + interval, interval, pendingIntent);
-        }
+    private void setBootReceiverEnabled(int componentEnabledState) {
+        ComponentName componentName = new ComponentName(this, BootReceiver.class);
+        PackageManager packageManager = getPackageManager();
+        packageManager.setComponentEnabledSetting(componentName,
+                componentEnabledState,
+                PackageManager.DONT_KILL_APP);
     }
 
     private void setBranding() {
