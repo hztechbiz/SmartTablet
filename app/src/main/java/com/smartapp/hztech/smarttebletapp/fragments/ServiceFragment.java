@@ -210,7 +210,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     public void onSuccess(Object result) {
         Service service = result != null ? (Service) result : null;
         ArrayList<NavigationFragment.MenuItem> menu_items_objects = new ArrayList<>();
-        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_TESTIMONIALS};
+        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_TESTIMONIALS, Constants.TOP_MENU_SHOW_SERVICES, Constants.TOP_MENU_SHOW_PRODUCTS, Constants.TOP_MENU_SHOW_PRICE_LIST};
 
         if (service != null) {
             _service = service;
@@ -308,6 +308,33 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
 
                                             item.title = "OFFERS";
                                             item.fragment = serviceOffersFragment;
+
+                                            break;
+                                        case Constants.TOP_MENU_SHOW_SERVICES:
+                                            ServiceServicesMenuFragment serviceServiceMenuFragment = new ServiceServicesMenuFragment();
+                                            serviceServiceMenuFragment.setArguments(_bundle);
+                                            serviceServiceMenuFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "SERVICES";
+                                            item.fragment = serviceServiceMenuFragment;
+
+                                            break;
+                                        case Constants.TOP_MENU_SHOW_PRODUCTS:
+                                            ServiceProductsFragment serviceProductsFragment = new ServiceProductsFragment();
+                                            serviceProductsFragment.setArguments(_bundle);
+                                            serviceProductsFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "PRODUCTS";
+                                            item.fragment = serviceProductsFragment;
+
+                                            break;
+                                        case Constants.TOP_MENU_SHOW_PRICE_LIST:
+                                            ServicePriceListFragment servicePriceListFragment = new ServicePriceListFragment();
+                                            servicePriceListFragment.setArguments(_bundle);
+                                            servicePriceListFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "PRICE LIST";
+                                            item.fragment = servicePriceListFragment;
 
                                             break;
                                         case Constants.TOP_MENU_SHOW_TESTIMONIALS:

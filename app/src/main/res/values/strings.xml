@@ -97,6 +97,8 @@
     <string name="local_region">LOCAL REGION</string>
     <string name="weather">WEATHER</string>
     <string name="news">NEWS</string>
+    <string name="transport_options">TRANSPORT OPTIONS</string>
+    <string name="partner_offers">PARTNER OFFERS</string>
     <string name="synchronizing_please_wait">Synchronizing, please wait...</string>
     <string name="sync">Sync</string>
     <string name="enter_hotel_key_here">ENTER HOTEL KEY HERE</string>

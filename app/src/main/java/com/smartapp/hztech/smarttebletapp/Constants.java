@@ -39,6 +39,9 @@ public class Constants {
     public static final String TOP_MENU_SHOW_BOOK = "show_booking";
     public static final String TOP_MENU_SHOW_OFFERS = "show_offers";
     public static final String TOP_MENU_SHOW_TESTIMONIALS = "show_testimonials";
+    public static final String TOP_MENU_SHOW_SERVICES = "show_services";
+    public static final String TOP_MENU_SHOW_PRODUCTS = "show_products";
+    public static final String TOP_MENU_SHOW_PRICE_LIST = "show_price_list";
     public static final String META_LOCATION_TITLE = "location_title";
     public static final String META_LOCATION_DESCRIPTION = "location_short_description";
     public static final String META_LOCATION_ADDRESS = "location_address";

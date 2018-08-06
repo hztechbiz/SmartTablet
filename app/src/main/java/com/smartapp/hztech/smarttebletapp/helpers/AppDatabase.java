@@ -3,10 +3,12 @@ package com.smartapp.hztech.smarttebletapp.helpers;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
+import com.smartapp.hztech.smarttebletapp.dao.ArrivalDao;
 import com.smartapp.hztech.smarttebletapp.dao.CategoryDao;
 import com.smartapp.hztech.smarttebletapp.dao.HotelDao;
 import com.smartapp.hztech.smarttebletapp.dao.MediaDao;
 import com.smartapp.hztech.smarttebletapp.dao.OfferDao;
+import com.smartapp.hztech.smarttebletapp.dao.SaleDao;
 import com.smartapp.hztech.smarttebletapp.dao.ServiceDao;
 import com.smartapp.hztech.smarttebletapp.dao.SettingDao;
 import com.smartapp.hztech.smarttebletapp.dao.TestimonialDao;
@@ -33,4 +35,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract OfferDao offerDao();
 
     public abstract TestimonialDao testimonialDao();
+
+    public abstract ArrivalDao arrivalDao();
+
+    public abstract SaleDao saleDao();
 }

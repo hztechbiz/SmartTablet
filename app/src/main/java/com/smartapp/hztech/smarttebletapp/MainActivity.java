@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity {
     private String entryPageStart, entryPageEnd, kioskPassword;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img;
-    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
+    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
     private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left;
     private Button _btn_night_mode;
     private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
@@ -89,7 +89,7 @@ public class MainActivity extends FragmentActivity {
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
-    private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8;
+    private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8, item_icon_9, item_icon_10;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -380,6 +380,8 @@ public class MainActivity extends FragmentActivity {
         item_useful_info_text = findViewById(R.id.item_useful_info_text);
         item_weather_text = findViewById(R.id.item_weather_text);
         item_news_text = findViewById(R.id.item_news_text);
+        item_transport_text = findViewById(R.id.item_transport_text);
+        item_partner_text = findViewById(R.id.item_partner_text);
         img_wifi_signals = findViewById(R.id.wifi_connect);
         entry_page_img_wifi_signals = findViewById(R.id.entry_page_wifi_connect);
         img_battery_level = findViewById(R.id.bettryStatus);
@@ -407,6 +409,8 @@ public class MainActivity extends FragmentActivity {
         item_icon_6 = findViewById(R.id.region);
         item_icon_7 = findViewById(R.id.weather);
         item_icon_8 = findViewById(R.id.news);
+        item_icon_9 = findViewById(R.id.transport);
+        item_icon_10 = findViewById(R.id.partner);
 
         if (_fragment_container != null) {
 
@@ -433,6 +437,8 @@ public class MainActivity extends FragmentActivity {
         item_useful_info_text.setTypeface(Util.getTypeFace(this));
         item_weather_text.setTypeface(Util.getTypeFace(this));
         item_news_text.setTypeface(Util.getTypeFace(this));
+        item_transport_text.setTypeface(Util.getTypeFace(this));
+        item_partner_text.setTypeface(Util.getTypeFace(this));
         _app_heading.setTypeface(Util.getTypeFace(this));
 
         batteryBroadcastReceiver = new BatteryBroadcastReceiver();
@@ -732,11 +738,15 @@ public class MainActivity extends FragmentActivity {
                 "enable_local_map",
                 "enable_weather",
                 "enable_news",
+                "enable_transport_options",
+                "enable_partner_offers",
                 "operating_the_television_category",
                 "connect_to_wifi_category",
                 "how_use_tablet_category",
                 "useful_information_category",
                 "local_region_category",
+                "transport_options_category",
+                "partner_offers_category",
                 "local_map_address",
                 "local_map_latitude",
                 "local_map_longitude"
@@ -754,11 +764,15 @@ public class MainActivity extends FragmentActivity {
                     String enable_local_map = values.containsKey("enable_local_map") ? values.get("enable_local_map") : "0";
                     String enable_weather = values.containsKey("enable_weather") ? values.get("enable_weather") : "0";
                     String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "0";
+                    String enable_transport_options = values.containsKey("enable_transport_options") ? values.get("enable_transport_options") : "0";
+                    String enable_partner_offers = values.containsKey("enable_partner_offers") ? values.get("enable_partner_offers") : "0";
                     String operating_the_television_category = values.containsKey("operating_the_television_category") ? values.get("operating_the_television_category") : "0";
                     String connect_to_wifi_category = values.containsKey("connect_to_wifi_category") ? values.get("connect_to_wifi_category") : "0";
                     String how_use_tablet_category = values.containsKey("how_use_tablet_category") ? values.get("how_use_tablet_category") : "0";
                     String useful_information_category = values.containsKey("useful_information_category") ? values.get("useful_information_category") : "0";
                     String local_region_category = values.containsKey("local_region_category") ? values.get("local_region_category") : "0";
+                    String transport_options_category = values.containsKey("transport_options_category") ? values.get("transport_options_category") : "0";
+                    String partner_offers_category = values.containsKey("partner_offers_category") ? values.get("partner_offers_category") : "0";
                     String local_map_address = values.containsKey("local_map_address") ? values.get("local_map_address") : null;
                     double local_map_latitude = values.containsKey("local_map_latitude") ? Double.parseDouble(values.get("local_map_latitude")) : 0;
                     double local_map_longitude = values.containsKey("local_map_longitude") ? Double.parseDouble(values.get("local_map_longitude")) : 0;
@@ -771,6 +785,8 @@ public class MainActivity extends FragmentActivity {
                     LinearLayout news_linear = findViewById(R.id.itemNews);
                     LinearLayout local_region = findViewById(R.id.itemLocalRegion);
                     LinearLayout local_map = findViewById(R.id.itemMap);
+                    LinearLayout transport_options = findViewById(R.id.itemTransport);
+                    LinearLayout partner_offers = findViewById(R.id.itemPartner);
 
                     if (enable_operating_the_television.equals("1")) {
                         ott_linear.setVisibility(View.VISIBLE);
@@ -818,6 +834,22 @@ public class MainActivity extends FragmentActivity {
                         Info_linear.setTag(R.string.tag_action, R.string.tag_action_category);
                     } else {
                         Info_linear.setVisibility(View.GONE);
+                    }
+
+                    if (enable_transport_options.equals("1")) {
+                        transport_options.setVisibility(View.VISIBLE);
+                        transport_options.setTag(R.string.tag_value, transport_options_category);
+                        transport_options.setTag(R.string.tag_action, R.string.tag_action_category);
+                    } else {
+                        transport_options.setVisibility(View.GONE);
+                    }
+
+                    if (enable_partner_offers.equals("1")) {
+                        partner_offers.setVisibility(View.VISIBLE);
+                        partner_offers.setTag(R.string.tag_value, partner_offers_category);
+                        partner_offers.setTag(R.string.tag_action, R.string.tag_action_category);
+                    } else {
+                        partner_offers.setVisibility(View.GONE);
                     }
 
                     if (enable_weather.equals("1")) {
@@ -973,9 +1005,11 @@ public class MainActivity extends FragmentActivity {
         LinearLayout localReg_linear = findViewById(R.id.itemLocalRegion);
         LinearLayout weather_linear = findViewById(R.id.itemWeather);
         LinearLayout news_linear = findViewById(R.id.itemNews);
+        LinearLayout transport_options = findViewById(R.id.itemTransport);
+        LinearLayout partner_offers = findViewById(R.id.itemPartner);
 
         LinearLayout[] all_items = new LinearLayout[]{ott_linear, wifi_linear, howTo_linear, Info_linear, map_linear, localReg_linear,
-                weather_linear, news_linear};
+                weather_linear, news_linear, transport_options, partner_offers};
 
         for (LinearLayout all_item : all_items) {
             all_item.setBackgroundColor(0);
@@ -993,6 +1027,8 @@ public class MainActivity extends FragmentActivity {
         item_icon_6.setImageResource(R.drawable.localregion);
         item_icon_7.setImageResource(R.drawable.weather);
         item_icon_8.setImageResource(R.drawable.news);
+        item_icon_9.setImageResource(R.drawable.news);
+        item_icon_10.setImageResource(R.drawable.news);
 
         if (view != null) {
             switch (view.getId()) {
@@ -1019,6 +1055,12 @@ public class MainActivity extends FragmentActivity {
                     break;
                 case R.id.itemNews:
                     item_icon_8.setImageResource(R.drawable.news_black);
+                    break;
+                case R.id.itemTransport:
+                    item_icon_9.setImageResource(R.drawable.news_black);
+                    break;
+                case R.id.itemPartner:
+                    item_icon_10.setImageResource(R.drawable.news_black);
                     break;
             }
         }

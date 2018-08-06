@@ -15,20 +15,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.smartapp.hztech.smarttebletapp.Constants;
+import com.smartapp.hztech.smarttebletapp.entities.Arrival;
 import com.smartapp.hztech.smarttebletapp.entities.Category;
 import com.smartapp.hztech.smarttebletapp.entities.Hotel;
 import com.smartapp.hztech.smarttebletapp.entities.Media;
 import com.smartapp.hztech.smarttebletapp.entities.Offer;
+import com.smartapp.hztech.smarttebletapp.entities.Sale;
 import com.smartapp.hztech.smarttebletapp.entities.Service;
 import com.smartapp.hztech.smarttebletapp.entities.Setting;
 import com.smartapp.hztech.smarttebletapp.entities.Testimonial;
 import com.smartapp.hztech.smarttebletapp.listeners.AsyncResultBag;
 import com.smartapp.hztech.smarttebletapp.tasks.DeleteMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.RetrieveSetting;
+import com.smartapp.hztech.smarttebletapp.tasks.StoreArrival;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreCategory;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreHotel;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreMedia;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreOffer;
+import com.smartapp.hztech.smarttebletapp.tasks.StoreSale;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreService;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreSetting;
 import com.smartapp.hztech.smarttebletapp.tasks.StoreTestimonial;
@@ -60,6 +64,8 @@ public class SyncService extends IntentService {
     private boolean _isServicesStored;
     private boolean _isFilesDownloaded;
     private boolean _isOffersStored;
+    private boolean _isArrivalsStored;
+    private boolean _isSalesStored;
     private boolean _imageProcessing;
     private String _token;
     private int _extraFieldsLength;
@@ -138,7 +144,7 @@ public class SyncService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         _hasError = false;
         _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = _isFilesDownloaded = false;
-        _isOffersStored = true;
+        _isOffersStored = _isArrivalsStored = _isSalesStored = true;
         _extraFieldsLength = 1;
         _indexesFilled = 0;
 
@@ -414,6 +420,8 @@ public class SyncService extends IntentService {
         for (int i = 0; i < services_arr.length(); i++) {
             JSONObject s = services_arr.getJSONObject(i);
             JSONArray offers = s.getJSONArray("offers");
+            JSONArray arrivals = s.getJSONArray("new_arrivals");
+            JSONArray sales = s.getJSONArray("sales");
             JSONArray testimonials = s.getJSONArray("testimonials");
 
             Service service = new Service();
@@ -430,6 +438,14 @@ public class SyncService extends IntentService {
 
             if (offers.length() > 0) {
                 storeOffers(offers);
+            }
+
+            if (arrivals.length() > 0) {
+                storeArrivals(arrivals);
+            }
+
+            if (sales.length() > 0) {
+                storeSales(sales);
             }
 
             if (testimonials.length() > 0) {
@@ -501,6 +517,50 @@ public class SyncService extends IntentService {
 
         if (offers.length > 0) {
             new StoreOffer(this, offers).execute();
+        }
+    }
+
+    private void storeArrivals(JSONArray arrivals_arr) throws JSONException {
+        Arrival[] arrivals = new Arrival[arrivals_arr.length()];
+
+        for (int i = 0; i < arrivals_arr.length(); i++) {
+            JSONObject o = arrivals_arr.getJSONObject(i);
+
+            Arrival arrival = new Arrival();
+
+            arrival.setId(o.getInt("id"));
+            arrival.setTitle(o.getString("title"));
+            arrival.setDescription(o.getString("description"));
+            arrival.setMedia_id(o.getInt("media_id"));
+            arrival.setService_id(o.getInt("service_id"));
+
+            arrivals[i] = arrival;
+        }
+
+        if (arrivals.length > 0) {
+            new StoreArrival(this, arrivals).execute();
+        }
+    }
+
+    private void storeSales(JSONArray sales_arr) throws JSONException {
+        Sale[] sales = new Sale[sales_arr.length()];
+
+        for (int i = 0; i < sales_arr.length(); i++) {
+            JSONObject o = sales_arr.getJSONObject(i);
+
+            Sale sale = new Sale();
+
+            sale.setId(o.getInt("id"));
+            sale.setTitle(o.getString("title"));
+            sale.setDescription(o.getString("description"));
+            sale.setMedia_id(o.getInt("media_id"));
+            sale.setService_id(o.getInt("service_id"));
+
+            sales[i] = sale;
+        }
+
+        if (sales.length > 0) {
+            new StoreSale(this, sales).execute();
         }
     }
 
