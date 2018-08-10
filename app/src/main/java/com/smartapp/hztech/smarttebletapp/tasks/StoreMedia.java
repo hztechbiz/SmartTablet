@@ -114,6 +114,7 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
             if (_media[index] != null) {
 
                 String path = null;
+                Log.d("StoreMedia", "downloading: " + _media[index].getUrl());
 
                 try {
                     path = downloadImage(_media[index].getUrl());

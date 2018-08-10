@@ -210,7 +210,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
     public void onSuccess(Object result) {
         Service service = result != null ? (Service) result : null;
         ArrayList<NavigationFragment.MenuItem> menu_items_objects = new ArrayList<>();
-        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_TESTIMONIALS, Constants.TOP_MENU_SHOW_SERVICES, Constants.TOP_MENU_SHOW_PRODUCTS, Constants.TOP_MENU_SHOW_PRICE_LIST};
+        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_ARRIVALS, Constants.TOP_MENU_SHOW_SALES, Constants.TOP_MENU_SHOW_TESTIMONIALS, Constants.TOP_MENU_SHOW_SERVICES, Constants.TOP_MENU_SHOW_PRODUCTS, Constants.TOP_MENU_SHOW_PRICE_LIST};
 
         if (service != null) {
             _service = service;
@@ -253,6 +253,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                 setupBackgroundImage(meta_obj.getString("meta_value"));
                             }
 
+                            /*
                             for (int j = 0; j < menu_items.length; j++) {
                                 if (meta_obj.getString("meta_key").equals(menu_items[j]) && meta_obj.getString("meta_value").equals("1")) {
                                     NavigationFragment.MenuItem item = new NavigationFragment.MenuItem();
@@ -310,6 +311,24 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                             item.fragment = serviceOffersFragment;
 
                                             break;
+                                        case Constants.TOP_MENU_SHOW_ARRIVALS:
+                                            ServiceArrivalsFragment serviceArrivalsFragment = new ServiceArrivalsFragment();
+                                            serviceArrivalsFragment.setArguments(_bundle);
+                                            serviceArrivalsFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "NEW ARRIVALS";
+                                            item.fragment = serviceArrivalsFragment;
+
+                                            break;
+                                        case Constants.TOP_MENU_SHOW_SALES:
+                                            ServiceSalesFragment serviceSalesFragment = new ServiceSalesFragment();
+                                            serviceSalesFragment.setArguments(_bundle);
+                                            serviceSalesFragment.setFragmentListener(fragmentListener);
+
+                                            item.title = "SALES";
+                                            item.fragment = serviceSalesFragment;
+
+                                            break;
                                         case Constants.TOP_MENU_SHOW_SERVICES:
                                             ServiceServicesMenuFragment serviceServiceMenuFragment = new ServiceServicesMenuFragment();
                                             serviceServiceMenuFragment.setArguments(_bundle);
@@ -352,6 +371,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                                         menu_items_objects.add(item);
                                 }
                             }
+                            */
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

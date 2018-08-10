@@ -93,7 +93,7 @@ public class NavigationFragment extends Fragment {
                     public void onSuccess(Object result) {
                         Service service = result != null ? (Service) result : null;
                         ArrayList<NavigationFragment.MenuItem> menu_items_objects = new ArrayList<>();
-                        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_TESTIMONIALS};
+                        String[] menu_items = new String[]{Constants.TOP_MENU_SHOW_ABOUT, Constants.TOP_MENU_SHOW_LOCATION, Constants.TOP_MENU_SHOW_VIDEO, Constants.TOP_MENU_SHOW_GALLERY, Constants.TOP_MENU_SHOW_MENU, Constants.TOP_MENU_SHOW_BOOK, Constants.TOP_MENU_SHOW_OFFERS, Constants.TOP_MENU_SHOW_ARRIVALS, Constants.TOP_MENU_SHOW_SALES, Constants.TOP_MENU_SHOW_TESTIMONIALS, Constants.TOP_MENU_SHOW_SERVICES, Constants.TOP_MENU_SHOW_PRODUCTS, Constants.TOP_MENU_SHOW_PRICE_LIST, Constants.TOP_MENU_SHOW_WEBSITE};
 
                         if (service != null) {
                             if (!service.getMeta().isEmpty()) {
@@ -169,6 +169,51 @@ public class NavigationFragment extends Fragment {
                                                             item.fragment = serviceOffersFragment;
 
                                                             break;
+                                                        case Constants.TOP_MENU_SHOW_ARRIVALS:
+                                                            ServiceArrivalsFragment serviceArrivalsFragment = new ServiceArrivalsFragment();
+                                                            serviceArrivalsFragment.setArguments(bundle);
+                                                            serviceArrivalsFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "NEW ARRIVALS";
+                                                            item.fragment = serviceArrivalsFragment;
+
+                                                            break;
+                                                        case Constants.TOP_MENU_SHOW_SALES:
+                                                            ServiceSalesFragment serviceSalesFragment = new ServiceSalesFragment();
+                                                            serviceSalesFragment.setArguments(bundle);
+                                                            serviceSalesFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "SALES";
+                                                            item.fragment = serviceSalesFragment;
+
+                                                            break;
+                                                        case Constants.TOP_MENU_SHOW_SERVICES:
+                                                            ServiceServicesMenuFragment serviceServiceMenuFragment = new ServiceServicesMenuFragment();
+                                                            serviceServiceMenuFragment.setArguments(bundle);
+                                                            serviceServiceMenuFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "SERVICES";
+                                                            item.fragment = serviceServiceMenuFragment;
+
+                                                            break;
+                                                        case Constants.TOP_MENU_SHOW_PRODUCTS:
+                                                            ServiceProductsFragment serviceProductsFragment = new ServiceProductsFragment();
+                                                            serviceProductsFragment.setArguments(bundle);
+                                                            serviceProductsFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "PRODUCTS";
+                                                            item.fragment = serviceProductsFragment;
+
+                                                            break;
+                                                        case Constants.TOP_MENU_SHOW_PRICE_LIST:
+                                                            ServicePriceListFragment servicePriceListFragment = new ServicePriceListFragment();
+                                                            servicePriceListFragment.setArguments(bundle);
+                                                            servicePriceListFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "PRICE LIST";
+                                                            item.fragment = servicePriceListFragment;
+
+                                                            break;
                                                         case Constants.TOP_MENU_SHOW_TESTIMONIALS:
                                                             ServiceTestimonialsFragment serviceTestimonialsFragment = new ServiceTestimonialsFragment();
                                                             serviceTestimonialsFragment.setArguments(bundle);
@@ -176,6 +221,15 @@ public class NavigationFragment extends Fragment {
 
                                                             item.title = "TESTIMONIALS";
                                                             item.fragment = serviceTestimonialsFragment;
+
+                                                            break;
+                                                        case Constants.TOP_MENU_SHOW_WEBSITE:
+                                                            ServiceWebsiteFragment serviceWebsiteFragment = new ServiceWebsiteFragment();
+                                                            serviceWebsiteFragment.setArguments(bundle);
+                                                            serviceWebsiteFragment.setFragmentListener(childFragmentListener);
+
+                                                            item.title = "WEBSITE";
+                                                            item.fragment = serviceWebsiteFragment;
 
                                                             break;
                                                     }
