@@ -67,6 +67,7 @@ public class WelcomeFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_reset_menu), null));
         actions.add(new ActivityAction((R.string.msg_reset_background), null));
         actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
 
         _activity.takeActions(actions);
 

@@ -378,7 +378,7 @@ public class ServiceFragment extends Fragment implements AsyncResultBag.Success 
                     }
                 }
 
-                if (service.isIs_marketing_partner() && !menu_items_objects.isEmpty()) {
+                if (service.isIs_marketing_partner()) {
                     mainContent.setVisibility(View.GONE);
                     //if (fragmentListener != null)
                     //fragmentListener.onUpdateFragment(menu_items_objects.get(0).fragment);
