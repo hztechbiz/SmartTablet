@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart Teblet App</string>
+    <string name="app_name">Smart Tablet</string>
     <string name="google_maps_API_key">AIzaSyDNfA62gOcam9nw4Lf-a-feuqS2qdF7axQ</string>
     <string name="title_activity_make_reservation">MakeReservation</string>
     <string name="dummy_button">Dummy Button</string>
