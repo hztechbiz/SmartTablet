@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:background="@drawable/white_bg_border_radius_opacity"
         android:orientation="horizontal"
@@ -50,6 +50,7 @@
         android:id="@+id/footerContent"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:paddingTop="10dp">
 

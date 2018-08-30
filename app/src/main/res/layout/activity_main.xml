@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:context="com.smartapp.hztech.smarttebletapp.MainActivity">
+    tools:context="com.smart.tablet.MainActivity">
 
     <ImageView
         android:id="@+id/main_bg_img"
@@ -554,6 +554,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/welcome"
+                        android:textAllCaps="true"
                         android:textColor="#fff"
                         android:textColorHint="#fff" />
                 </LinearLayout>
@@ -664,6 +665,13 @@
                         android:paddingRight="5dp">
 
                         <ImageView
+                            android:id="@+id/img_electric"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/electric" />
+
+                        <ImageView
                             android:id="@+id/bettryStatus"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
@@ -703,32 +711,70 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_guest_info"
+                    android:id="@+id/topRightButtons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:gravity="end"
-                    android:onClick="onGuestInfoClick">
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/btn_welcome_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/black_transparent_with_radius"
-                        android:padding="10dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp">
+                        android:layout_gravity="right"
+                        android:gravity="end"
+                        android:onClick="onWelcomeClick">
 
-                        <TextView
-                            android:id="@+id/btn_guest_info_text"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/guest_information"
-                            android:textColor="#FFF"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/black_transparent_with_radius"
+                            android:padding="10dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/btn_welcome_2_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/welcome"
+                                android:textColor="#FFF"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_guest_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="end"
+                        android:onClick="onGuestInfoClick">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/black_transparent_with_radius"
+                            android:padding="10dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/btn_guest_info_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/guest_information"
+                                android:textColor="#FFF"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -804,7 +850,7 @@
         android:layout_height="match_parent"
         android:background="#FFF"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/entry_bg_img"
@@ -819,10 +865,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
             android:gravity="end"
             android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_night_mode_2"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/black_transparent_with_radius"
+                android:onClick="toggleNightMode"
+                android:padding="5dp"
+                android:text="@string/night_mode"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#FFF" />
 
             <ImageView
                 android:id="@+id/entry_page_wifi_connect"
@@ -844,6 +902,13 @@
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
+
+                <ImageView
+                    android:id="@+id/img_electric_2"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/electric" />
 
                 <ImageView
                     android:id="@+id/entry_page_bettryStatus"

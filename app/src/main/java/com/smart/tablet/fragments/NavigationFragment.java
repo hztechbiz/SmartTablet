@@ -359,7 +359,7 @@ public class NavigationFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_show_logo_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
         actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
-        actions.add(new ActivityAction((R.string.msg_hide_guest_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_top_right_buttons), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
@@ -413,7 +413,7 @@ public class NavigationFragment extends Fragment {
 
                                     //menuItems.add(item);
                                     ArrayList<ActivityAction> actions = new ArrayList<>();
-                                    actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
+                                    //actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
 
                                     Intent intent = new Intent(getString(R.string.param_activity_action));
                                     intent.putParcelableArrayListExtra(getString(R.string.param_activity_actions), actions);

@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -24,7 +26,6 @@ import com.smart.tablet.adapters.CategoryGridAdapter;
 import com.smart.tablet.adapters.ServicesGridAdapter;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.ServiceFragment;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -55,11 +56,11 @@ public class CategoryFragment extends Fragment {
     private WebView webView;
     private RelativeLayout webview_container;
     private ProgressBar progressBar;
-    private ImageView _logoImageView, _bgImageView;
+    private ImageView _logoImageView, _bgImageView, _scrollIndicator;
     private CategoryGridAdapter categoryAdapter;
     private ServicesGridAdapter servicesAdapter;
     private int _category_id;
-    private Boolean _has_children;
+    private Boolean _has_children, _display_services;
     private String _listing_type, _embed_url;
     private MainActivity _activity;
 
@@ -93,6 +94,7 @@ public class CategoryFragment extends Fragment {
         webView = view.findViewById(R.id.webview);
         webview_container = view.findViewById(R.id.webview_container);
         progressBar = view.findViewById(R.id.progressBar);
+        _scrollIndicator = view.findViewById(R.id.img_scroll_indicator);
 
         _category_id = 0;
         _has_children = false;
@@ -192,7 +194,7 @@ public class CategoryFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_reset_background), null));
         actions.add(new ActivityAction((R.string.msg_show_logo_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
-        actions.add(new ActivityAction((R.string.msg_hide_guest_button), null));
+        actions.add(new ActivityAction((R.string.msg_hide_top_right_buttons), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
@@ -200,12 +202,15 @@ public class CategoryFragment extends Fragment {
         if (_listing_type != null && _listing_type.equals("mp")) {
             actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
         } else {
+            actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
             actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));
         }
 
         _activity.takeActions(actions);
 
-        if (_category_id > 0 && !_has_children) {
+        _display_services = _category_id > 0 && !_has_children;
+
+        if (_display_services) {
             getServices();
             gridView.setAdapter(servicesAdapter);
         } else {
@@ -213,7 +218,7 @@ public class CategoryFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
-        if (_embed_url != null) {
+        if (_embed_url != null && !_embed_url.equals("")) {
             showWebView();
         }
 
@@ -229,6 +234,17 @@ public class CategoryFragment extends Fragment {
         parentListener.receive(R.string.msg_show_copyright, null);
         parentListener.receive(R.string.msg_hide_top_guest_button, null);
         */
+
+        _scrollIndicator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (_display_services)
+                    gridView.smoothScrollToPosition(servicesAdapter.getCount());
+                else
+                    gridView.smoothScrollToPosition(categoryAdapter.getCount());
+            }
+        });
 
         return view;
     }
@@ -287,6 +303,10 @@ public class CategoryFragment extends Fragment {
                         if (result != null) {
                             Category[] categories = (Category[]) result;
 
+                            if (categories.length > 4) {
+                                showScrollIndicator();
+                            }
+
                             _categories.clear();
                             _categories.addAll(Arrays.asList(categories));
 
@@ -294,6 +314,14 @@ public class CategoryFragment extends Fragment {
                         }
                     }
                 }).execute();
+    }
+
+    private void showScrollIndicator() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.bounce);
+
+        _scrollIndicator.setVisibility(View.VISIBLE);
+        _scrollIndicator.setAnimation(animation);
+        _scrollIndicator.animate();
     }
 
     private void getServices() {
@@ -304,6 +332,10 @@ public class CategoryFragment extends Fragment {
                         if (result != null) {
                             Service[] services = (Service[]) result;
                             ServiceModel[] serviceModels = new ServiceModel[services.length];
+
+                            if (services.length > 4) {
+                                showScrollIndicator();
+                            }
 
                             for (int j = 0; j < services.length; j++) {
                                 Service service = services[j];

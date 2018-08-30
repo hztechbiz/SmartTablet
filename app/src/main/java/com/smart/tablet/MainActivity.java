@@ -42,9 +42,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.smart.tablet.Constants;
-import com.smart.tablet.MessagePopupActivity;
-import com.smart.tablet.R;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.fragments.MainFragment;
 import com.smart.tablet.fragments.NavigationFragment;
@@ -60,6 +57,7 @@ import com.smart.tablet.models.ActivityAction;
 import com.smart.tablet.models.MapMarker;
 import com.smart.tablet.receivers.AdminReceiver;
 import com.smart.tablet.receivers.BootReceiver;
+import com.smart.tablet.receivers.PowerConnectionReceiver;
 import com.smart.tablet.service.MyFirebaseMessagingService;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveCategories;
@@ -79,10 +77,10 @@ public class MainActivity extends FragmentActivity {
     private String TAG = this.getClass().getName();
     private String entryPageStart, entryPageEnd, kioskPassword;
     private FrameLayout _fragment_container;
-    private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img;
-    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text;
-    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left;
-    private Button _btn_night_mode;
+    private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
+    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text;
+    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left, _top_right_buttons;
+    private Button _btn_night_mode, _btn_night_mode_2;
     private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
@@ -189,11 +187,11 @@ public class MainActivity extends FragmentActivity {
                 case R.string.msg_hide_welcome_button:
                     showWelcomeButton(false);
                     break;
-                case R.string.msg_show_guest_button:
-                    showGuestButton(true);
+                case R.string.msg_show_top_right_buttons:
+                    showTopRightButtons(true);
                     break;
-                case R.string.msg_hide_guest_button:
-                    showGuestButton(false);
+                case R.string.msg_hide_top_right_buttons:
+                    showTopRightButtons(false);
                     break;
                 case R.string.msg_set_app_heading:
                     if (arguments != null)
@@ -239,6 +237,16 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+    private BroadcastReceiver powerConnectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isCharging = intent.getBooleanExtra("isCharging", false);
+            boolean isOnUsb = intent.getBooleanExtra("isOnUsb", false);
+            boolean isOnAc = intent.getBooleanExtra("isOnAc", false);
+
+            showElectricImage(isCharging || isOnAc || isOnUsb);
+        }
+    };
     private boolean inKioskMode = false;
     private DevicePolicyManager dpm;
     private ComponentName deviceAdmin;
@@ -250,6 +258,11 @@ public class MainActivity extends FragmentActivity {
         intent.putExtra(getString(R.string.param_message_body), message);
 
         startActivity(intent);
+    }
+
+    private void showElectricImage(boolean b) {
+        img_electric.setVisibility(b ? View.VISIBLE : View.GONE);
+        img_electric_2.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     private void showCopyright(boolean b) {
@@ -318,6 +331,10 @@ public class MainActivity extends FragmentActivity {
         _btn_back.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
+    private void showTopRightButtons(boolean b) {
+        _top_right_buttons.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
     private void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
@@ -359,6 +376,7 @@ public class MainActivity extends FragmentActivity {
         _fragment_container = findViewById(R.id.fragment_container);
         _main_activity = findViewById(R.id.main_activity);
         _sidebar = findViewById(R.id.sidebar);
+        _top_right_buttons = findViewById(R.id.topRightButtons);
         _top_bar_right = findViewById(R.id.top_bar_right);
         _top_bar_left = findViewById(R.id.top_bar_left);
         _btn_home = findViewById(R.id.btn_home);
@@ -368,9 +386,11 @@ public class MainActivity extends FragmentActivity {
         _btn_welcome = findViewById(R.id.btn_welcome);
         _btn_guest_info = findViewById(R.id.btn_guest_info);
         _btn_guest_info_text = findViewById(R.id.btn_guest_info_text);
+        _btn_welcome_2_text = findViewById(R.id.btn_welcome_2_text);
         _btn_top_guest_info_text = findViewById(R.id.btn_top_guest_info_text);
         _btn_top_guest_info = findViewById(R.id.btn_top_guest_info);
         _btn_night_mode = findViewById(R.id.btn_night_mode);
+        _btn_night_mode_2 = findViewById(R.id.btn_night_mode_2);
         _btn_kiosk = findViewById(R.id.btn_kiosk);
         _time_box = findViewById(R.id.time_box);
         _sync_container = findViewById(R.id.syncContainer);
@@ -386,6 +406,8 @@ public class MainActivity extends FragmentActivity {
         item_transport_text = findViewById(R.id.item_transport_text);
         item_partner_text = findViewById(R.id.item_partner_text);
         img_wifi_signals = findViewById(R.id.wifi_connect);
+        img_electric = findViewById(R.id.img_electric);
+        img_electric_2 = findViewById(R.id.img_electric_2);
         entry_page_img_wifi_signals = findViewById(R.id.entry_page_wifi_connect);
         img_battery_level = findViewById(R.id.bettryStatus);
         entry_page_img_battery_level = findViewById(R.id.entry_page_bettryStatus);
@@ -431,8 +453,11 @@ public class MainActivity extends FragmentActivity {
 
         _btn_home_text.setTypeface(Util.getTypeFace(this));
         _btn_top_guest_info_text.setTypeface(Util.getTypeFace(this));
+        _btn_welcome_2_text.setTypeface(Util.getTypeFace(this));
         _btn_guest_info_text.setTypeface(Util.getTypeFace(this));
         _btn_back_text.setTypeface(Util.getTypeFace(this));
+        _btn_night_mode.setTypeface(Util.getTypeFace(this));
+        _btn_night_mode_2.setTypeface(Util.getTypeFace(this));
         item_home_text.setTypeface(Util.getTypeFace(this));
         item_tv_text.setTypeface(Util.getTypeFace(this));
         item_wifi_text.setTypeface(Util.getTypeFace(this));
@@ -625,6 +650,7 @@ public class MainActivity extends FragmentActivity {
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(firebaseReceiver, new IntentFilter(MyFirebaseMessagingService.MESSAGE_RECEIVED));
         registerReceiver(activityListener1, new IntentFilter(getString(R.string.param_activity_action)));
+        registerReceiver(powerConnectionReceiver, new IntentFilter(PowerConnectionReceiver.POWER_CONNECTION_CHANGE));
 
         Thread t = new Thread() {
             @Override
@@ -724,6 +750,9 @@ public class MainActivity extends FragmentActivity {
 
         if (activityListener1 != null)
             unregisterReceiver(activityListener1);
+
+        if (powerConnectionReceiver != null)
+            unregisterReceiver(powerConnectionReceiver);
 
         stopCheckingActiveScreen();
         stopCheckingToShowEntryPage();
@@ -1296,6 +1325,11 @@ public class MainActivity extends FragmentActivity {
             txt_battery_percentage.setText(level + "%");
             entry_page_txt_battery_percentage.setText(level + "%");
 
+            int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            final boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL;
+
+            showElectricImage(isCharging);
             setBattery(level);
         }
     }

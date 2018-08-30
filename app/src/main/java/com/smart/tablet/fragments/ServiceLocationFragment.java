@@ -18,13 +18,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.ServiceBookingFragment;
-import com.smart.tablet.helpers.Util;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentActivityListener;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.tasks.RetrieveSingleService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -154,6 +147,10 @@ public class ServiceLocationFragment extends Fragment implements com.smart.table
                                 case com.smart.tablet.Constants.META_LOCATION_LONGITUDE:
                                     _longitude = Double.parseDouble(meta_value);
                                     setupMarker();
+                                    break;
+                                case Constants.TOP_MENU_SHOW_BOOK:
+                                    if (meta_value.equals("1"))
+                                        btn_booking.setVisibility(View.VISIBLE);
                                     break;
                             }
                         } catch (JSONException e) {

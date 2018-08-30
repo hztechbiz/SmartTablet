@@ -145,6 +145,7 @@
                 <Button
                     android:id="@+id/btn_booking"
                     style="@style/ButtonBlue"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/book_now_here"

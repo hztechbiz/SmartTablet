@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--main-content-->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/webview_container"
@@ -39,6 +38,15 @@
             android:layout_height="match_parent"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth" />
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_scroll_indicator"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/arrow_down_circle"
+            android:visibility="gone" />
+    </RelativeLayout>
     <!--main-content-->
 </android.support.constraint.ConstraintLayout>

@@ -11,18 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.smart.tablet.Constants;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.ServiceBookingFragment;
-import com.smart.tablet.helpers.ImageHelper;
-import com.smart.tablet.helpers.Util;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentActivityListener;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.tasks.RetrieveMedia;
-import com.smart.tablet.tasks.RetrieveSingleService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +27,7 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
     TextView txt_description;
     ImageView iv_image;
     Button btn_booking;
+    LinearLayout footer_content;
     int _service_id;
     com.smart.tablet.entities.Service _service;
     Bundle _bundle;
@@ -63,6 +57,7 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
         txt_description = view.findViewById(R.id.txt_description);
         iv_image = view.findViewById(R.id.imageView);
         btn_booking = view.findViewById(R.id.btn_booking);
+        footer_content = view.findViewById(R.id.footerContent);
 
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         btn_booking.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
@@ -139,12 +134,17 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
                             String meta_key = meta_obj.getString("meta_key");
                             String meta_value = meta_obj.getString("meta_value");
 
-                            if (meta_key.equals("image")) {
-                                _setupImage(meta_obj.getString("meta_value"));
-                            }
-
-                            if (meta_key.equals("about_text")) {
-                                txt_description.setText(meta_value);
+                            switch (meta_key) {
+                                case "image":
+                                    _setupImage(meta_value);
+                                    break;
+                                case "about_text":
+                                    txt_description.setText(meta_value);
+                                    break;
+                                case Constants.TOP_MENU_SHOW_BOOK:
+                                    if (meta_value.equals("1"))
+                                        footer_content.setVisibility(View.VISIBLE);
+                                    break;
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

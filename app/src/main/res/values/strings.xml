@@ -62,6 +62,8 @@
     <string name="msg_hide_welcome_button">HIDE_WELCOME_BUTTON</string>
     <string name="msg_show_guest_button">SHOW_GUEST_BUTTON</string>
     <string name="msg_hide_guest_button">HIDE_GUEST_BUTTON</string>
+    <string name="msg_show_top_right_buttons">SHOW_TOP_RIGHT_BUTTONS</string>
+    <string name="msg_hide_top_right_buttons">HIDE_TOP_RIGHT_BUTTONS</string>
     <string name="msg_show_app_heading">SHOW_APP_HEADING</string>
     <string name="msg_hide_app_heading">HIDE_APP_HEADING</string>
     <string name="msg_set_app_heading">SET_APP_HEADING</string>
@@ -105,7 +107,7 @@
     <string name="view_offer_detail">View Offer Detail</string>
     <string name="powered_by_smart_tablet">Powered by Smart Tablet</string>
     <string name="guest_information">Guest Information</string>
-    <string name="welcome">WELCOME</string>
+    <string name="welcome">Welcome</string>
     <string name="what_people_say_about_us">What people say about us</string>
     <string name="location">Location</string>
     <string name="sydney">Sydney</string>

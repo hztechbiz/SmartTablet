@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PowerConnectionReceiver extends BroadcastReceiver {
+    public static final String POWER_CONNECTION_CHANGE = "power_connection_change";
     private String TAG = com.smart.tablet.receivers.PowerConnectionReceiver.class.getName();
     private Context _context;
     private String _token;
@@ -40,6 +41,13 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         final boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         final boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+
+        Intent i = new Intent(POWER_CONNECTION_CHANGE);
+        i.putExtra("isCharging", isCharging);
+        i.putExtra("isOnUsb", usbCharge);
+        i.putExtra("isOnAc", acCharge);
+
+        context.sendBroadcast(i);
 
         new StoreSetting(
                 context,

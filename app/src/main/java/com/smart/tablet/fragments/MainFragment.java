@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -38,7 +40,7 @@ public class MainFragment extends Fragment {
     private List<com.smart.tablet.entities.Category> _categories;
     private List<com.smart.tablet.entities.Service> _services;
     private GridView gridView;
-    private ImageView _logoImageView, _bgImageView;
+    private ImageView _logoImageView, _bgImageView, _scrollIndicator;
     private com.smart.tablet.adapters.CategoryGridAdapter categoryAdapter;
     private com.smart.tablet.adapters.ServicesGridAdapter servicesAdapter;
     private int _category_id, _main_category_id, _service_id;
@@ -69,6 +71,7 @@ public class MainFragment extends Fragment {
         _activity = (com.smart.tablet.MainActivity) getActivity();
 
         gridView = view.findViewById(R.id.gridview);
+        _scrollIndicator = view.findViewById(R.id.img_scroll_indicator);
 
         _category_id = _main_category_id = _service_id = 0;
         _has_children = false;
@@ -166,7 +169,7 @@ public class MainFragment extends Fragment {
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_logo_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_main_logo), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_welcome_button), null));
-        actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_guest_button), null));
+        actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_top_right_buttons), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_night_mode_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_copyright), null));
@@ -267,6 +270,14 @@ public class MainFragment extends Fragment {
                 .execute();
     }
 
+    private void showScrollIndicator() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.bounce);
+
+        _scrollIndicator.setVisibility(View.VISIBLE);
+        _scrollIndicator.setAnimation(animation);
+        _scrollIndicator.animate();
+    }
+
     private void getCategories() {
         new com.smart.tablet.tasks.RetrieveCategories(getContext(), _category_id, null)
                 .onSuccess(new com.smart.tablet.listeners.AsyncResultBag.Success() {
@@ -274,6 +285,10 @@ public class MainFragment extends Fragment {
                     public void onSuccess(Object result) {
                         if (result != null) {
                             com.smart.tablet.entities.Category[] categories = (com.smart.tablet.entities.Category[]) result;
+
+                            if (categories.length > 4) {
+                                showScrollIndicator();
+                            }
 
                             _categories.clear();
                             _categories.addAll(Arrays.asList(categories));

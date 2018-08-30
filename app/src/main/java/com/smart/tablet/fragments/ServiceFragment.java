@@ -18,22 +18,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.smart.tablet.AppController;
 import com.smart.tablet.Constants;
-import com.smart.tablet.MainActivity;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.NavigationFragment;
-import com.smart.tablet.fragments.ServiceBookingFragment;
-import com.smart.tablet.helpers.ImageHelper;
-import com.smart.tablet.helpers.Util;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentActivityListener;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.models.ActivityAction;
-import com.smart.tablet.tasks.RetrieveMedia;
-import com.smart.tablet.tasks.RetrieveSetting;
-import com.smart.tablet.tasks.RetrieveSingleService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -231,7 +217,6 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 activityListener.receive(R.string.msg_show_app_heading, null);
                 activityListener.receive(R.string.msg_set_app_heading, service.getTitle().toUpperCase());
                 */
-                footerContent.setVisibility(View.VISIBLE);
             }
 
             if (!service.getMeta().isEmpty()) {
@@ -246,134 +231,22 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                     for (int i = 0; i < metas_arr.length(); i++) {
                         try {
                             JSONObject meta_obj = metas_arr.getJSONObject(i);
+                            String meta_key = meta_obj.getString("meta_key");
+                            String meta_value = meta_obj.getString("meta_value");
 
-                            if (!service.isIs_marketing_partner() && meta_obj.getString("meta_key").equals("image")) {
-                                setupImage(meta_obj.getString("meta_value"));
+                            switch (meta_key) {
+                                case "image":
+                                    if (!service.isIs_marketing_partner())
+                                        setupImage(meta_value);
+                                    break;
+                                case "background_image":
+                                    setupBackgroundImage(meta_value);
+                                    break;
+                                case Constants.TOP_MENU_SHOW_BOOK:
+                                    if (meta_value.equals("1"))
+                                        footerContent.setVisibility(View.VISIBLE);
                             }
 
-                            if (meta_obj.getString("meta_key").equals("background_image")) {
-                                setupBackgroundImage(meta_obj.getString("meta_value"));
-                            }
-
-                            /*
-                            for (int j = 0; j < menu_items.length; j++) {
-                                if (meta_obj.getString("meta_key").equals(menu_items[j]) && meta_obj.getString("meta_value").equals("1")) {
-                                    NavigationFragment.MenuItem item = new NavigationFragment.MenuItem();
-
-                                    switch (menu_items[j]) {
-                                        case Constants.TOP_MENU_SHOW_ABOUT:
-                                            ServiceAboutFragment serviceAboutFragment = new ServiceAboutFragment();
-                                            serviceAboutFragment.setArguments(_bundle);
-                                            serviceAboutFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "ABOUT US";
-                                            item.fragment = serviceAboutFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_LOCATION:
-                                            ServiceLocationFragment serviceLocationFragment = new ServiceLocationFragment();
-                                            serviceLocationFragment.setArguments(_bundle);
-                                            serviceLocationFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "LOCATION";
-                                            item.fragment = serviceLocationFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_VIDEO:
-                                            ServiceVideoFragment serviceVideoFragment = new ServiceVideoFragment();
-                                            serviceVideoFragment.setArguments(_bundle);
-
-                                            item.title = "VIDEO";
-                                            item.fragment = serviceVideoFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_GALLERY:
-                                            ServiceGalleryFragment serviceGalleryFragment = new ServiceGalleryFragment();
-                                            serviceGalleryFragment.setArguments(_bundle);
-
-                                            item.title = "GALLERY";
-                                            item.fragment = serviceGalleryFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_MENU:
-                                            ServiceMenuFragment serviceMenuFragment = new ServiceMenuFragment();
-                                            serviceMenuFragment.setArguments(_bundle);
-                                            serviceMenuFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "MENUS";
-                                            item.fragment = serviceMenuFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_OFFERS:
-                                            ServiceOffersFragment serviceOffersFragment = new ServiceOffersFragment();
-                                            serviceOffersFragment.setArguments(_bundle);
-                                            serviceOffersFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "OFFERS";
-                                            item.fragment = serviceOffersFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_ARRIVALS:
-                                            ServiceArrivalsFragment serviceArrivalsFragment = new ServiceArrivalsFragment();
-                                            serviceArrivalsFragment.setArguments(_bundle);
-                                            serviceArrivalsFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "NEW ARRIVALS";
-                                            item.fragment = serviceArrivalsFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_SALES:
-                                            ServiceSalesFragment serviceSalesFragment = new ServiceSalesFragment();
-                                            serviceSalesFragment.setArguments(_bundle);
-                                            serviceSalesFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "SALES";
-                                            item.fragment = serviceSalesFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_SERVICES:
-                                            ServiceServicesMenuFragment serviceServiceMenuFragment = new ServiceServicesMenuFragment();
-                                            serviceServiceMenuFragment.setArguments(_bundle);
-                                            serviceServiceMenuFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "SERVICES";
-                                            item.fragment = serviceServiceMenuFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_PRODUCTS:
-                                            ServiceProductsFragment serviceProductsFragment = new ServiceProductsFragment();
-                                            serviceProductsFragment.setArguments(_bundle);
-                                            serviceProductsFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "PRODUCTS";
-                                            item.fragment = serviceProductsFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_PRICE_LIST:
-                                            ServicePriceListFragment servicePriceListFragment = new ServicePriceListFragment();
-                                            servicePriceListFragment.setArguments(_bundle);
-                                            servicePriceListFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "PRICE LIST";
-                                            item.fragment = servicePriceListFragment;
-
-                                            break;
-                                        case Constants.TOP_MENU_SHOW_TESTIMONIALS:
-                                            ServiceTestimonialsFragment serviceTestimonialsFragment = new ServiceTestimonialsFragment();
-                                            serviceTestimonialsFragment.setArguments(_bundle);
-                                            serviceTestimonialsFragment.setFragmentListener(fragmentListener);
-
-                                            item.title = "TESTIMONIALS";
-                                            item.fragment = serviceTestimonialsFragment;
-
-                                            break;
-                                    }
-
-                                    if (item.title != null)
-                                        menu_items_objects.add(item);
-                                }
-                            }
-                            */
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
