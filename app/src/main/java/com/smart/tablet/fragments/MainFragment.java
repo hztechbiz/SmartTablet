@@ -2,6 +2,7 @@ package com.smart.tablet.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +11,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.smart.tablet.MainActivity;
 import com.smart.tablet.R;
-import com.smart.tablet.adapters.CategoryGridAdapter;
-import com.smart.tablet.adapters.ServicesGridAdapter;
 import com.smart.tablet.entities.Category;
-import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.MapFragment;
-import com.smart.tablet.fragments.NavigationFragment;
-import com.smart.tablet.fragments.ServiceFragment;
-import com.smart.tablet.fragments.WeatherFragment;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentActivityListener;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.models.ActivityAction;
-import com.smart.tablet.models.MapMarker;
+import com.smart.tablet.models.CategoryModel;
 import com.smart.tablet.tasks.RetrieveCategories;
-import com.smart.tablet.tasks.RetrieveSingleCategory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +29,7 @@ public class MainFragment extends Fragment {
     private com.smart.tablet.listeners.FragmentListener fragmentListener;
     private com.smart.tablet.listeners.FragmentActivityListener parentListener;
     private Fragment childFragment;
-    private List<com.smart.tablet.entities.Category> _categories;
+    private List<CategoryModel> _categories;
     private List<com.smart.tablet.entities.Service> _services;
     private GridView gridView;
     private ImageView _logoImageView, _bgImageView, _scrollIndicator;
@@ -45,7 +37,7 @@ public class MainFragment extends Fragment {
     private com.smart.tablet.adapters.ServicesGridAdapter servicesAdapter;
     private int _category_id, _main_category_id, _service_id;
     private com.smart.tablet.models.MapMarker _map_marker;
-    private Boolean _has_children, _is_weather;
+    private Boolean _has_children, _is_weather, _display_services;
     private String _listing_type;
     private Bundle _bundle;
     private com.smart.tablet.MainActivity _activity;
@@ -78,6 +70,7 @@ public class MainFragment extends Fragment {
         _listing_type = null;
         _map_marker = null;
         _is_weather = false;
+        _display_services = false;
 
         if (_bundle != null) {
             if (_bundle.containsKey(getString(R.string.param_category_id))) {
@@ -151,6 +144,7 @@ public class MainFragment extends Fragment {
         } else if (_map_marker != null) {
             moveToMapFragment();
         } else if (_service_id > 0) {
+            _display_services = true;
             moveToServiceFragment();
         } else if (_main_category_id > 0) {
             moveToCategoryFragment();
@@ -191,6 +185,17 @@ public class MainFragment extends Fragment {
         parentListener.receive(R.string.msg_show_copyright, null);
         parentListener.receive(R.string.msg_hide_top_guest_button, null);
         */
+
+        _scrollIndicator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (_display_services)
+                    gridView.smoothScrollToPosition(servicesAdapter.getCount());
+                else
+                    gridView.smoothScrollToPosition(categoryAdapter.getCount());
+            }
+        });
 
         return view;
     }
@@ -279,19 +284,51 @@ public class MainFragment extends Fragment {
     }
 
     private void getCategories() {
-        new com.smart.tablet.tasks.RetrieveCategories(getContext(), _category_id, null)
+        new RetrieveCategories(getContext(), _category_id, null)
                 .onSuccess(new com.smart.tablet.listeners.AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
                         if (result != null) {
-                            com.smart.tablet.entities.Category[] categories = (com.smart.tablet.entities.Category[]) result;
+                            Category[] categories = (com.smart.tablet.entities.Category[]) result;
+                            CategoryModel[] categoryModels = new CategoryModel[categories.length];
+
+                            for (int i = 0; i < categories.length; i++) {
+                                categoryModels[i] = new CategoryModel(categories[i]);
+
+                                if (categories[i].getMeta() != null && !categories[i].getMeta().isEmpty()) {
+                                    JSONArray metas_arr = null;
+                                    try {
+                                        metas_arr = new JSONArray(categories[i].getMeta());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (metas_arr != null) {
+                                        for (int j = 0; j < metas_arr.length(); j++) {
+                                            try {
+                                                JSONObject meta_obj = metas_arr.getJSONObject(j);
+                                                String meta_key = meta_obj.getString("meta_key");
+                                                String meta_value = meta_obj.getString("meta_value");
+
+                                                switch (meta_key) {
+                                                    case "image":
+                                                        categoryModels[i].setImage(meta_value);
+                                                        break;
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                             if (categories.length > 4) {
                                 showScrollIndicator();
                             }
 
                             _categories.clear();
-                            _categories.addAll(Arrays.asList(categories));
+                            _categories.addAll(Arrays.asList(categoryModels));
 
                             categoryAdapter.notifyDataSetChanged();
                         }

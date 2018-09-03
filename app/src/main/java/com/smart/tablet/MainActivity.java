@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.smart.tablet.entities.Category;
+import com.smart.tablet.entities.Device;
 import com.smart.tablet.fragments.MainFragment;
 import com.smart.tablet.fragments.NavigationFragment;
 import com.smart.tablet.fragments.WelcomeFragment;
@@ -61,7 +62,12 @@ import com.smart.tablet.receivers.PowerConnectionReceiver;
 import com.smart.tablet.service.MyFirebaseMessagingService;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveCategories;
+import com.smart.tablet.tasks.RetrieveDevice;
 import com.smart.tablet.tasks.RetrieveSetting;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -75,7 +81,7 @@ import java.util.HashMap;
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
-    private String entryPageStart, entryPageEnd, kioskPassword;
+    private String entryPageStart, entryPageEnd, kioskPassword, sleepTime;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
     private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text;
@@ -85,8 +91,8 @@ public class MainActivity extends FragmentActivity {
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
-    private int timerClicked;
-    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp;
+    private int timerClicked, _btn_kiosk_clicks;
+    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage;
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
@@ -369,7 +375,7 @@ public class MainActivity extends FragmentActivity {
         };
 
         timerClicked = 0;
-        timerClickedTimerAdded = isServiceRunning = _isNightMode = false;
+        timerClickedTimerAdded = isServiceRunning = _isNightMode = _isCheckingToShowEntryPage = false;
         _isActivityUp = true;
         inKioskMode = dpm.isLockTaskPermitted(this.getPackageName());
 
@@ -481,6 +487,18 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
+        _btn_kiosk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _btn_kiosk_clicks++;
+
+                if (_btn_kiosk_clicks > 1) {
+                    _btn_kiosk_clicks = 0;
+                    openDeviceInformationDialog(v);
+                }
+            }
+        });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -492,7 +510,7 @@ public class MainActivity extends FragmentActivity {
             }
         }, 1000);
 
-        getEntryPageTimings();
+        getTimeSettings();
         getKioskPassword();
         setupMenuItems();
         setBranding();
@@ -507,10 +525,21 @@ public class MainActivity extends FragmentActivity {
 
     private void getKioskPassword() {
         kioskPassword = "test";
+        new RetrieveSetting(this, Constants.SETTING_PASSWORD)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null)
+                            kioskPassword = result.toString();
+                    }
+                })
+                .execute();
     }
 
-    private void getEntryPageTimings() {
-        new RetrieveSetting(this, Constants.SETTING_ENTRY_PAGE_START_TIME, Constants.SETTING_ENTRY_PAGE_END_TIME)
+    private void getTimeSettings() {
+        new RetrieveSetting(this, Constants.SETTING_ENTRY_PAGE_START_TIME,
+                Constants.SETTING_ENTRY_PAGE_END_TIME,
+                Constants.SETTING_SLEEP_TIME)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -519,6 +548,7 @@ public class MainActivity extends FragmentActivity {
                         if (values != null) {
                             entryPageStart = values.containsKey("entry_page_start_time") ? values.get("entry_page_start_time") : null;
                             entryPageEnd = values.containsKey("entry_page_end_time") ? values.get("entry_page_end_time") : null;
+                            sleepTime = values.containsKey("sleep_time") ? values.get("sleep_time") : null;
                         }
                     }
                 })
@@ -625,7 +655,7 @@ public class MainActivity extends FragmentActivity {
         stopCheckingToShowEntryPage();
 
         startCheckingActiveScreen();
-        startCheckingToShowEntryPage();
+        //startCheckingToShowEntryPage();
     }
 
     @Override
@@ -657,7 +687,6 @@ public class MainActivity extends FragmentActivity {
             public void run() {
                 try {
                     while (!isInterrupted()) {
-                        Thread.sleep(1000);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -668,8 +697,10 @@ public class MainActivity extends FragmentActivity {
                                 entry_page_txt_time.setText(date);
 
                                 checkEntryPageConditions();
+                                checkSleepPageConditions();
                             }
                         });
+                        Thread.sleep((1000 * 60));
                     }
                 } catch (InterruptedException e) {
                     Log.e(TAG, e + "");
@@ -694,19 +725,61 @@ public class MainActivity extends FragmentActivity {
         super.onStart();
     }
 
-    private void checkEntryPageConditions() {
-        if (entryPageStart == null || entryPageEnd == null || entryPageStart.isEmpty() || entryPageEnd.isEmpty())
+    private void checkSleepPageConditions() {
+        if (sleepTime == null || sleepTime.isEmpty())
             return;
 
         DateFormat df = new SimpleDateFormat("HH:mm");
         String date = df.format(Calendar.getInstance().getTime());
-        try {
-            Date d1 = df.parse(entryPageStart);
-            Date d2 = df.parse(entryPageEnd);
+        Date sleepTimeDate = null;
 
-            Util.DateDifference diff = Util.getDateDifference(d1, d2);
-            Log.d("entryPageDate", entryPageStart + " - " + entryPageEnd);
-            Log.d("entryPageDate", diff.toString());
+        try {
+            sleepTimeDate = df.parse(this.sleepTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        sleepTime = df.format(sleepTimeDate.getTime());
+
+        if (date.equals(this.sleepTime)) {
+            showNightMode(true);
+        }
+    }
+
+    private void checkEntryPageConditions() {
+        if (entryPageStart == null || entryPageEnd == null || entryPageStart.isEmpty() || entryPageEnd.isEmpty())
+            return;
+
+        DateFormat time_format = new SimpleDateFormat("HH:mm");
+        DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat datetime_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date now = Calendar.getInstance().getTime();
+        String date = time_format.format(now);
+
+        entryPageStart = date_format.format(now) + " " + entryPageStart;
+        entryPageEnd = date_format.format(now) + " " + entryPageEnd;
+
+        try {
+            Date d1 = datetime_format.parse(entryPageStart);
+            Date d2 = datetime_format.parse(entryPageEnd);
+
+            Util.DateDifference diff = Util.getDateDifference(d1, now);
+            boolean is_started = diff.getHours() < 0 || diff.getMinutes() < 0 || diff.getSeconds() < 0;
+
+            diff = Util.getDateDifference(d2, now);
+            boolean is_ended = diff.getHours() < 0 || diff.getMinutes() < 0 || diff.getSeconds() < 0;
+
+            if (!is_ended && is_started) {
+                if (!isCheckingToShowEntryPage())
+                    startCheckingToShowEntryPage();
+            } else {
+                stopCheckingToShowEntryPage();
+            }
+
+            //Log.d("entryPageDate", "\n" + d1 + "\n" + d2 + "\n" + now);
+            //Log.d("entryPageDate", diff.toString());
+            //Log.d("entryPageDate", isCheckingToShowEntryPage() ? "checking" : "not checking");
+            //Log.d("entryPageDate", "started: " + (is_started ? "Yes" : "No") + ", ended: " + (is_ended ? "Yes" : "No"));
         } catch (ParseException e) {
             Log.e("entryPageDate", e.getMessage());
             e.printStackTrace();
@@ -1233,10 +1306,16 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void startCheckingToShowEntryPage() {
+        _isCheckingToShowEntryPage = true;
         _entryPageHandler.postDelayed(_entryPageRunnable, Constants.BACK_TO_ENTRY_PAGE);
     }
 
+    private boolean isCheckingToShowEntryPage() {
+        return _isCheckingToShowEntryPage;
+    }
+
     private void stopCheckingToShowEntryPage() {
+        _isCheckingToShowEntryPage = false;
         _entryPageHandler.removeCallbacks(_entryPageRunnable);
     }
 
@@ -1271,6 +1350,57 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
+    }
+
+    public void openDeviceInformationDialog(View view) {
+
+        new RetrieveDevice(this)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Device device = (Device) result;
+
+                            String mac_address = device.getMac_address();
+                            String din = device.getDevice_identity();
+                            String room_number = "";
+
+                            if (!device.getMeta().isEmpty()) {
+                                JSONArray metas_arr = null;
+                                try {
+                                    metas_arr = new JSONArray(device.getMeta());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (metas_arr != null) {
+                                    for (int i = 0; i < metas_arr.length(); i++) {
+                                        try {
+                                            JSONObject meta_obj = metas_arr.getJSONObject(i);
+                                            String meta_key = meta_obj.getString("meta_key");
+                                            String meta_value = meta_obj.getString("meta_value");
+
+                                            switch (meta_key) {
+                                                case "room_allocation":
+                                                    room_number = meta_value;
+                                                    break;
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setTitle("Device Information");
+                            builder.setMessage("MAC Address: " + mac_address + "\nDIN: " + din + "\nRoom Number: " + room_number);
+
+                            builder.show();
+                        }
+                    }
+                })
+                .execute();
     }
 
     public void toggleKioskMode(View view) {

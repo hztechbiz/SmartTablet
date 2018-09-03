@@ -37,6 +37,22 @@ public class Util {
             this.days = days;
         }
 
+        public long getSeconds() {
+            return seconds;
+        }
+
+        public long getMinutes() {
+            return minutes;
+        }
+
+        public long getHours() {
+            return hours;
+        }
+
+        public long getDays() {
+            return days;
+        }
+
         @Override
         public String toString() {
             return "DateDifference{" +

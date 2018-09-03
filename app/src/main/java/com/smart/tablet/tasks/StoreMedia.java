@@ -63,7 +63,8 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
                 executor.execute(new LongThread(i));
             }
 
-            while (_downloaded != _totalMedia) {
+            while (_downloaded < _totalMedia) {
+                Log.d("StoreMedia", "" + _downloaded + " < " + _totalMedia);
                 Thread.sleep(1000);
             }
 

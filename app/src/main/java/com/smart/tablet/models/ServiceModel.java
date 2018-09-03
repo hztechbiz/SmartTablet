@@ -21,6 +21,8 @@ public class ServiceModel {
 
     private Bitmap image;
 
+    private Bitmap thumbnail;
+
     public int getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class ServiceModel {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

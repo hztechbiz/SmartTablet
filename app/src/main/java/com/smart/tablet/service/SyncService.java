@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.smart.tablet.Constants;
 import com.smart.tablet.entities.Arrival;
 import com.smart.tablet.entities.Category;
+import com.smart.tablet.entities.Device;
 import com.smart.tablet.entities.Hotel;
 import com.smart.tablet.entities.Media;
 import com.smart.tablet.entities.Offer;
@@ -29,6 +30,7 @@ import com.smart.tablet.tasks.DeleteMedia;
 import com.smart.tablet.tasks.RetrieveSetting;
 import com.smart.tablet.tasks.StoreArrival;
 import com.smart.tablet.tasks.StoreCategory;
+import com.smart.tablet.tasks.StoreDevice;
 import com.smart.tablet.tasks.StoreHotel;
 import com.smart.tablet.tasks.StoreMedia;
 import com.smart.tablet.tasks.StoreOffer;
@@ -63,6 +65,7 @@ public class SyncService extends IntentService {
     private boolean _isCategoriesStored;
     private boolean _isServicesStored;
     private boolean _isFilesDownloaded;
+    private boolean _isDeviceInfoStored;
     private boolean _isOffersStored;
     private boolean _isArrivalsStored;
     private boolean _isSalesStored;
@@ -143,7 +146,7 @@ public class SyncService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         _hasError = false;
-        _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = _isFilesDownloaded = false;
+        _isServicesStored = _isCategoriesStored = _isSettingsStored = _isHotelInfoStored = _isFilesDownloaded = _isDeviceInfoStored = false;
         _isOffersStored = _isArrivalsStored = _isSalesStored = true;
         _extraFieldsLength = 1;
         _indexesFilled = 0;
@@ -288,6 +291,23 @@ public class SyncService extends IntentService {
 
         JSONObject data = response.getJSONObject("data");
         JSONObject hotel_obj = data.getJSONObject("hotel");
+        JSONObject device_obj = data.getJSONObject("device");
+
+        Device device = new Device();
+
+        device.setId(device_obj.getInt("id"));
+        device.setDevice_id(device_obj.getString("device_id"));
+        device.setHotel_id(device_obj.getInt("hotel_id"));
+        device.setLanguage(device_obj.getString("language"));
+        device.setLast_sync(device_obj.getString("last_sync"));
+        device.setMac_address(device_obj.getString("mac_address"));
+        device.setDevice_identity(device_obj.getString("device_identity"));
+        device.setStatus(device_obj.getInt("status"));
+
+        if (!device_obj.isNull("meta"))
+            device.setMeta(device_obj.getJSONArray("meta").toString());
+
+        storeDeviceInfo(device);
 
         Hotel hotel = new Hotel();
 
@@ -322,6 +342,29 @@ public class SyncService extends IntentService {
 
                             decide();
                         }
+                    }
+                })
+                .execute();
+    }
+
+    private void storeDeviceInfo(Device device) {
+        new StoreDevice(this, device)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        _isDeviceInfoStored = true;
+                        decide();
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        Log.e(TAG, "storeDeviceInfo: " + error);
+
+                        _hasError = true;
+                        _error = error;
+
+                        decide();
                     }
                 })
                 .execute();
@@ -382,6 +425,9 @@ public class SyncService extends IntentService {
             category.setName(c.getString("name"));
             category.setDescription(c.getString("description"));
             category.setIs_marketing_partner((c.getInt("is_marketing_partner") == 1));
+
+            if (!c.isNull("meta"))
+                category.setMeta(c.getJSONArray("meta").toString());
 
             if (!c.isNull("embed_url"))
                 category.setEmbed_url(c.getString("embed_url"));
@@ -628,7 +674,7 @@ public class SyncService extends IntentService {
     }
 
     private void decide() {
-        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored && _isFilesDownloaded;
+        Boolean isDone = _isSettingsStored && _isHotelInfoStored && _isCategoriesStored && _isServicesStored && _isFilesDownloaded && _isDeviceInfoStored;
         Log.d("SchedulingAlarms", "all done: " + (isDone ? "yes" : "no"));
 
         if (isDone) {

@@ -31,6 +31,7 @@ import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.models.ActivityAction;
+import com.smart.tablet.models.CategoryModel;
 import com.smart.tablet.models.ServiceModel;
 import com.smart.tablet.tasks.RetrieveCategories;
 import com.smart.tablet.tasks.RetrieveMedia;
@@ -50,7 +51,7 @@ public class CategoryFragment extends Fragment {
 
     private FragmentListener fragmentListener;
     private FragmentActivityListener parentListener;
-    private List<Category> _categories;
+    private List<CategoryModel> _categories;
     private List<ServiceModel> _services;
     private GridView gridView;
     private WebView webView;
@@ -302,13 +303,45 @@ public class CategoryFragment extends Fragment {
                     public void onSuccess(Object result) {
                         if (result != null) {
                             Category[] categories = (Category[]) result;
+                            CategoryModel[] categoryModels = new CategoryModel[categories.length];
+
+                            for (int i = 0; i < categories.length; i++) {
+                                categoryModels[i] = new CategoryModel(categories[i]);
+
+                                if (categories[i].getMeta() != null && !categories[i].getMeta().isEmpty()) {
+                                    JSONArray metas_arr = null;
+                                    try {
+                                        metas_arr = new JSONArray(categories[i].getMeta());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (metas_arr != null) {
+                                        for (int j = 0; j < metas_arr.length(); j++) {
+                                            try {
+                                                JSONObject meta_obj = metas_arr.getJSONObject(j);
+                                                String meta_key = meta_obj.getString("meta_key");
+                                                String meta_value = meta_obj.getString("meta_value");
+
+                                                switch (meta_key) {
+                                                    case "image":
+                                                        categoryModels[i].setImage(meta_value);
+                                                        break;
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                             if (categories.length > 4) {
                                 showScrollIndicator();
                             }
 
                             _categories.clear();
-                            _categories.addAll(Arrays.asList(categories));
+                            _categories.addAll(Arrays.asList(categoryModels));
 
                             categoryAdapter.notifyDataSetChanged();
                         }
@@ -353,6 +386,8 @@ public class CategoryFragment extends Fragment {
                                 serviceModel.setTitle(service.getTitle());
                                 serviceModel.setImage(null);
 
+                                String image_id = null;
+
                                 if (!service.getMeta().isEmpty()) {
                                     JSONArray metas_arr = null;
                                     try {
@@ -365,40 +400,48 @@ public class CategoryFragment extends Fragment {
                                         for (int i = 0; i < metas_arr.length(); i++) {
                                             try {
                                                 JSONObject meta_obj = metas_arr.getJSONObject(i);
+                                                String meta_key = meta_obj.getString("meta_key");
+                                                String meta_value = meta_obj.getString("meta_value");
 
-                                                if (meta_obj.getString("meta_key").equals("image")) {
-                                                    String image_id = meta_obj.getString("meta_value");
+                                                if (meta_key.equals("thumbnail"))
+                                                    image_id = meta_value;
 
-                                                    new RetrieveMedia(getContext(), Integer.parseInt(image_id))
-                                                            .onSuccess(new AsyncResultBag.Success() {
-                                                                @Override
-                                                                public void onSuccess(Object result) {
-                                                                    if (result != null) {
-                                                                        try {
-                                                                            String filePath = result.toString();
+                                                if ((image_id == null || image_id.isEmpty()) && meta_key.equals("image"))
+                                                    image_id = meta_value;
 
-                                                                            if (filePath != null) {
-                                                                                File imgBG = new File(filePath);
-
-                                                                                if (imgBG.exists()) {
-                                                                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                                                                    bitmap = ImageHelper.getResizedBitmap(bitmap, 300);
-
-                                                                                    serviceModel.setImage(bitmap);
-                                                                                    servicesAdapter.notifyDataSetChanged();
-                                                                                }
-                                                                            }
-                                                                        } catch (Exception ex) {
-                                                                            ex.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                }
-                                                            })
-                                                            .execute();
-                                                }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
+                                        }
+
+                                        if (image_id != null && !image_id.isEmpty()) {
+
+                                            new RetrieveMedia(getContext(), Integer.parseInt(image_id))
+                                                    .onSuccess(new AsyncResultBag.Success() {
+                                                        @Override
+                                                        public void onSuccess(Object result) {
+                                                            if (result != null) {
+                                                                try {
+                                                                    String filePath = result.toString();
+
+                                                                    if (filePath != null) {
+                                                                        File imgBG = new File(filePath);
+
+                                                                        if (imgBG.exists()) {
+                                                                            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                                                            bitmap = ImageHelper.getResizedBitmap(bitmap, 300);
+
+                                                                            serviceModel.setImage(bitmap);
+                                                                            servicesAdapter.notifyDataSetChanged();
+                                                                        }
+                                                                    }
+                                                                } catch (Exception ex) {
+                                                                    ex.printStackTrace();
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+                                                    .execute();
                                         }
                                     }
                                 }
