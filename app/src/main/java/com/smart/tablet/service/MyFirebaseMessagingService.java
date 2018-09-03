@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.smart.tablet.Constants;
+import com.smart.tablet.entities.Setting;
+import com.smart.tablet.tasks.StoreSetting;
 
 import java.util.Map;
 
@@ -12,6 +15,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String MESSAGE_RECEIVED = MyFirebaseMessagingService.class.getName() + ":MESSAGE_RECEIVED";
     private static final String TAG = "MyFirebaseMsgService";
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        storeToken(s);
+    }
+
+    private void storeToken(String token) {
+        new StoreSetting(this, new Setting(Constants.DEVICE_ID, token))
+                .execute();
+    }
 
     /**
      * Called when message is received.

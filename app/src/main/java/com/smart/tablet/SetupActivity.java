@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -21,10 +22,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.smart.tablet.AppController;
-import com.smart.tablet.Constants;
-import com.smart.tablet.MainActivity;
-import com.smart.tablet.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.smart.tablet.entities.Setting;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.service.SyncService;
@@ -88,7 +89,20 @@ public class SetupActivity extends Activity {
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
 
-        fetchDeviceToken();
+        //fetchDeviceToken();
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                _token = instanceIdResult.getToken();
+                Log.d("DeviceToken", instanceIdResult + "");
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("DeviceToken", e.getMessage());
+            }
+        });
 
         super.onStart();
     }
@@ -159,6 +173,8 @@ public class SetupActivity extends Activity {
                     String url = Constants.GetApiUrl("auth");
                     JSONObject jsonRequest = new JSONObject();
 
+                    Log.d("DeviceToken", _token + "");
+
                     try {
                         jsonRequest.put("udid", _token);
                         jsonRequest.put("api_key", key);
@@ -197,6 +213,7 @@ public class SetupActivity extends Activity {
                             return params;
                         }
                     };
+
                     AppController.getInstance().addToRequestQueue(request);
                 }
             }
