@@ -130,6 +130,7 @@ public class CategoryFragment extends Fragment {
                 Object category_id = v.getTag(R.string.tag_value);
                 Object has_children = v.getTag(R.string.tag_has_children);
                 Object embed_url = v.getTag(R.string.tag_embed_url);
+                Object is_mp = v.getTag(R.string.tag_is_mp);
 
                 if (category_id != null) {
                     bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(category_id.toString()));
@@ -141,6 +142,10 @@ public class CategoryFragment extends Fragment {
 
                 if (embed_url != null) {
                     bundle.putString(getString(R.string.param_embed_url), embed_url.toString());
+                }
+
+                if (is_mp != null) {
+                    bundle.putString(getString(R.string.param_listing_type), (Boolean.valueOf(is_mp.toString()) ? "mp" : "gsd"));
                 }
 
                 com.smart.tablet.fragments.CategoryFragment fragment = new com.smart.tablet.fragments.CategoryFragment();
@@ -202,6 +207,7 @@ public class CategoryFragment extends Fragment {
 
         if (_listing_type != null && _listing_type.equals("mp")) {
             actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
+            actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
         } else {
             actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
             actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));

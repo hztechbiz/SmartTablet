@@ -210,6 +210,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_app_heading), null));
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_set_app_heading), service.getTitle().toUpperCase()));
+                actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_welcome_button), service.getTitle().toUpperCase()));
 
                 _activity.takeActions(actions);
 

@@ -366,7 +366,9 @@ public class NavigationFragment extends Fragment {
 
         if (_listing_type != null && _listing_type.equals("mp")) {
             actions.add(new ActivityAction((R.string.msg_show_top_guest_button), null));
+            actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
         } else {
+            actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
             actions.add(new ActivityAction((R.string.msg_hide_top_guest_button), null));
         }
 
