@@ -38,7 +38,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
     int _service_id;
     com.smart.tablet.entities.Service _service;
     Bundle _bundle;
-    Button btn_booking;
+    Button btn_booking, btn_featured;
     private com.smart.tablet.listeners.FragmentActivityListener activityListener;
     private com.smart.tablet.listeners.FragmentListener fragmentListener;
     private com.smart.tablet.MainActivity _activity;
@@ -68,16 +68,35 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         mainContent = view.findViewById(R.id.mainContent);
         footerContent = view.findViewById(R.id.footerContent);
         btn_booking = view.findViewById(R.id.btn_booking);
+        btn_featured = view.findViewById(R.id.btn_featured);
 
         btn_booking.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
+        btn_featured.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_title.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         footerContent.setVisibility(View.GONE);
+        btn_booking.setVisibility(View.GONE);
+        btn_featured.setVisibility(View.GONE);
+
+        btn_featured.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+
+                bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(v.getTag().toString()));
+
+                ServiceFragment serviceFragment = new ServiceFragment();
+                serviceFragment.setArguments(bundle);
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceFragment);
+            }
+        });
 
         btn_booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.smart.tablet.fragments.ServiceBookingFragment serviceBookingFragment = new com.smart.tablet.fragments.ServiceBookingFragment();
+                ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
                 serviceBookingFragment.setArguments(_bundle);
 
                 if (fragmentListener != null)
@@ -244,8 +263,20 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                                     setupBackgroundImage(meta_value);
                                     break;
                                 case Constants.TOP_MENU_SHOW_BOOK:
-                                    if (meta_value.equals("1"))
+                                    if (meta_value.equals("1")) {
                                         footerContent.setVisibility(View.VISIBLE);
+                                        btn_booking.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
+                                case Constants.TOP_MENU_SHOW_FEATURED:
+                                    if (meta_value.equals("1")) {
+                                        footerContent.setVisibility(View.VISIBLE);
+                                        btn_featured.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
+                                case "featured_service":
+                                    btn_featured.setTag(meta_value);
+                                    break;
                             }
 
                         } catch (JSONException e) {

@@ -68,6 +68,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/book_now_here"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_featured"
+            style="@style/ButtonBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/featured_partner_learn_more"
+            android:textColor="#fff"
+            android:visibility="gone" />
     </LinearLayout>
 </RelativeLayout>

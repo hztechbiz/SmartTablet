@@ -47,6 +47,7 @@ public class Constants {
     public static final String TOP_MENU_SHOW_PRODUCTS = "show_products";
     public static final String TOP_MENU_SHOW_PRICE_LIST = "show_price_list";
     public static final String TOP_MENU_SHOW_WEBSITE = "show_website";
+    public static final String TOP_MENU_SHOW_FEATURED = "show_featured";
     public static final String META_LOCATION_TITLE = "location_title";
     public static final String META_LOCATION_DESCRIPTION = "location_short_description";
     public static final String META_LOCATION_ADDRESS = "location_address";
