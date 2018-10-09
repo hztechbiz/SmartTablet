@@ -288,7 +288,7 @@
                         android:id="@+id/transport"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/weather" />
+                        android:src="@drawable/transport_icon" />
 
                     <TextView
                         android:id="@+id/item_transport_text"
@@ -322,7 +322,7 @@
                         android:id="@+id/partner"
                         android:layout_width="35dp"
                         android:layout_height="23dp"
-                        android:src="@drawable/weather" />
+                        android:src="@drawable/partner_offer" />
 
                     <TextView
                         android:id="@+id/item_partner_text"

@@ -1132,8 +1132,8 @@ public class MainActivity extends FragmentActivity {
         item_icon_6.setImageResource(R.drawable.localregion);
         item_icon_7.setImageResource(R.drawable.weather);
         item_icon_8.setImageResource(R.drawable.news);
-        item_icon_9.setImageResource(R.drawable.news);
-        item_icon_10.setImageResource(R.drawable.news);
+        item_icon_9.setImageResource(R.drawable.transport_icon);
+        item_icon_10.setImageResource(R.drawable.partner_offer);
 
         if (view != null) {
             switch (view.getId()) {
@@ -1162,10 +1162,10 @@ public class MainActivity extends FragmentActivity {
                     item_icon_8.setImageResource(R.drawable.news_black);
                     break;
                 case R.id.itemTransport:
-                    item_icon_9.setImageResource(R.drawable.news_black);
+                    item_icon_9.setImageResource(R.drawable.transport_icon_black);
                     break;
                 case R.id.itemPartner:
-                    item_icon_10.setImageResource(R.drawable.news_black);
+                    item_icon_10.setImageResource(R.drawable.partner_offer_black);
                     break;
             }
         }
