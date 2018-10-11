@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Category;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.models.CategoryModel;
 import com.smart.tablet.tasks.RetrieveCategories;
 
@@ -151,6 +152,8 @@ public class MainFragment extends Fragment {
         } else {
             getCategories();
             gridView.setAdapter(categoryAdapter);
+
+            AnalyticsHelper.track(getContext(), "Viewed Homepage");
         }
 
         ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();

@@ -44,6 +44,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="8dp"
+                android:textSize="15sp"
                 android:maxLines="3"
                 android:minLines="3"
                 android:lines="3"

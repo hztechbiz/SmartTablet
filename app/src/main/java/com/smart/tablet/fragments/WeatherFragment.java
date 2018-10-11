@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.smart.tablet.AppController;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
@@ -34,6 +35,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class WeatherFragment extends Fragment implements View.OnClickListener {
     private static final String ns = null;
@@ -96,6 +98,8 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     private void requestWeatherDetails(String city) {
         txt_details.setText("...");
         txt_temperature.setText("...");
+
+        AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed weather info for %s", city));
 
         String url = String.format("http://rss.weather.com.au/%s", new Object[]{city});
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

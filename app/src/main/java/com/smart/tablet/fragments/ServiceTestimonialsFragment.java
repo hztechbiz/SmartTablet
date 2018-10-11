@@ -13,14 +13,18 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.smart.tablet.R;
+import com.smart.tablet.entities.Service;
 import com.smart.tablet.entities.Testimonial;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
+import com.smart.tablet.tasks.RetrieveSingleService;
 import com.smart.tablet.tasks.RetrieveTestimonials;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ServiceTestimonialsFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
     int _service_id;
@@ -95,6 +99,19 @@ public class ServiceTestimonialsFragment extends Fragment implements com.smart.t
         new com.smart.tablet.tasks.RetrieveTestimonials(getContext(), _service_id)
                 .onSuccess(this)
                 .execute();
+
+        new RetrieveSingleService(getContext(), _service_id)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Service service = (Service) result;
+
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Testimonials", service.getId(), service.getTitle()));
+                        }
+                    }
+                })
+                .execute();
     }
 
     @Override
@@ -129,7 +146,7 @@ public class ServiceTestimonialsFragment extends Fragment implements com.smart.t
 
         txt_content.setText(testimonial.getContent());
         txt_cite.setText(testimonial.getCite());
-        
+
         item.setVisibility(View.VISIBLE);
     }
 

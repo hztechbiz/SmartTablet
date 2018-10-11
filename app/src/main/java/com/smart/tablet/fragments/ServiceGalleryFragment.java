@@ -18,6 +18,7 @@ import com.smart.tablet.ImagePopupActivity;
 import com.smart.tablet.R;
 import com.smart.tablet.adapters.GalleryGridAdapter;
 import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.tasks.RetrieveMedia;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.Success {
     GridView gridView;
@@ -96,6 +98,8 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Gallery", service.getId(), service.getTitle()));
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

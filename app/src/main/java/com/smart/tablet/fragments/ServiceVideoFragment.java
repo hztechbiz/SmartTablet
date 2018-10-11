@@ -10,6 +10,7 @@ import android.widget.VideoView;
 
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.tasks.RetrieveMedia;
@@ -18,6 +19,8 @@ import com.smart.tablet.tasks.RetrieveSingleService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class ServiceVideoFragment extends Fragment implements AsyncResultBag.Success {
     int _service_id;
@@ -69,6 +72,8 @@ public class ServiceVideoFragment extends Fragment implements AsyncResultBag.Suc
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Video", service.getId(), service.getTitle()));
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

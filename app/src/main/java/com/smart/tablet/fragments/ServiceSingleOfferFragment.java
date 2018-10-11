@@ -13,14 +13,18 @@ import android.widget.TextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Offer;
+import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.tasks.RetrieveSingleOffer;
+import com.smart.tablet.tasks.RetrieveSingleService;
 
 import java.io.File;
+import java.util.Locale;
 
 public class ServiceSingleOfferFragment extends Fragment implements AsyncResultBag.Success {
 
@@ -91,10 +95,23 @@ public class ServiceSingleOfferFragment extends Fragment implements AsyncResultB
 
     @Override
     public void onSuccess(Object result) {
-        Offer offer = result != null ? (Offer) result : null;
+        final Offer offer = result != null ? (Offer) result : null;
 
         if (offer != null) {
             _offer = offer;
+
+            new RetrieveSingleService(getContext(), offer.getService_id())
+                    .onSuccess(new AsyncResultBag.Success() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            if (result != null) {
+                                Service service = (Service) result;
+
+                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Offer(%s) in #%d %s", offer.getTitle(), service.getId(), service.getTitle()));
+                            }
+                        }
+                    })
+                    .execute();
 
             txt_title.setText(offer.getTitle());
             txt_description.setText(offer.getDescription());

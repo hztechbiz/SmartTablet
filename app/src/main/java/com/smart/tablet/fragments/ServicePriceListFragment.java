@@ -11,6 +11,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Service;
 import com.smart.tablet.fragments.ServiceBookingFragment;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Locale;
 
 public class ServicePriceListFragment extends Fragment implements AsyncResultBag.Success {
     PDFView pdfView;
@@ -85,6 +87,8 @@ public class ServicePriceListFragment extends Fragment implements AsyncResultBag
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Price List", service.getId(), service.getTitle()));
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

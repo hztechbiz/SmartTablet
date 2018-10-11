@@ -16,12 +16,14 @@ import android.widget.TextView;
 
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
+import com.smart.tablet.helpers.AnalyticsHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Locale;
 
 public class ServiceAboutFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
     TextView txt_description;
@@ -116,6 +118,8 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "About", service.getId(), service.getTitle()));
 
             //txt_description.setText(service.getDescription());
 

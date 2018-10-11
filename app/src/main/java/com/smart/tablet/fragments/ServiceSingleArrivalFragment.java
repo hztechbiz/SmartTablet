@@ -13,14 +13,18 @@ import android.widget.TextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Arrival;
+import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.tasks.RetrieveSingleArrival;
+import com.smart.tablet.tasks.RetrieveSingleService;
 
 import java.io.File;
+import java.util.Locale;
 
 public class ServiceSingleArrivalFragment extends Fragment implements AsyncResultBag.Success {
 
@@ -91,10 +95,23 @@ public class ServiceSingleArrivalFragment extends Fragment implements AsyncResul
 
     @Override
     public void onSuccess(Object result) {
-        Arrival arrival = result != null ? (Arrival) result : null;
+        final Arrival arrival = result != null ? (Arrival) result : null;
 
         if (arrival != null) {
             _arrival = arrival;
+
+            new RetrieveSingleService(getContext(), arrival.getService_id())
+                    .onSuccess(new AsyncResultBag.Success() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            if (result != null) {
+                                Service service = (Service) result;
+
+                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed News Arrival(%s) in #%d %s", arrival.getTitle(), service.getId(), service.getTitle()));
+                            }
+                        }
+                    })
+                    .execute();
 
             txt_title.setText(arrival.getTitle());
             txt_description.setText(arrival.getDescription());

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.smart.tablet.R;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 
 public class MessagePopupActivity extends FragmentActivity {
@@ -53,5 +54,7 @@ public class MessagePopupActivity extends FragmentActivity {
 
         txt_title.setText(title);
         txt_message.setText(message);
+
+        AnalyticsHelper.track(this, String.format("Displayed Popup Message with title '%s' and message '%s'", title, message));
     }
 }

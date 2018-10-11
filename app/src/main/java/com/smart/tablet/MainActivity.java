@@ -47,6 +47,7 @@ import com.smart.tablet.entities.Device;
 import com.smart.tablet.fragments.MainFragment;
 import com.smart.tablet.fragments.NavigationFragment;
 import com.smart.tablet.fragments.WelcomeFragment;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Common;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.helpers.ScheduledJobs;
@@ -64,6 +65,7 @@ import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveCategories;
 import com.smart.tablet.tasks.RetrieveDevice;
 import com.smart.tablet.tasks.RetrieveSetting;
+import com.smart.tablet.tasks.StoreAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -976,11 +978,15 @@ public class MainActivity extends FragmentActivity {
 
     public void onEntryPageEnter(View view) {
         showEntryPage(false);
+
+        AnalyticsHelper.track(this, "Entry Page");
     }
 
     public void toggleNightMode(View view) {
         _isNightMode = !_isNightMode;
         showNightMode(_isNightMode);
+
+        AnalyticsHelper.track(this, _isNightMode ? "Enabled night mode" : "Disabled night mode");
     }
 
     private void showNightMode(boolean b) {
@@ -1099,6 +1105,8 @@ public class MainActivity extends FragmentActivity {
                     }
                 })
                 .execute();
+
+        AnalyticsHelper.track(this, "Moved to Guest Services");
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {
@@ -1135,38 +1143,54 @@ public class MainActivity extends FragmentActivity {
         item_icon_9.setImageResource(R.drawable.transport_icon);
         item_icon_10.setImageResource(R.drawable.partner_offer);
 
+        String text = null;
+
         if (view != null) {
             switch (view.getId()) {
                 case R.id.ott:
                     item_icon_1.setImageResource(R.drawable.operating_the_television_black);
+                    text = getString(R.string.operating_the_television);
                     break;
                 case R.id.itemWifi:
                     item_icon_2.setImageResource(R.drawable.connect_to_wifi_black);
+                    text = getString(R.string.connect_to_wifi);
                     break;
                 case R.id.itemHow:
                     item_icon_3.setImageResource(R.drawable.how_to_use_smart_tablet_black);
+                    text = getString(R.string.how_to_use_smart_tablet);
                     break;
                 case R.id.itemInfo:
                     item_icon_4.setImageResource(R.drawable.useful_info_black);
+                    text = getString(R.string.useful_information);
                     break;
                 case R.id.itemMap:
                     item_icon_5.setImageResource(R.drawable.local_map_black);
+                    text = getString(R.string.local_map);
                     break;
                 case R.id.itemLocalRegion:
                     item_icon_6.setImageResource(R.drawable.the_local_region_black);
+                    text = getString(R.string.local_region);
                     break;
                 case R.id.itemWeather:
                     item_icon_7.setImageResource(R.drawable.weather_black);
+                    text = getString(R.string.weather);
                     break;
                 case R.id.itemNews:
                     item_icon_8.setImageResource(R.drawable.news_black);
+                    text = getString(R.string.news);
                     break;
                 case R.id.itemTransport:
                     item_icon_9.setImageResource(R.drawable.transport_icon_black);
+                    text = getString(R.string.transport_options);
                     break;
                 case R.id.itemPartner:
                     item_icon_10.setImageResource(R.drawable.partner_offer_black);
+                    text = getString(R.string.partner_offers);
                     break;
+            }
+
+            if (makeActive) {
+                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text));
             }
         }
     }
@@ -1180,6 +1204,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onTimeClick(View view) {
+        AnalyticsHelper.track(this, "Tapped time");
+
         if (isServiceRunning)
             return;
 
@@ -1239,6 +1265,8 @@ public class MainActivity extends FragmentActivity {
         fragmentListener.onUpdateFragment(firstFragment);
 
         makeMenuItemActive(null, false);
+
+        AnalyticsHelper.track(this, "Moved to Home");
     }
 
     public void setSignal(int wifi_signals_level) {
@@ -1354,6 +1382,8 @@ public class MainActivity extends FragmentActivity {
 
     public void openDeviceInformationDialog(View view) {
 
+        AnalyticsHelper.track(this, "Viewed Device Information");
+
         new RetrieveDevice(this)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -1404,6 +1434,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void toggleKioskMode(View view) {
+        AnalyticsHelper.track(this, "Toggle Kiosk Mode");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Password");
 

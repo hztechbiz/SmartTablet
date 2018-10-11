@@ -14,17 +14,20 @@ import com.smart.tablet.adapters.OffersGridAdapter;
 import com.smart.tablet.entities.Offer;
 import com.smart.tablet.entities.Service;
 import com.smart.tablet.fragments.ServiceSingleOfferFragment;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.models.OfferModel;
 import com.smart.tablet.tasks.RetrieveOffers;
+import com.smart.tablet.tasks.RetrieveSingleService;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class ServiceOffersFragment extends Fragment implements AsyncResultBag.Success {
     GridView gridView;
@@ -86,6 +89,19 @@ public class ServiceOffersFragment extends Fragment implements AsyncResultBag.Su
     private void bind() {
         new RetrieveOffers(getContext(), _service_id)
                 .onSuccess(this)
+                .execute();
+
+        new RetrieveSingleService(getContext(), _service_id)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Service service = (Service) result;
+
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Offers", service.getId(), service.getTitle()));
+                        }
+                    }
+                })
                 .execute();
     }
 

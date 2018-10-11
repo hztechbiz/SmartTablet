@@ -18,10 +18,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
+import com.smart.tablet.helpers.AnalyticsHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class ServiceLocationFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
     TextView txt_description, txt_title, txt_address, txt_email, txt_phone;
@@ -96,6 +99,8 @@ public class ServiceLocationFragment extends Fragment implements com.smart.table
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Location", service.getId(), service.getTitle()));
 
             txt_description.setText(service.getDescription());
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -23,6 +24,8 @@ import com.smart.tablet.tasks.RetrieveSingleService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class ServiceWebsiteFragment extends Fragment implements AsyncResultBag.Success {
     WebView webview;
@@ -94,6 +97,8 @@ public class ServiceWebsiteFragment extends Fragment implements AsyncResultBag.S
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Website", service.getId(), service.getTitle()));
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

@@ -20,6 +20,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
+import com.smart.tablet.entities.Analytics;
+import com.smart.tablet.helpers.AnalyticsHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ServiceFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
@@ -88,6 +91,8 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceFragment serviceFragment = new ServiceFragment();
                 serviceFragment.setArguments(bundle);
 
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()));
+
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceFragment);
             }
@@ -98,6 +103,8 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
             public void onClick(View v) {
                 ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
                 serviceBookingFragment.setArguments(_bundle);
+
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()));
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceBookingFragment);
@@ -221,6 +228,8 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
         if (service != null) {
             _service = service;
+
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()));
 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());

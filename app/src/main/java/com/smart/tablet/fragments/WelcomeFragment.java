@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.smart.tablet.LocationPopupActivity;
 import com.smart.tablet.MainActivity;
 import com.smart.tablet.R;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -22,6 +23,7 @@ import com.smart.tablet.tasks.RetrieveSetting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class WelcomeFragment extends Fragment {
     TextView txtHotelName, txtDescription;
@@ -58,6 +60,8 @@ public class WelcomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), LocationPopupActivity.class);
                 startActivity(intent);
+
+                AnalyticsHelper.track(getContext(), "Viewed Hotel Location");
             }
         });
 
@@ -82,6 +86,8 @@ public class WelcomeFragment extends Fragment {
     }
 
     private void bind() {
+        AnalyticsHelper.track(getContext(), "Viewed Welcome page");
+
         new RetrieveHotel(getContext())
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override

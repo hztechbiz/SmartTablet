@@ -26,6 +26,7 @@ import com.smart.tablet.adapters.CategoryGridAdapter;
 import com.smart.tablet.adapters.ServicesGridAdapter;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Service;
+import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -37,6 +38,7 @@ import com.smart.tablet.tasks.RetrieveCategories;
 import com.smart.tablet.tasks.RetrieveMedia;
 import com.smart.tablet.tasks.RetrieveServices;
 import com.smart.tablet.tasks.RetrieveSetting;
+import com.smart.tablet.tasks.RetrieveSingleCategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +48,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class CategoryFragment extends Fragment {
 
@@ -253,7 +256,25 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        if (_category_id != 0) {
+            getCategory();
+        }
+
         return view;
+    }
+
+    private void getCategory() {
+        new RetrieveSingleCategory(getContext(), _category_id)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            Category category = (Category) result;
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Category: #%d %s", category.getId(), category.getName()));
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void showWebView() {
