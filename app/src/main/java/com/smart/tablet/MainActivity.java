@@ -758,12 +758,12 @@ public class MainActivity extends FragmentActivity {
         Date now = Calendar.getInstance().getTime();
         String date = time_format.format(now);
 
-        entryPageStart = date_format.format(now) + " " + entryPageStart;
-        entryPageEnd = date_format.format(now) + " " + entryPageEnd;
+        String entryPageStartDateTime = date_format.format(now) + " " + entryPageStart;
+        String entryPageEndDateTime = date_format.format(now) + " " + entryPageEnd;
 
         try {
-            Date d1 = datetime_format.parse(entryPageStart);
-            Date d2 = datetime_format.parse(entryPageEnd);
+            Date d1 = datetime_format.parse(entryPageStartDateTime);
+            Date d2 = datetime_format.parse(entryPageEndDateTime);
 
             Util.DateDifference diff = Util.getDateDifference(d1, now);
             boolean is_started = diff.getHours() < 0 || diff.getMinutes() < 0 || diff.getSeconds() < 0;

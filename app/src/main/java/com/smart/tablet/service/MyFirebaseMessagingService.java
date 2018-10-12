@@ -55,14 +55,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Map<String, String> data = remoteMessage.getData();
 
-            Intent i = new Intent(MESSAGE_RECEIVED);
+            if (data.get("type").equals("notification")) {
+                Intent i = new Intent(MESSAGE_RECEIVED);
 
-            for (Map.Entry<String, String> entry :
-                    data.entrySet()) {
-                i.putExtra(entry.getKey(), entry.getValue());
+                for (Map.Entry<String, String> entry :
+                        data.entrySet()) {
+                    i.putExtra(entry.getKey(), entry.getValue());
+                }
+
+                sendBroadcast(i);
+            } else if (data.get("type").equals("command")) {
+                String command = data.get("command");
+
+                switch (command) {
+                    case Constants.COMMAND_EXECUTE_SEND_REPORT:
+                        Intent intent = new Intent(this, SendAnalytics.class);
+                        startService(intent);
+                        break;
+                }
             }
-
-            sendBroadcast(i);
         }
 
         // Check if message contains a notification payload.

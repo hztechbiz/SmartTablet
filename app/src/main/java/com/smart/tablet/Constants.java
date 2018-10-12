@@ -72,6 +72,10 @@ public class Constants {
     public static final String CITY_GOLD_COAST = "qld/gold-coast";
     public static final String CITY_PERTH = "wa/perth";
     /*
+     * Commands
+     */
+    public static final String COMMAND_EXECUTE_SEND_REPORT = "execute_send_report_task";
+    /*
      * Constants
      */
     public static String APP_KEY = "smart-$2y$10$RdYWP.Z6T1DFDjSSunimzOUcMDGIBmyqCQ11/Vof.idVxCY14h8ky-api";
