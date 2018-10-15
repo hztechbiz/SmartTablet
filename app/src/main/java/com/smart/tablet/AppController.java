@@ -17,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.smart.tablet.Constants;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveSetting;
 
@@ -32,6 +31,7 @@ public class AppController extends Application {
     private static com.smart.tablet.AppController mInstance;
     private RequestQueue mRequestQueue;
     private String _token;
+    private boolean _syncDone;
     private String _wifiName;
     private int _wifiLevel;
     private int _batteryLevel;
@@ -96,7 +96,7 @@ public class AppController extends Application {
         registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_POWER_CONNECTED));
         registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_POWER_DISCONNECTED));
 
-        fetchToken();
+        fetchSettings();
     }
 
     @Override
@@ -133,6 +133,10 @@ public class AppController extends Application {
     }
 
     private void sendStatusToServer() {
+
+        if (!_syncDone)
+            return;
+
         String url = Constants.GetApiUrl("device/update");
 
         JSONObject jsonRequest = new JSONObject();
@@ -177,14 +181,18 @@ public class AppController extends Application {
         }
     }
 
-    private void fetchToken() {
-        new RetrieveSetting(this, Constants.TOKEN_KEY)
+    private void fetchSettings() {
+        new RetrieveSetting(this, Constants.TOKEN_KEY, Constants.SETTING_SYNC_DONE)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
                         try {
                             if (result != null) {
-                                _token = result.toString();
+                                HashMap<String, String> settings = (HashMap<String, String>) result;
+
+                                _token = settings.get(Constants.TOKEN_KEY);
+                                _syncDone = settings.get(Constants.SETTING_SYNC_DONE).equals("1");
+
                                 sendStatusToServer();
                             } else {
                                 Log.e(TAG, "Token not found");

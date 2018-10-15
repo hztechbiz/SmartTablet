@@ -20,7 +20,7 @@
             android:gravity="center"
             android:hint="@string/enter_hotel_key_here"
             android:inputType="textPersonName"
-            android:text="874AQ-dm3cV-rW7J8-DB3Ut-fWwr0"
+            android:text="WC4xE-Hzhq1-5piul-1SZlN-xy2md"
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold" />

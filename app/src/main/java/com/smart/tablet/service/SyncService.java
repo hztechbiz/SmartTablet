@@ -57,9 +57,9 @@ public class SyncService extends IntentService {
     public static final String TRANSACTION_HEART_BEAT = com.smart.tablet.service.SyncService.class.getName() + ":HEART_BEAT";
     private static final String TAG = com.smart.tablet.service.SyncService.class.getName();
     private boolean isRunning = false;
-    private String SYNC_DONE = "ST@SYNC_DONE";
-    private String TOKEN = "ST@TOKEN";
-    private String FILE_PATH = "ST@FILE_PATH";
+    private String SYNC_DONE = Constants.SETTING_SYNC_DONE;
+    private String TOKEN = Constants.TOKEN_KEY;
+    private String FILE_PATH = Constants.FILE_PATH_KEY;
     private boolean _isSettingsStored;
     private boolean _isHotelInfoStored;
     private boolean _isCategoriesStored;
@@ -243,6 +243,7 @@ public class SyncService extends IntentService {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    Log.d("SchedulingAlarms", response + "");
                     if (response.getBoolean("status")) {
                         startSync(response);
                     } else {
@@ -348,6 +349,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeDeviceInfo(Device device) {
+        Log.d("Sync", "storing device info");
+
         new StoreDevice(this, device)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -371,6 +374,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeMedias(JSONArray media_arr) throws JSONException {
+        Log.d("Sync", "storing medias");
+
         Media[] medias = new Media[media_arr.length()];
 
         if (media_arr.length() > 0) {
@@ -388,6 +393,7 @@ public class SyncService extends IntentService {
                 medias[i] = media;
             }
         }
+        Log.d("Sync", "medias: " + medias.length);
         if (medias.length > 0) {
             new StoreMedia(this, getFilePath(null), medias)
                     .onSuccess(new AsyncResultBag.Success() {
@@ -411,10 +417,14 @@ public class SyncService extends IntentService {
                     .execute();
         } else {
             _isFilesDownloaded = true;
+
+            decide();
         }
     }
 
     private void storeCategories(JSONArray categories_arr) throws JSONException {
+        Log.d("Sync", "storing categories");
+
         Category[] categories = new Category[categories_arr.length()];
 
         for (int i = 0; i < categories_arr.length(); i++) {
@@ -461,6 +471,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeServices(JSONArray services_arr) throws JSONException {
+        Log.d("Sync", "storing services");
+
         Service[] services = new Service[services_arr.length()];
 
         for (int i = 0; i < services_arr.length(); i++) {
@@ -476,8 +488,10 @@ public class SyncService extends IntentService {
             service.setDescription(s.getString("description"));
             service.setCategory_id(s.getInt("category_id"));
             service.setStatus(s.getInt("status"));
-            service.setHotel_id(s.getInt("hotel_id"));
             service.setIs_marketing_partner((s.getInt("is_marketing_partner") == 1));
+
+            if (!s.isNull("hotel_id"))
+                service.setHotel_id(s.getInt("hotel_id"));
 
             if (!s.isNull("meta"))
                 service.setMeta(s.getJSONArray("meta").toString());
@@ -524,6 +538,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeTestimonials(JSONArray testimonials_arr) throws JSONException {
+        Log.d("Sync", "storing testimonials");
+
         Testimonial[] testimonials = new Testimonial[testimonials_arr.length()];
 
         for (int i = 0; i < testimonials_arr.length(); i++) {
@@ -545,6 +561,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeOffers(JSONArray offers_arr) throws JSONException {
+        Log.d("Sync", "storing offers");
+
         Offer[] offers = new Offer[offers_arr.length()];
 
         for (int i = 0; i < offers_arr.length(); i++) {
@@ -567,6 +585,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeArrivals(JSONArray arrivals_arr) throws JSONException {
+        Log.d("Sync", "storing arrivals");
+
         Arrival[] arrivals = new Arrival[arrivals_arr.length()];
 
         for (int i = 0; i < arrivals_arr.length(); i++) {
@@ -589,6 +609,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeSales(JSONArray sales_arr) throws JSONException {
+        Log.d("Sync", "storing sales");
+
         Sale[] sales = new Sale[sales_arr.length()];
 
         for (int i = 0; i < sales_arr.length(); i++) {
@@ -611,6 +633,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeHotelSettings(JSONArray meta) throws JSONException {
+        Log.d("Sync", "storing hotel settings");
+
         int length = meta.length() + _extraFieldsLength;
         Setting[] settings = new Setting[length];
 
@@ -651,6 +675,8 @@ public class SyncService extends IntentService {
     }
 
     private void storeHotelInfo(Hotel hotel) {
+        Log.d("Sync", "storing hotel info");
+
         new StoreHotel(this, hotel)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override

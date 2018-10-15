@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -41,6 +42,7 @@ import java.util.Map;
 public class SetupActivity extends Activity {
 
     private ProgressDialog _progressDialog;
+    private Button _btn_sync;
     private String API_KEY = Constants.API_KEY;
     private String TOKEN = Constants.TOKEN_KEY;
     private String _token;
@@ -159,8 +161,9 @@ public class SetupActivity extends Activity {
 
         _progressDialog = new ProgressDialog(this);
         _sync_container = findViewById(R.id.syncContainer);
+        _btn_sync = findViewById(R.id.btn_sync);
 
-        findViewById(R.id.btn_sync).setOnClickListener(new View.OnClickListener() {
+        _btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String key = ((EditText) findViewById(R.id.txt_key)).getText().toString();
@@ -190,6 +193,8 @@ public class SetupActivity extends Activity {
                                 if (response.getBoolean("status")) {
                                     String token = response.getJSONObject("data").getString("token");
                                     storeSettings(new Setting(API_KEY, key), new Setting(TOKEN, token));
+
+                                    _btn_sync.setEnabled(false);
                                 } else {
                                     hideProgressDialog();
                                     showMessage(response.getString("message"));

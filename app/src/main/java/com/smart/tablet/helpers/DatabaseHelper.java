@@ -8,7 +8,7 @@ import com.smart.tablet.helpers.AppDatabase;
 public class DatabaseHelper {
 
     private static com.smart.tablet.helpers.DatabaseHelper _instance;
-    private static String DB_NAME = "002_SmartTablet";
+    private static String DB_NAME = "003_SmartTablet";
     private AppDatabase _db;
     private Context _context;
 
