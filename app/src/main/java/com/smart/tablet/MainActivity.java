@@ -56,6 +56,7 @@ import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.models.ActivityAction;
+import com.smart.tablet.models.HotelModel;
 import com.smart.tablet.models.MapMarker;
 import com.smart.tablet.receivers.AdminReceiver;
 import com.smart.tablet.receivers.BootReceiver;
@@ -64,8 +65,8 @@ import com.smart.tablet.service.MyFirebaseMessagingService;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveCategories;
 import com.smart.tablet.tasks.RetrieveDevice;
+import com.smart.tablet.tasks.RetrieveHotel;
 import com.smart.tablet.tasks.RetrieveSetting;
-import com.smart.tablet.tasks.StoreAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,11 +80,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
-    private String entryPageStart, entryPageEnd, kioskPassword, sleepTime;
+    private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, timezone;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
     private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text;
@@ -94,7 +96,7 @@ public class MainActivity extends FragmentActivity {
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private int timerClicked, _btn_kiosk_clicks;
-    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage;
+    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage, _battery_low_popup;
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
@@ -517,12 +519,31 @@ public class MainActivity extends FragmentActivity {
         setupMenuItems();
         setBranding();
         scheduleAlarms();
+        getHotelInformation();
 
         wakeupScreen();
 
         if (_hasEntryPage) {
             showEntryPage(true);
         }
+    }
+
+    private void getHotelInformation() {
+        timezone = Constants.DEFAULT_TIMEZONE;
+
+        new RetrieveHotel(this)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            HotelModel hotel = (HotelModel) result;
+
+                            if (hotel.getTimezone() != null && !hotel.getTimezone().equals(""))
+                                timezone = hotel.getTimezone();
+                        }
+                    }
+                })
+                .execute();
     }
 
     private void getKioskPassword() {
@@ -571,7 +592,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void scheduleAlarms() {
-        ScheduledJobs.scheduleSyncAlarm(this);
+        ScheduledJobs.scheduleSyncAlarm(this, timezone);
         ScheduledJobs.scheduleWakeupAlarm(this);
 
         setBootReceiverEnabled(PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
@@ -693,6 +714,11 @@ public class MainActivity extends FragmentActivity {
                             @Override
                             public void run() {
                                 DateFormat df = new SimpleDateFormat("hh:mm a");
+
+                                if (timezone != null && !timezone.equals("")) {
+                                    df.setTimeZone(TimeZone.getTimeZone(timezone));
+                                }
+
                                 String date = df.format(Calendar.getInstance().getTime());
 
                                 txt_time.setText(date);
@@ -732,6 +758,11 @@ public class MainActivity extends FragmentActivity {
             return;
 
         DateFormat df = new SimpleDateFormat("HH:mm");
+
+        if (timezone != null && !timezone.equals("")) {
+            df.setTimeZone(TimeZone.getTimeZone(timezone));
+        }
+
         String date = df.format(Calendar.getInstance().getTime());
         Date sleepTimeDate = null;
 
@@ -755,6 +786,13 @@ public class MainActivity extends FragmentActivity {
         DateFormat time_format = new SimpleDateFormat("HH:mm");
         DateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat datetime_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        if (timezone != null && !timezone.equals("")) {
+            time_format.setTimeZone(TimeZone.getTimeZone(timezone));
+            date_format.setTimeZone(TimeZone.getTimeZone(timezone));
+            datetime_format.setTimeZone(TimeZone.getTimeZone(timezone));
+        }
+
         Date now = Calendar.getInstance().getTime();
         String date = time_format.format(now);
 
@@ -1296,10 +1334,9 @@ public class MainActivity extends FragmentActivity {
 
     public void setBattery(float percentage) {
         int res = R.drawable.battery_icon;
+
         if (percentage < 10) {
             res = R.drawable.batterydown;
-//            Intent btryPop = new Intent(getApplicationContext(), BatteryPopUp.class);
-//            startActivity(btryPop);
         } else if (percentage < 20) {
             res = R.drawable.battery_icon;
         } else if (percentage < 30) {
@@ -1318,6 +1355,13 @@ public class MainActivity extends FragmentActivity {
             res = R.drawable.battery_icon;
         } else if (percentage <= 100) {
             res = R.drawable.btfull1;
+        }
+
+        if (percentage < 5 && !_battery_low_popup) {
+            _battery_low_popup = true;
+            showPopupMessage("Battery Low", "Warning! Connect Power");
+        } else {
+            _battery_low_popup = false;
         }
 
         Bitmap battery_icon = BitmapFactory.decodeResource(getResources(), res);

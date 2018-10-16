@@ -860,109 +860,127 @@
             android:layout_centerHorizontal="true"
             tools:ignore="ContentDescription" />
 
+        <RelativeLayout
+            android:layout_width="700dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="15dp"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_night_mode_2"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/black_transparent_with_radius"
-                android:onClick="toggleNightMode"
-                android:padding="5dp"
-                android:text="@string/night_mode"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="#FFF" />
-
-            <ImageView
-                android:id="@+id/entry_page_wifi_connect"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/blue_radius"
-                android:padding="5dp"
-                android:src="@drawable/wsignal" />
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/blue_radius"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+                android:layout_weight="1"
+                android:paddingStart="10dp">
 
                 <ImageView
-                    android:id="@+id/img_electric_2"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/electric" />
-
-                <ImageView
-                    android:id="@+id/entry_page_bettryStatus"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="3dp"
-                    android:src="@drawable/battery_icon" />
-
-                <TextView
-                    android:id="@+id/entry_page_percentage_set"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/_0"
-                    android:textColor="#fff"
-                    android:textColorHint="#fff" />
+                    android:id="@+id/entryLogo"
+                    android:layout_width="300dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/white_background_corner_radius"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/blue_radius"
-                android:gravity="center"
-                android:onClick="onTimeClick"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end">
 
-                <TextView
-                    android:id="@+id/entry_page_getTime"
+                <Button
+                    android:id="@+id/btn_night_mode_2"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/black_transparent_with_radius"
+                    android:onClick="toggleNightMode"
+                    android:padding="5dp"
+                    android:text="@string/night_mode"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#FFF" />
+
+                <ImageView
+                    android:id="@+id/entry_page_wifi_connect"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/blue_radius"
+                    android:padding="5dp"
+                    android:src="@drawable/wsignal" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/_00_00_pm"
-                    android:textColor="#fff"
-                    android:textColorHint="#fff" />
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/blue_radius"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <ImageView
+                        android:id="@+id/img_electric_2"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/electric" />
+
+                    <ImageView
+                        android:id="@+id/entry_page_bettryStatus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="3dp"
+                        android:src="@drawable/battery_icon" />
+
+                    <TextView
+                        android:id="@+id/entry_page_percentage_set"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/_0"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/blue_radius"
+                    android:gravity="center"
+                    android:onClick="onTimeClick"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <TextView
+                        android:id="@+id/entry_page_getTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/_00_00_pm"
+                        android:textColor="#fff"
+                        android:textColorHint="#fff" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/entryLogo"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/white_background_corner_radius"
-            android:paddingBottom="15dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="15dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/entryLogo"
+            android:layout_centerVertical="true"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -993,6 +1011,8 @@
                 android:textColor="#FFF"
                 android:textSize="25sp" />
         </LinearLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

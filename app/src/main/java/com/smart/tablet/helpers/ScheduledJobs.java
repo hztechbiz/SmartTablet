@@ -13,6 +13,7 @@ import com.smart.tablet.receivers.WakeupReceiver;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class ScheduledJobs {
     public static void scheduleWakeupAlarm(Context context) {
@@ -28,12 +29,14 @@ public class ScheduledJobs {
         }
     }
 
-    public static void scheduleSyncAlarm(Context context) {
+    public static void scheduleSyncAlarm(Context context, String timezone) {
         Intent intent = new Intent(context, SyncAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         long millis = System.currentTimeMillis();
         long triggerAt = millis;
         long interval = AlarmManager.INTERVAL_HOUR * 24;
+
         //interval = 10 * 60 * 1000;
         String datetime_format = "yyyy-MM-dd HH:mm:ss";
         String date_format = "yyyy-MM-dd";
@@ -42,6 +45,11 @@ public class ScheduledJobs {
 
         SimpleDateFormat df = new SimpleDateFormat(date_format);
         SimpleDateFormat sdf = new SimpleDateFormat(datetime_format);
+
+        if (timezone != null && !timezone.equals("")) {
+            df.setTimeZone(TimeZone.getTimeZone(timezone));
+            sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+        }
 
         String current_date = df.format(millis);
         String givenDateString = current_date + " " + sync_time;
