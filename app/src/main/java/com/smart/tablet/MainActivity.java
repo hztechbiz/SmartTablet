@@ -514,12 +514,15 @@ public class MainActivity extends FragmentActivity {
             }
         }, 1000);
 
+        getHotelInformation();
+    }
+
+    private void init() {
         getTimeSettings();
         getKioskPassword();
         setupMenuItems();
         setBranding();
         scheduleAlarms();
-        getHotelInformation();
 
         wakeupScreen();
 
@@ -541,6 +544,8 @@ public class MainActivity extends FragmentActivity {
                             if (hotel.getTimezone() != null && !hotel.getTimezone().equals(""))
                                 timezone = hotel.getTimezone();
                         }
+
+                        init();
                     }
                 })
                 .execute();

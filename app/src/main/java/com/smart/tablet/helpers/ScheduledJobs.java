@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.smart.tablet.Constants;
+import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.receivers.SyncAlarmReceiver;
 import com.smart.tablet.receivers.WakeupReceiver;
+import com.smart.tablet.tasks.RetrieveHotel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,11 @@ public class ScheduledJobs {
         }
     }
 
-    public static void scheduleSyncAlarm(Context context, String timezone) {
+    public static void scheduleSyncAlarm(final Context context, String timezone) {
+        scheduleSyncAlarmAt(context, timezone, "03:00:00", true);
+    }
+
+    public static void scheduleSyncAlarmAt(final Context context, String timezone, String sync_time, boolean repeating) {
         Intent intent = new Intent(context, SyncAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -40,11 +46,12 @@ public class ScheduledJobs {
         //interval = 10 * 60 * 1000;
         String datetime_format = "yyyy-MM-dd HH:mm:ss";
         String date_format = "yyyy-MM-dd";
-        String sync_time = "03:00:00";
         //sync_time = "18:49:00";
 
         SimpleDateFormat df = new SimpleDateFormat(date_format);
         SimpleDateFormat sdf = new SimpleDateFormat(datetime_format);
+
+        Log.d("SyncAlarm", timezone);
 
         if (timezone != null && !timezone.equals("")) {
             df.setTimeZone(TimeZone.getTimeZone(timezone));
@@ -71,7 +78,11 @@ public class ScheduledJobs {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerAt, interval, pendingIntent);
+            if (repeating) {
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerAt, interval, pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
+            }
         }
     }
 }
