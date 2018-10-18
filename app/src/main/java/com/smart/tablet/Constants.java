@@ -75,6 +75,7 @@ public class Constants {
      * Commands
      */
     public static final String COMMAND_EXECUTE_SEND_REPORT = "execute_send_report_task";
+    public static final String COMMAND_PING = "ping_device";
     /*
      * Constants
      */

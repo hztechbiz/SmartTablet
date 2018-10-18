@@ -123,6 +123,7 @@
 
         <service android:name=".service.SyncService" />
         <service android:name=".service.SendAnalytics" />
+        <service android:name=".service.PingResponse" />
         <service
             android:name=".service.MyFirebaseMessagingService"
             android:stopWithTask="true">

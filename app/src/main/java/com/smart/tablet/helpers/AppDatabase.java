@@ -26,7 +26,7 @@ import com.smart.tablet.entities.Service;
 import com.smart.tablet.entities.Setting;
 import com.smart.tablet.entities.Testimonial;
 
-@Database(entities = {Setting.class, Hotel.class, Category.class, Service.class, Media.class, Offer.class, Testimonial.class, Arrival.class, Sale.class, Device.class, Analytics.class}, version = 5, exportSchema = false)
+@Database(entities = {Setting.class, Hotel.class, Category.class, Service.class, Media.class, Offer.class, Testimonial.class, Arrival.class, Sale.class, Device.class, Analytics.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SettingDao settingDao();
 

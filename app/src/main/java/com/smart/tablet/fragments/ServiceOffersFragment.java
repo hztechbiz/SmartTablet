@@ -98,7 +98,7 @@ public class ServiceOffersFragment extends Fragment implements AsyncResultBag.Su
                         if (result != null) {
                             Service service = (Service) result;
 
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Offers", service.getId(), service.getTitle()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Offers", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                         }
                     }
                 })

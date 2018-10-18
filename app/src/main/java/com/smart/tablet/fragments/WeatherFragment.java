@@ -99,7 +99,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         txt_details.setText("...");
         txt_temperature.setText("...");
 
-        AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed weather info for %s", city));
+        AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed weather info for %s", city), null);
 
         String url = String.format("http://rss.weather.com.au/%s", new Object[]{city});
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

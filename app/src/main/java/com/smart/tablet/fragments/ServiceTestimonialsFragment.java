@@ -107,7 +107,7 @@ public class ServiceTestimonialsFragment extends Fragment implements com.smart.t
                         if (result != null) {
                             Service service = (Service) result;
 
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Testimonials", service.getId(), service.getTitle()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Testimonials", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                         }
                     }
                 })

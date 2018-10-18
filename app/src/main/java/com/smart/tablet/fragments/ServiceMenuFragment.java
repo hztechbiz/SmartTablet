@@ -88,7 +88,7 @@ public class ServiceMenuFragment extends Fragment implements AsyncResultBag.Succ
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Menu", service.getId(), service.getTitle()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Menu", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

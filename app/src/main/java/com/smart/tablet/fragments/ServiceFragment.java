@@ -91,7 +91,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceFragment serviceFragment = new ServiceFragment();
                 serviceFragment.setArguments(bundle);
 
-                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()));
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()), String.format(Locale.US, "Service #%d", _service.getId()));
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceFragment);
@@ -104,7 +104,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
                 serviceBookingFragment.setArguments(_bundle);
 
-                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()));
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()), String.format(Locale.US, "Service #%d", _service.getId()));
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceBookingFragment);
@@ -229,7 +229,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());

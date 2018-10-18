@@ -107,7 +107,7 @@ public class ServiceSingleArrivalFragment extends Fragment implements AsyncResul
                             if (result != null) {
                                 Service service = (Service) result;
 
-                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed News Arrival(%s) in #%d %s", arrival.getTitle(), service.getId(), service.getTitle()));
+                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed News Arrival(%s) in #%d %s", arrival.getTitle(), service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                             }
                         }
                     })

@@ -153,7 +153,7 @@ public class MainFragment extends Fragment {
             getCategories();
             gridView.setAdapter(categoryAdapter);
 
-            AnalyticsHelper.track(getContext(), "Viewed Homepage");
+            AnalyticsHelper.track(getContext(), "Viewed Homepage", null);
         }
 
         ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();

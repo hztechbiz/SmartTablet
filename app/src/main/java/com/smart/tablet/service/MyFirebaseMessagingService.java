@@ -66,10 +66,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendBroadcast(i);
             } else if (data.get("type").equals("command")) {
                 String command = data.get("command");
+                Intent intent = null;
 
                 switch (command) {
                     case Constants.COMMAND_EXECUTE_SEND_REPORT:
-                        Intent intent = new Intent(this, SendAnalytics.class);
+                        intent = new Intent(this, SendAnalytics.class);
+                        startService(intent);
+                        break;
+                    case Constants.COMMAND_PING:
+                        intent = new Intent(this, PingResponse.class);
                         startService(intent);
                         break;
                 }

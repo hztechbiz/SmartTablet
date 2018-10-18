@@ -32,7 +32,7 @@ public class AnalyticsHelper {
         return _instance;
     }
 
-    public static void track(final Context context, final String purpose) {
+    public static void track(final Context context, final String purpose, final String reference) {
         new RetrieveHotel(context)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -59,6 +59,7 @@ public class AnalyticsHelper {
 
                         try {
                             jsonObject.put("purpose", purpose);
+                            jsonObject.put("reference", reference);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

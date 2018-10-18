@@ -109,7 +109,7 @@ public class ServiceSingleSaleFragment extends Fragment implements com.smart.tab
                             if (result != null) {
                                 Service service = (Service) result;
 
-                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Sale(%s) in #%d %s", sale.getTitle(), service.getId(), service.getTitle()));
+                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Sale(%s) in #%d %s", sale.getTitle(), service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                             }
                         }
                     })

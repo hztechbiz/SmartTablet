@@ -100,7 +100,7 @@ public class ServiceLocationFragment extends Fragment implements com.smart.table
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Location", service.getId(), service.getTitle()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Location", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
 
             txt_description.setText(service.getDescription());
 

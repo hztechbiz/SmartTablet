@@ -100,7 +100,7 @@ public class ServiceArrivalsFragment extends Fragment implements com.smart.table
                         if (result != null) {
                             Service service = (Service) result;
 
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Arrivals", service.getId(), service.getTitle()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Arrivals", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                         }
                     }
                 })

@@ -1022,14 +1022,14 @@ public class MainActivity extends FragmentActivity {
     public void onEntryPageEnter(View view) {
         showEntryPage(false);
 
-        AnalyticsHelper.track(this, "Entry Page");
+        AnalyticsHelper.track(this, "Entry Page", null);
     }
 
     public void toggleNightMode(View view) {
         _isNightMode = !_isNightMode;
         showNightMode(_isNightMode);
 
-        AnalyticsHelper.track(this, _isNightMode ? "Enabled night mode" : "Disabled night mode");
+        AnalyticsHelper.track(this, (_isNightMode ? "Enabled night mode" : "Disabled night mode"), null);
     }
 
     private void showNightMode(boolean b) {
@@ -1149,7 +1149,7 @@ public class MainActivity extends FragmentActivity {
                 })
                 .execute();
 
-        AnalyticsHelper.track(this, "Moved to Guest Services");
+        AnalyticsHelper.track(this, "Moved to Guest Services", null);
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {
@@ -1233,7 +1233,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             if (makeActive) {
-                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text));
+                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text), null);
             }
         }
     }
@@ -1247,7 +1247,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onTimeClick(View view) {
-        AnalyticsHelper.track(this, "Tapped time");
+        AnalyticsHelper.track(this, "Tapped time", null);
 
         if (isServiceRunning)
             return;
@@ -1309,7 +1309,7 @@ public class MainActivity extends FragmentActivity {
 
         makeMenuItemActive(null, false);
 
-        AnalyticsHelper.track(this, "Moved to Home");
+        AnalyticsHelper.track(this, "Moved to Home", null);
     }
 
     public void setSignal(int wifi_signals_level) {
@@ -1431,7 +1431,7 @@ public class MainActivity extends FragmentActivity {
 
     public void openDeviceInformationDialog(View view) {
 
-        AnalyticsHelper.track(this, "Viewed Device Information");
+        AnalyticsHelper.track(this, "Viewed Device Information", null);
 
         new RetrieveDevice(this)
                 .onSuccess(new AsyncResultBag.Success() {
@@ -1483,7 +1483,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void toggleKioskMode(View view) {
-        AnalyticsHelper.track(this, "Toggle Kiosk Mode");
+        AnalyticsHelper.track(this, "Toggle Kiosk Mode", null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Password");

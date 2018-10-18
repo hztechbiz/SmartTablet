@@ -107,7 +107,7 @@ public class ServiceSingleOfferFragment extends Fragment implements AsyncResultB
                             if (result != null) {
                                 Service service = (Service) result;
 
-                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Offer(%s) in #%d %s", offer.getTitle(), service.getId(), service.getTitle()));
+                                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Offer(%s) in #%d %s", offer.getTitle(), service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
                             }
                         }
                     })

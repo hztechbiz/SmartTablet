@@ -270,7 +270,7 @@ public class CategoryFragment extends Fragment {
                     public void onSuccess(Object result) {
                         if (result != null) {
                             Category category = (Category) result;
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Category: #%d %s", category.getId(), category.getName()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Category: #%d %s", category.getId(), category.getName()), String.format(Locale.US, "Category #%d", category.getId()));
                         }
                     }
                 })
