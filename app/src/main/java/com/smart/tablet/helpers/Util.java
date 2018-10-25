@@ -3,6 +3,7 @@ package com.smart.tablet.helpers;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.Html;
 
 import com.smart.tablet.R;
 
@@ -25,6 +26,14 @@ public class Util {
         long days = hours / 24;
 
         return new DateDifference(seconds, minutes, hours, days);
+    }
+
+    public static String stripHtml(String html) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(html).toString();
+        }
     }
 
     public static class DateDifference {

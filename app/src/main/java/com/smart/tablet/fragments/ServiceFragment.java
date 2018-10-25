@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -233,7 +234,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());
-                txt_description.setText(service.getDescription());
+                txt_description.setText(Html.fromHtml(service.getDescription()));
             } else {
                 ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_app_heading), null));

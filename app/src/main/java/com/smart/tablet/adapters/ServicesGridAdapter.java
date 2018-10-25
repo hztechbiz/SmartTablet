@@ -1,6 +1,7 @@
 package com.smart.tablet.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class ServicesGridAdapter extends BaseAdapter {
         TextView txt_description = view.findViewById(R.id.offer_descrip);
 
         txt_title.setText(service.getTitle().toUpperCase());
-        txt_description.setText(description);
+        txt_description.setText(Util.stripHtml(description));
 
         txt_title.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(context));
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(context));

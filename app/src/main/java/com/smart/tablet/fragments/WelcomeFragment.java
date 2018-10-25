@@ -3,6 +3,7 @@ package com.smart.tablet.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,8 +127,8 @@ public class WelcomeFragment extends Fragment {
             txtHotelName.setText(_heading);
 
         if (_new_description != null)
-            txtDescription.setText(_new_description);
+            txtDescription.setText(Html.fromHtml(_new_description));
         else
-            txtDescription.setText(_description);
+            txtDescription.setText(Html.fromHtml(_description));
     }
 }

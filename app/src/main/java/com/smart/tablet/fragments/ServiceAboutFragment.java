@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,7 +144,7 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
                                     _setupImage(meta_value);
                                     break;
                                 case "about_text":
-                                    txt_description.setText(meta_value);
+                                    txt_description.setText(Html.fromHtml(meta_value));
                                     break;
                                 case Constants.TOP_MENU_SHOW_BOOK:
                                     if (meta_value.equals("1"))
