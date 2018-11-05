@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.smartapp.hztech.smarttebletapp.SetupActivity">
+    android:background="@color/colorBlack"
+    tools:context="com.smart.tablet.SetupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +22,7 @@
             android:inputType="textPersonName"
             android:text="WC4xE-Hzhq1-5piul-1SZlN-xy2md"
             android:textAlignment="center"
+            android:textColor="@color/colorWhite"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -29,21 +30,25 @@
             android:id="@+id/btn_sync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sync" />
+            android:background="@color/colorPrimary"
+            android:text="@string/sync"
+            android:textColor="@color/colorWhite" />
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/syncContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:visibility="gone"
-        android:keepScreenOn="true">
+        android:background="@color/colorBlack"
+        android:keepScreenOn="true"
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/syncProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,7 +56,7 @@
             android:layout_below="@id/syncProgressBar"
             android:layout_centerInParent="true"
             android:text="@string/synchronizing_please_wait"
-            android:textColor="#FFF"
+            android:textColor="@color/colorPrimary"
             android:textSize="17sp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

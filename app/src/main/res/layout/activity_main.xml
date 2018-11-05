@@ -1044,14 +1044,15 @@
         android:id="@+id/syncContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1f1f1f"
+        android:background="@color/colorBlack"
         android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/syncProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -1059,7 +1060,7 @@
             android:layout_below="@id/syncProgressBar"
             android:layout_centerInParent="true"
             android:text="@string/synchronizing_please_wait"
-            android:textColor="#FFF"
+            android:textColor="@color/colorPrimary"
             android:textSize="17sp" />
     </RelativeLayout>
 
