@@ -2,6 +2,7 @@ package com.smart.tablet.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.smart.tablet.dao.MediaDao;
 import com.smart.tablet.entities.Media;
@@ -39,14 +40,19 @@ public class DeleteMedia extends AsyncTask<Void, Void, Boolean> {
             Media[] medias = mediaDao.getAll();
 
             for (Media media : medias) {
-                File file = new File(media.getPath());
-                file.delete();
+                if (media != null) {
+                    try {
+                        File file = new File(media.getPath());
+                        file.delete();
 
-                mediaDao.delete(media);
+                        mediaDao.delete(media);
+                    } catch (NullPointerException ex) {
+                        // nothing
+                    }
+                }
             }
         } catch (Exception e) {
-            error = e;
-            return false;
+            // nothing
         }
         return true;
     }

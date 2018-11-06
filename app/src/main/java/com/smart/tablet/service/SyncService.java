@@ -52,6 +52,7 @@ import java.util.Map;
 public class SyncService extends IntentService {
 
     public static final String TRANSACTION_DONE = com.smart.tablet.service.SyncService.class.getName() + ":DONE";
+    public static final String TRANSACTION_FAILED = com.smart.tablet.service.SyncService.class.getName() + ":FAILED";
     public static final String TRANSACTION_COMPLETE = com.smart.tablet.service.SyncService.class.getName() + ":COMPLETE";
     public static final String TRANSACTION_START = com.smart.tablet.service.SyncService.class.getName() + ":START";
     public static final String TRANSACTION_HEART_BEAT = com.smart.tablet.service.SyncService.class.getName() + ":HEART_BEAT";
@@ -127,6 +128,11 @@ public class SyncService extends IntentService {
         sendBroadcast(i);
     }
 
+    private void sendFailedBroadcast() {
+        Intent i = new Intent(TRANSACTION_FAILED);
+        sendBroadcast(i);
+    }
+
     private void sendCompleteBroadcast() {
         Intent i = new Intent(TRANSACTION_COMPLETE);
         sendBroadcast(i);
@@ -155,19 +161,17 @@ public class SyncService extends IntentService {
 
             isRunning = true;
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    notifyFinish();
-                }
-            }, Constants.SYNC_WAIT);
-
             new StoreSetting(this, new Setting(Constants.SYNC_SERVICE_RUNNING, "1"))
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
-                            retrieveTokenAndStartSync();
-                            sendStartBroadcast();
+                            if (isRunning) {
+                                retrieveTokenAndStartSync();
+                                sendStartBroadcast();
+                            } else {
+                                Log.d(TAG, "destroyed at setting");
+                                _hasError = true;
+                            }
                         }
                     })
                     .onError(new AsyncResultBag.Error() {
@@ -183,6 +187,13 @@ public class SyncService extends IntentService {
                     })
                     .execute();
 
+            while (isRunning) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             //scheduleHeartBeat();
         }
     }
@@ -209,9 +220,13 @@ public class SyncService extends IntentService {
                     @Override
                     public void onSuccess(Object result) {
                         if (result != null) {
-                            _token = result.toString();
-                            Log.d("SchedulingAlarms", "token: " + _token);
-                            sync();
+                            if (isRunning) {
+                                _token = result.toString();
+                                Log.d("SchedulingAlarms", "token: " + _token);
+                                sync();
+                            } else {
+                                _hasError = true;
+                            }
                         }
                     }
                 })
@@ -231,8 +246,10 @@ public class SyncService extends IntentService {
 
     @Override
     public void onDestroy() {
-        isRunning = false;
         super.onDestroy();
+
+        isRunning = false;
+        Log.d("SyncService", "destroyed");
     }
 
     private void sync() {
@@ -245,7 +262,12 @@ public class SyncService extends IntentService {
                 try {
                     Log.d("SchedulingAlarms", response + "");
                     if (response.getBoolean("status")) {
-                        startSync(response);
+                        if (isRunning) {
+                            startSync(response);
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at sync()");
+                        }
                     } else {
                         _hasError = true;
                         _error = response.get("message").toString();
@@ -333,16 +355,27 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        try {
-                            storeMedias(media_arr);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "deleteMedia: " + e.getMessage());
+                        if (isRunning) {
+                            try {
+                                storeMedias(media_arr);
+                            } catch (JSONException e) {
+                                Log.e(TAG, "deleteMedia: " + e.getMessage());
 
+                                _hasError = true;
+                                _error = e;
+
+                                decide();
+                            }
+                        } else {
                             _hasError = true;
-                            _error = e;
-
-                            decide();
+                            Log.d(TAG, "destroyed at delete media");
                         }
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        Log.e(TAG, "deleteMedia: " + error);
                     }
                 })
                 .execute();
@@ -355,8 +388,13 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        _isDeviceInfoStored = true;
-                        decide();
+                        if (isRunning) {
+                            _isDeviceInfoStored = true;
+                            decide();
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at device info");
+                        }
                     }
                 })
                 .onError(new AsyncResultBag.Error() {
@@ -399,8 +437,13 @@ public class SyncService extends IntentService {
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
-                            _isFilesDownloaded = true;
-                            decide();
+                            if (isRunning) {
+                                _isFilesDownloaded = true;
+                                decide();
+                            } else {
+                                _hasError = true;
+                                Log.d(TAG, "destroyed at storing media");
+                            }
                         }
                     })
                     .onError(new AsyncResultBag.Error() {
@@ -452,8 +495,13 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        _isCategoriesStored = true;
-                        decide();
+                        if (isRunning) {
+                            _isCategoriesStored = true;
+                            decide();
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at storing categories");
+                        }
                     }
                 })
                 .onError(new AsyncResultBag.Error() {
@@ -519,8 +567,13 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        _isServicesStored = true;
-                        decide();
+                        if (isRunning) {
+                            _isServicesStored = true;
+                            decide();
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at storing services");
+                        }
                     }
                 })
                 .onError(new AsyncResultBag.Error() {
@@ -656,8 +709,13 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        _isSettingsStored = true;
-                        decide();
+                        if (isRunning) {
+                            _isSettingsStored = true;
+                            decide();
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at hotel settings");
+                        }
                     }
                 })
                 .onError(new AsyncResultBag.Error() {
@@ -681,8 +739,13 @@ public class SyncService extends IntentService {
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
-                        _isHotelInfoStored = true;
-                        decide();
+                        if (isRunning) {
+                            _isHotelInfoStored = true;
+                            decide();
+                        } else {
+                            _hasError = true;
+                            Log.d(TAG, "destroyed at storing hotel");
+                        }
                     }
                 })
                 .onError(new AsyncResultBag.Error() {
@@ -722,6 +785,8 @@ public class SyncService extends IntentService {
                     })
                     .execute();
         } else if (_hasError) {
+            _error = "Sync failed";
+
             if (_error instanceof ConnectException || _error instanceof UnknownHostException || _error instanceof NetworkError) {
                 _error = "Connection failed, please try again later";
             }

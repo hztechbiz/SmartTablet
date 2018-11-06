@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.smart.tablet"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 8
         versionName "0.0.8"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -65,6 +67,12 @@ public class SetupActivity extends Activity {
             showSynchronizing(false);
         }
     };
+    private BroadcastReceiver syncFailedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showSynchronizing(false);
+        }
+    };
     private BroadcastReceiver syncCompleteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,11 +90,13 @@ public class SetupActivity extends Activity {
 
     private void showSynchronizing(boolean b) {
         _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
+        _btn_sync.setEnabled(!b);
     }
 
     @Override
     protected void onStart() {
         registerReceiver(syncReceiver, new IntentFilter(SyncService.TRANSACTION_DONE));
+        registerReceiver(syncFailedReceiver, new IntentFilter(SyncService.TRANSACTION_FAILED));
         registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
@@ -137,6 +147,9 @@ public class SetupActivity extends Activity {
     protected void onStop() {
         if (syncReceiver != null)
             unregisterReceiver(syncReceiver);
+
+        if (syncFailedReceiver != null)
+            unregisterReceiver(syncFailedReceiver);
 
         if (syncStartReceiver != null)
             unregisterReceiver(syncStartReceiver);
@@ -273,8 +286,12 @@ public class SetupActivity extends Activity {
 
                         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         */
-                        Intent intent = new Intent(com.smart.tablet.SetupActivity.this, SyncService.class);
-                        startService(intent);
+                        Intent intent = new Intent(SetupActivity.this, SyncService.class);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                            startService(intent);
+                        } else {
+                            startForegroundService(intent);
+                        }
                     }
                 })
                 .execute();

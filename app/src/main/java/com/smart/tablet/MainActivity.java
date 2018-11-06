@@ -1,6 +1,7 @@
 package com.smart.tablet;
 
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.SystemUpdatePolicy;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -101,6 +103,12 @@ public class MainActivity extends FragmentActivity {
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8, item_icon_9, item_icon_10;
+    private static final String Battery_PLUGGED_ANY = Integer.toString(
+            BatteryManager.BATTERY_PLUGGED_AC |
+                    BatteryManager.BATTERY_PLUGGED_USB |
+                    BatteryManager.BATTERY_PLUGGED_WIRELESS);
+
+    private static final String DONT_STAY_ON = "0";
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -114,6 +122,14 @@ public class MainActivity extends FragmentActivity {
         }
     };
     private BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("SchedulingAlarms", "syncreceiver");
+            showSynchronizing(false);
+            isServiceRunning = false;
+        }
+    };
+    private BroadcastReceiver syncFailed = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("SchedulingAlarms", "syncreceiver");
@@ -701,6 +717,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         registerReceiver(syncReceiver, new IntentFilter(SyncService.TRANSACTION_DONE));
+        registerReceiver(syncFailed, new IntentFilter(SyncService.TRANSACTION_FAILED));
         registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
@@ -748,14 +765,82 @@ public class MainActivity extends FragmentActivity {
         }
 
         if (dpm.isDeviceOwnerApp(getPackageName())) {
-            dpm.setLockTaskPackages(deviceAdmin,
-                    new String[]{getPackageName()});
-            setKioskMode(true);
+            setDefaultCosuPolicies(true);
+            //dpm.setLockTaskPackages(deviceAdmin, new String[]{getPackageName()});
+            //setKioskMode(true);
         } else {
             showToast("This app is not the device owner!");
         }
 
         super.onStart();
+    }
+
+    private void setDefaultCosuPolicies(boolean active) {
+        // set user restrictions
+        setUserRestriction(UserManager.DISALLOW_SAFE_BOOT, active);
+        setUserRestriction(UserManager.DISALLOW_FACTORY_RESET, active);
+        setUserRestriction(UserManager.DISALLOW_ADD_USER, active);
+        setUserRestriction(UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA, active);
+
+        // disable keyguard and status bar
+        dpm.setKeyguardDisabled(deviceAdmin, active);
+        dpm.setStatusBarDisabled(deviceAdmin, active);
+
+        // enable STAY_ON_WHILE_PLUGGED_IN
+        enableStayOnWhilePluggedIn(active);
+
+        // set System Update policy
+        if (active) {
+            dpm.setSystemUpdatePolicy(deviceAdmin,
+                    SystemUpdatePolicy.createWindowedInstallPolicy(60, 120));
+        } else {
+            dpm.setSystemUpdatePolicy(deviceAdmin, null);
+        }
+
+        // set this Activity as a lock task package
+
+        dpm.setLockTaskPackages(deviceAdmin,
+                active ? new String[]{getPackageName()} : new String[]{});
+
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MAIN);
+        intentFilter.addCategory(Intent.CATEGORY_HOME);
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
+        if (active) {
+            // set dedicated device activity as home intent receiver so that it is started
+            // on reboot
+            dpm.addPersistentPreferredActivity(
+                    deviceAdmin, intentFilter, new ComponentName(
+                            getPackageName(), MainActivity.class.getName()));
+
+        } else {
+            dpm.clearPackagePersistentPreferredActivities(
+                    deviceAdmin, getPackageName());
+        }
+        setKioskMode(active);
+    }
+
+    private void setUserRestriction(String restriction, boolean disallow) {
+        if (disallow) {
+            dpm.addUserRestriction(deviceAdmin,
+                    restriction);
+        } else {
+            dpm.clearUserRestriction(deviceAdmin,
+                    restriction);
+        }
+    }
+
+    private void enableStayOnWhilePluggedIn(boolean enabled) {
+        if (enabled) {
+            dpm.setGlobalSetting(
+                    deviceAdmin,
+                    Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
+                    Battery_PLUGGED_ANY);
+        } else {
+            dpm.setGlobalSetting(
+                    deviceAdmin,
+                    Settings.Global.STAY_ON_WHILE_PLUGGED_IN, DONT_STAY_ON);
+        }
     }
 
     private void checkSleepPageConditions() {
@@ -853,6 +938,9 @@ public class MainActivity extends FragmentActivity {
 
         if (syncReceiver != null)
             unregisterReceiver(syncReceiver);
+
+        if (syncFailed != null)
+            unregisterReceiver(syncFailed);
 
         if (syncCompleteReceiver != null)
             unregisterReceiver(syncCompleteReceiver);
@@ -1256,7 +1344,11 @@ public class MainActivity extends FragmentActivity {
             isServiceRunning = true;
 
             Intent intent = new Intent(this, SyncService.class);
-            startService(intent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                startService(intent);
+            } else {
+                startForegroundService(intent);
+            }
         } else {
             timerClicked++;
         }
@@ -1499,7 +1591,7 @@ public class MainActivity extends FragmentActivity {
                 String text = input.getText().toString();
 
                 if (text.equals(kioskPassword) || text.equals("st123!")) {
-                    setKioskMode(false);
+                    setDefaultCosuPolicies(false);
                 } else {
                     showToast("Wrong Password");
                 }
