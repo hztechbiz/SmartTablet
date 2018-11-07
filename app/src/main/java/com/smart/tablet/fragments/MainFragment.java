@@ -124,7 +124,7 @@ public class MainFragment extends Fragment {
                 }
 
                 if (embed_url != null) {
-                    //bundle.putString(getString(R.string.param_embed_url), embed_url.toString());
+                    bundle.putString(getString(R.string.param_embed_url), embed_url.toString());
                 }
 
                 if (is_mp != null) {
@@ -153,7 +153,7 @@ public class MainFragment extends Fragment {
             getCategories();
             gridView.setAdapter(categoryAdapter);
 
-            AnalyticsHelper.track(getContext(), "Viewed Homepage", null);
+            AnalyticsHelper.track(getContext(), "Viewed Homepage", null, null);
         }
 
         ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();

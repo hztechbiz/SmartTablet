@@ -45,6 +45,7 @@
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
     <string name="msg_show_sidebar">SHOW_SIDEBAR</string>
     <string name="msg_update_menu">UPDATE_MENU</string>
+    <string name="msg_viewing_smart_page">VIEWING_SMART_PAGE</string>
     <string name="msg_go_back">GO_BACK</string>
     <string name="msg_show_home_button">SHOW_HOME_BUTTON</string>
     <string name="msg_hide_home_button">HIDE_HOME_BUTTON</string>

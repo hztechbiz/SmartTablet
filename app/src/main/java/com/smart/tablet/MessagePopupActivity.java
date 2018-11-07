@@ -55,6 +55,6 @@ public class MessagePopupActivity extends FragmentActivity {
         txt_title.setText(title);
         txt_message.setText(message);
 
-        AnalyticsHelper.track(this, String.format("Displayed Popup Message with title '%s' and message '%s'", title, message), null);
+        AnalyticsHelper.track(this, String.format("Displayed Popup Message with title '%s' and message '%s'", title, message), null, null);
     }
 }

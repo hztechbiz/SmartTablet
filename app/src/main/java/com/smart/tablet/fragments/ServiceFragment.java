@@ -92,7 +92,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceFragment serviceFragment = new ServiceFragment();
                 serviceFragment.setArguments(bundle);
 
-                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()), String.format(Locale.US, "Service #%d", _service.getId()));
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceFragment);
@@ -105,7 +105,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
                 serviceBookingFragment.setArguments(_bundle);
 
-                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()), String.format(Locale.US, "Service #%d", _service.getId()));
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceBookingFragment);
@@ -120,16 +120,9 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_copyright), null));
+        actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_viewing_smart_page), null));
 
         _activity.takeActions(actions);
-
-        /*
-        activityListener.receive(R.string.msg_show_sidebar, null);
-        activityListener.receive(R.string.msg_reset_menu, null);
-        activityListener.receive(R.string.msg_hide_home_button, null);
-        activityListener.receive(R.string.msg_hide_app_heading, null);
-        activityListener.receive(R.string.msg_hide_copyright, null);
-        */
 
         bind();
         sendReport();
@@ -230,7 +223,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());
@@ -243,11 +236,6 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_top_guest_button), null));
 
                 _activity.takeActions(actions);
-
-                /*
-                activityListener.receive(R.string.msg_show_app_heading, null);
-                activityListener.receive(R.string.msg_set_app_heading, service.getTitle().toUpperCase());
-                */
             }
 
             if (!service.getMeta().isEmpty()) {
@@ -298,22 +286,14 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
                 if (service.isIs_marketing_partner()) {
                     mainContent.setVisibility(View.GONE);
-                    //if (fragmentListener != null)
-                    //fragmentListener.onUpdateFragment(menu_items_objects.get(0).fragment);
 
                     ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();
                     actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_sidebar), null));
                     actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_home_button), null));
                     actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_update_menu), _service_id + ""));
+                    actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_viewing_smart_page), "1"));
 
                     _parentFragment.takeActions(actions);
-
-                    //activityListener.receive(R.string.msg_update_menu, menu_items_objects);
-                    /*
-                    activityListener.receive(R.string.msg_hide_sidebar, null);
-                    activityListener.receive(R.string.msg_update_menu, menu_items_objects);
-                    activityListener.receive(R.string.msg_show_home_button, null);
-                    */
                 }
             }
         }
@@ -335,8 +315,6 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                                 intent.putParcelableArrayListExtra(getString(R.string.param_activity_actions), actions);
 
                                 getContext().sendBroadcast(intent);
-
-                                //activityListener.receive(R.string.msg_update_background, filePath);
                             }
                         }
                     }

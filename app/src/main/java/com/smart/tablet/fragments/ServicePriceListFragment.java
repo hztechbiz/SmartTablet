@@ -88,7 +88,7 @@ public class ServicePriceListFragment extends Fragment implements AsyncResultBag
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Price List", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Price List", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;

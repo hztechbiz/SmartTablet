@@ -100,7 +100,7 @@ public class ServiceSalesFragment extends Fragment implements com.smart.tablet.l
                         if (result != null) {
                             Service service = (Service) result;
 
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Sales", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Sales", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
                         }
                     }
                 })

@@ -75,6 +75,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     private void sendStatusToServer(String wifiName, int signalsLevel) throws JSONException {
         String url = Constants.GetApiUrl("device/update");
 
+        Log.d(TAG, wifiName + " / " + signalsLevel);
+
         JSONObject jsonRequest = new JSONObject();
 
         jsonRequest.put("wifi_connected_name", wifiName);

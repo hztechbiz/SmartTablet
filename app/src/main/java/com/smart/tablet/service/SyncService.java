@@ -797,8 +797,10 @@ public class SyncService extends IntentService {
     }
 
     private void showMessage(String message) {
-        Log.d("SYNCMESSAGE", message);
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        if (isRunning) {
+            Log.d("SYNCMESSAGE", message);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
     }
 
     private String getFilePath(String filename) {

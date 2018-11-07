@@ -62,7 +62,7 @@ public class WelcomeFragment extends Fragment {
                 Intent intent = new Intent(getContext(), LocationPopupActivity.class);
                 startActivity(intent);
 
-                AnalyticsHelper.track(getContext(), "Viewed Hotel Location", null);
+                AnalyticsHelper.track(getContext(), "Viewed Hotel Location", null, null);
             }
         });
 
@@ -87,7 +87,7 @@ public class WelcomeFragment extends Fragment {
     }
 
     private void bind() {
-        AnalyticsHelper.track(getContext(), "Viewed Welcome page", null);
+        AnalyticsHelper.track(getContext(), "Viewed Welcome page", null, null);
 
         new RetrieveHotel(getContext())
                 .onSuccess(new AsyncResultBag.Success() {

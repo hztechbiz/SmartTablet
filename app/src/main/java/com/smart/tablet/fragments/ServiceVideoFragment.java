@@ -2,6 +2,7 @@ package com.smart.tablet.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class ServiceVideoFragment extends Fragment implements AsyncResultBag.Suc
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Video", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Video", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;
@@ -110,6 +111,12 @@ public class ServiceVideoFragment extends Fragment implements AsyncResultBag.Suc
                         if (result != null) {
                             videoView.setVideoPath(result.toString());
                         }
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        Log.d("VideoPath", error + "");
                     }
                 })
                 .execute();

@@ -362,7 +362,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        if (!this.isFinishing()) {
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -1110,14 +1112,14 @@ public class MainActivity extends FragmentActivity {
     public void onEntryPageEnter(View view) {
         showEntryPage(false);
 
-        AnalyticsHelper.track(this, "Entry Page", null);
+        AnalyticsHelper.track(this, "Entry Page", null, null);
     }
 
     public void toggleNightMode(View view) {
         _isNightMode = !_isNightMode;
         showNightMode(_isNightMode);
 
-        AnalyticsHelper.track(this, (_isNightMode ? "Enabled night mode" : "Disabled night mode"), null);
+        AnalyticsHelper.track(this, (_isNightMode ? "Enabled night mode" : "Disabled night mode"), null, null);
     }
 
     private void showNightMode(boolean b) {
@@ -1237,7 +1239,7 @@ public class MainActivity extends FragmentActivity {
                 })
                 .execute();
 
-        AnalyticsHelper.track(this, "Moved to Guest Services", null);
+        AnalyticsHelper.track(this, "Moved to Guest Services", null, null);
     }
 
     public void makeMenuItemActive(View view, Boolean makeActive) {
@@ -1321,7 +1323,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             if (makeActive) {
-                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text), null);
+                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text), null, null);
             }
         }
     }
@@ -1335,7 +1337,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onTimeClick(View view) {
-        AnalyticsHelper.track(this, "Tapped time", null);
+        AnalyticsHelper.track(this, "Tapped time", null, null);
 
         if (isServiceRunning)
             return;
@@ -1401,7 +1403,7 @@ public class MainActivity extends FragmentActivity {
 
         makeMenuItemActive(null, false);
 
-        AnalyticsHelper.track(this, "Moved to Home", null);
+        AnalyticsHelper.track(this, "Moved to Home", null, null);
     }
 
     public void setSignal(int wifi_signals_level) {
@@ -1523,7 +1525,7 @@ public class MainActivity extends FragmentActivity {
 
     public void openDeviceInformationDialog(View view) {
 
-        AnalyticsHelper.track(this, "Viewed Device Information", null);
+        AnalyticsHelper.track(this, "Viewed Device Information", null, null);
 
         new RetrieveDevice(this)
                 .onSuccess(new AsyncResultBag.Success() {
@@ -1575,7 +1577,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void toggleKioskMode(View view) {
-        AnalyticsHelper.track(this, "Toggle Kiosk Mode", null);
+        AnalyticsHelper.track(this, "Toggle Kiosk Mode", null, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Password");

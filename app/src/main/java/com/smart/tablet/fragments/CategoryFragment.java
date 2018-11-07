@@ -229,23 +229,9 @@ public class CategoryFragment extends Fragment {
             gridView.setAdapter(categoryAdapter);
         }
 
-        Log.d("CategoryFrag", _embed_url + "");
         if (_embed_url != null && !_embed_url.equals("")) {
             showWebView();
         }
-
-        /*
-        parentListener.receive(R.string.msg_show_sidebar, null);
-        parentListener.receive(R.string.msg_reset_menu, null);
-        parentListener.receive(R.string.msg_hide_home_button, null);
-        parentListener.receive(R.string.msg_reset_background, null);
-        parentListener.receive(R.string.msg_hide_main_logo, null);
-        parentListener.receive(R.string.msg_show_logo_button, null);
-        parentListener.receive(R.string.msg_hide_guest_button, null);
-        parentListener.receive(R.string.msg_hide_app_heading, null);
-        parentListener.receive(R.string.msg_show_copyright, null);
-        parentListener.receive(R.string.msg_hide_top_guest_button, null);
-        */
 
         _scrollIndicator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,7 +258,7 @@ public class CategoryFragment extends Fragment {
                     public void onSuccess(Object result) {
                         if (result != null) {
                             Category category = (Category) result;
-                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Category: #%d %s", category.getId(), category.getName()), String.format(Locale.US, "Category #%d", category.getId()));
+                            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Category: #%d %s", category.getId(), category.getName()), null, category.getId() + "");
                         }
                     }
                 })

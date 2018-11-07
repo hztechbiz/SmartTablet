@@ -99,7 +99,7 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Gallery", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "Gallery", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
 
             if (!service.getMeta().isEmpty()) {
                 JSONArray metas_arr = null;
@@ -139,7 +139,7 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
     }
 
     private void setupImages(int[] images_ids) {
-        new RetrieveMedia(getContext(), images_ids)
+        RetrieveMedia media = new RetrieveMedia(getContext(), images_ids)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -166,7 +166,9 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
                             adapter.notifyDataSetChanged();
                         }
                     }
-                })
-                .execute();
+                });
+
+        media.set_is_multiple(true);
+        media.execute();
     }
 }

@@ -1,9 +1,6 @@
 package com.smart.tablet.fragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,25 +19,8 @@ import android.widget.TextView;
 import com.smart.tablet.Constants;
 import com.smart.tablet.MainActivity;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Analytics;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.CategoryFragment;
-import com.smart.tablet.fragments.ServiceAboutFragment;
-import com.smart.tablet.fragments.ServiceArrivalsFragment;
-import com.smart.tablet.fragments.ServiceGalleryFragment;
-import com.smart.tablet.fragments.ServiceLocationFragment;
-import com.smart.tablet.fragments.ServiceMenuFragment;
-import com.smart.tablet.fragments.ServiceOffersFragment;
-import com.smart.tablet.fragments.ServicePriceListFragment;
-import com.smart.tablet.fragments.ServiceProductsFragment;
-import com.smart.tablet.fragments.ServiceSalesFragment;
-import com.smart.tablet.fragments.ServiceServicesMenuFragment;
-import com.smart.tablet.fragments.ServiceTestimonialsFragment;
-import com.smart.tablet.fragments.ServiceVideoFragment;
-import com.smart.tablet.fragments.ServiceWebsiteFragment;
-import com.smart.tablet.fragments.WelcomeFragment;
-import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
@@ -58,10 +38,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NavigationFragment extends Fragment {
+    private static final String TAG = NavigationFragment.class.getName();
     private FrameLayout fragmentContainer;
     private Fragment _childFragment;
     private LinearLayout menu_item, menu_items;
-    private TextView menu_item_1, menu_item_2, menu_item_3;
     private ImageButton btn_nav_left, btn_nav_right;
     private HorizontalScrollView scroll_view;
     private FragmentListener mainFragmentListener;
@@ -93,10 +73,16 @@ public class NavigationFragment extends Fragment {
                     if (arguments instanceof ArrayList && _inflater != null) {
                         menuItems = (ArrayList<MenuItem>) arguments;
                         bindMenuItems(_inflater);
+                    } else {
+                        menuItems = new ArrayList<>();
+                        bindMenuItems(_inflater);
                     }
+                    break;
                 default:
-                    if (parentListener != null)
+                    if (parentListener != null) {
                         parentListener.receive(message, arguments);
+                    }
+                    break;
             }
         }
     };
@@ -376,21 +362,6 @@ public class NavigationFragment extends Fragment {
 
         _activity.takeActions(actions);
 
-        /*
-        activityListener.receive(R.string.msg_show_sidebar, null);
-        activityListener.receive(R.string.msg_reset_menu, null);
-        activityListener.receive(R.string.msg_hide_home_button, null);
-        activityListener.receive(R.string.msg_show_back_button, null);
-        activityListener.receive(R.string.msg_reset_background, null);
-        activityListener.receive(R.string.msg_hide_main_logo, null);
-        activityListener.receive(R.string.msg_show_logo_button, null);
-        activityListener.receive(R.string.msg_hide_welcome_button, null);
-        activityListener.receive(R.string.msg_hide_guest_button, null);
-        activityListener.receive(R.string.msg_hide_app_heading, null);
-        activityListener.receive(R.string.msg_show_copyright, null);
-        activityListener.receive(R.string.msg_hide_top_guest_button, null);
-        */
-
         return view;
     }
 
@@ -415,16 +386,12 @@ public class NavigationFragment extends Fragment {
                                     item.title = ((values.containsKey(Constants.TOP_MENU_WELCOME_TEXT) && !values.get(Constants.TOP_MENU_WELCOME_TEXT).isEmpty()) ? values.get(Constants.TOP_MENU_WELCOME_TEXT) : "WELCOME").toUpperCase();
                                     item.fragment = fragment;
 
-                                    //menuItems.add(item);
                                     ArrayList<ActivityAction> actions = new ArrayList<>();
-                                    //actions.add(new ActivityAction((R.string.msg_show_welcome_button), null));
 
                                     Intent intent = new Intent(getString(R.string.param_activity_action));
                                     intent.putParcelableArrayListExtra(getString(R.string.param_activity_actions), actions);
 
                                     getContext().sendBroadcast(intent);
-
-                                    //activityListener.receive(R.string.msg_show_welcome_button, null);
                                 }
 
                                 JSONArray categories = new JSONArray();
@@ -497,6 +464,7 @@ public class NavigationFragment extends Fragment {
 
     public void finalizeNavigation(LayoutInflater inflater) {
         menu_items.removeAllViews();
+        Log.d(TAG, menuItems + "");
 
         for (int i = 0; i < menuItems.size(); i++) {
             final MenuItem menuItem = menuItems.get(i);

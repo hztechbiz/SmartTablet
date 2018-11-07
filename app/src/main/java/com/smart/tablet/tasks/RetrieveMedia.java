@@ -16,10 +16,12 @@ public class RetrieveMedia extends AsyncTask<Void, Void, HashMap<String, String>
     private AsyncResultBag.Success _successCallback;
     private int[] _ids;
     private Object error;
+    private boolean _is_multiple;
 
     public RetrieveMedia(Context context, int... ids) {
         _db = DatabaseHelper.getInstance(context);
         _ids = ids;
+        _is_multiple = false;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class RetrieveMedia extends AsyncTask<Void, Void, HashMap<String, String>
 
         Object val = values;
 
-        if (values.size() == 1 && _ids.length == 1) {
+        if (values.size() == 1 && _ids.length == 1 && !_is_multiple) {
             val = values.get(String.valueOf(_ids[0]));
         }
 
@@ -78,5 +80,9 @@ public class RetrieveMedia extends AsyncTask<Void, Void, HashMap<String, String>
     public com.smart.tablet.tasks.RetrieveMedia onSuccess(AsyncResultBag.Success callback) {
         _successCallback = callback;
         return this;
+    }
+
+    public void set_is_multiple(boolean _is_multiple) {
+        this._is_multiple = _is_multiple;
     }
 }

@@ -120,7 +120,7 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
         if (service != null) {
             _service = service;
 
-            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "About", service.getId(), service.getTitle()), String.format(Locale.US, "Service #%d", service.getId()));
+            AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed %s in #%d %s", "About", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
 
             //txt_description.setText(service.getDescription());
 
