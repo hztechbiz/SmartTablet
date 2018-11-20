@@ -63,6 +63,7 @@ import com.smart.tablet.models.MapMarker;
 import com.smart.tablet.receivers.AdminReceiver;
 import com.smart.tablet.receivers.BootReceiver;
 import com.smart.tablet.receivers.PowerConnectionReceiver;
+import com.smart.tablet.receivers.SyncAlarmReceiver;
 import com.smart.tablet.service.MyFirebaseMessagingService;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveCategories;
@@ -90,7 +91,7 @@ public class MainActivity extends FragmentActivity {
     private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, timezone;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
-    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text;
+    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text, _txt_progress, _txt_sync_debug;
     private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left, _top_right_buttons;
     private Button _btn_night_mode, _btn_night_mode_2;
     private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
@@ -129,6 +130,18 @@ public class MainActivity extends FragmentActivity {
             isServiceRunning = false;
         }
     };
+    private BroadcastReceiver syncProgressReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("SchedulingAlarms", "syncProgressReceiver");
+            _txt_progress.setText(intent.getIntExtra("progress", 0) + "% Downloaded. Please wait...");
+
+            ArrayList<String> downloading = intent.getStringArrayListExtra("downloading");
+            String debug = "";
+
+            Log.d("FilesList", downloading + "!");
+        }
+    };
     private BroadcastReceiver syncFailed = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -152,6 +165,12 @@ public class MainActivity extends FragmentActivity {
             String message = intent.getStringExtra("body");
 
             showPopupMessage(title, message);
+        }
+    };
+    private BroadcastReceiver syncBeforeStartReceiver = new BatteryBroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showBeforeSyncPopupMessage();
         }
     };
     private FragmentListener fragmentListener = new FragmentListener() {
@@ -286,6 +305,16 @@ public class MainActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    private void showBeforeSyncPopupMessage() {
+        Intent intent = new Intent(this, MessagePopupActivity.class);
+        intent.putExtra(getString(R.string.param_message_title), getString(R.string.sync_title));
+        intent.putExtra(getString(R.string.param_message_body), getString(R.string.sync_message));
+        intent.putExtra(getString(R.string.param_sync_wait), Constants.SYNC_BEFORE_WAIT);
+        intent.putExtra(getString(R.string.param_sync_popup), true);
+
+        startActivity(intent);
+    }
+
     private void showElectricImage(boolean b) {
         img_electric.setVisibility(b ? View.VISIBLE : View.GONE);
         img_electric_2.setVisibility(b ? View.VISIBLE : View.GONE);
@@ -338,6 +367,7 @@ public class MainActivity extends FragmentActivity {
 
     private void showSynchronizing(boolean b) {
         _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
+        _txt_progress.setText(getString(R.string.synchronizing_please_wait));
 
         if (!b) {
             setupMenuItems();
@@ -362,8 +392,12 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void showToast(String text) {
-        if (!this.isFinishing()) {
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        try {
+            if (!this.isFinishing()) {
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -464,6 +498,7 @@ public class MainActivity extends FragmentActivity {
         item_icon_8 = findViewById(R.id.news);
         item_icon_9 = findViewById(R.id.transport);
         item_icon_10 = findViewById(R.id.partner);
+        _txt_progress = findViewById(R.id.syncProgressText);
 
         if (_fragment_container != null) {
 
@@ -496,6 +531,7 @@ public class MainActivity extends FragmentActivity {
         item_transport_text.setTypeface(Util.getTypeFace(this));
         item_partner_text.setTypeface(Util.getTypeFace(this));
         _app_heading.setTypeface(Util.getTypeFace(this));
+        _txt_progress.setTypeface(Util.getTypeFace(this));
 
         batteryBroadcastReceiver = new BatteryBroadcastReceiver();
         wifiScanReceiver = new WifiScanReceiver();
@@ -723,6 +759,8 @@ public class MainActivity extends FragmentActivity {
         registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
+        registerReceiver(syncProgressReceiver, new IntentFilter(SyncService.TRANSACTION_PROGRESS));
+        registerReceiver(syncBeforeStartReceiver, new IntentFilter(SyncAlarmReceiver.TRANSACTION_BEFORE_SYNC));
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryBroadcastReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(firebaseReceiver, new IntentFilter(MyFirebaseMessagingService.MESSAGE_RECEIVED));
@@ -941,6 +979,9 @@ public class MainActivity extends FragmentActivity {
         if (syncReceiver != null)
             unregisterReceiver(syncReceiver);
 
+        if (syncProgressReceiver != null)
+            unregisterReceiver(syncProgressReceiver);
+
         if (syncFailed != null)
             unregisterReceiver(syncFailed);
 
@@ -952,6 +993,9 @@ public class MainActivity extends FragmentActivity {
 
         if (syncHeartBeatReceiver != null)
             unregisterReceiver(syncHeartBeatReceiver);
+
+        if (syncBeforeStartReceiver != null)
+            unregisterReceiver(syncBeforeStartReceiver);
 
         if (firebaseReceiver != null)
             unregisterReceiver(firebaseReceiver);

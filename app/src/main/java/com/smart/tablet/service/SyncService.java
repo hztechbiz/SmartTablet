@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.smart.tablet.Constants;
+import com.smart.tablet.R;
 import com.smart.tablet.entities.Arrival;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Device;
@@ -46,6 +47,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +58,7 @@ public class SyncService extends IntentService {
     public static final String TRANSACTION_COMPLETE = com.smart.tablet.service.SyncService.class.getName() + ":COMPLETE";
     public static final String TRANSACTION_START = com.smart.tablet.service.SyncService.class.getName() + ":START";
     public static final String TRANSACTION_HEART_BEAT = com.smart.tablet.service.SyncService.class.getName() + ":HEART_BEAT";
+    public static final String TRANSACTION_PROGRESS = com.smart.tablet.service.SyncService.class.getName() + ":PROGRESS";
     private static final String TAG = com.smart.tablet.service.SyncService.class.getName();
     private boolean isRunning = false;
     private String SYNC_DONE = Constants.SETTING_SYNC_DONE;
@@ -128,6 +131,14 @@ public class SyncService extends IntentService {
         sendBroadcast(i);
     }
 
+    private void sendProgressBroadcast(int progress, ArrayList args) {
+        Intent i = new Intent(TRANSACTION_PROGRESS);
+        i.putExtra("progress", progress);
+        i.putExtra("downloading", args);
+
+        sendBroadcast(i);
+    }
+
     private void sendFailedBroadcast() {
         Intent i = new Intent(TRANSACTION_FAILED);
         sendBroadcast(i);
@@ -157,9 +168,23 @@ public class SyncService extends IntentService {
         _extraFieldsLength = 1;
         _indexesFilled = 0;
 
+        long wait_before_seconds = 0;
+
+        if (intent != null) {
+            wait_before_seconds = intent.getLongExtra(getString(R.string.param_sync_wait), 0);
+        }
+
         if (!isRunning) {
 
             isRunning = true;
+
+            if (wait_before_seconds > 0) {
+                try {
+                    Thread.sleep(wait_before_seconds);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             new StoreSetting(this, new Setting(Constants.SYNC_SERVICE_RUNNING, "1"))
                     .onSuccess(new AsyncResultBag.Success() {
@@ -411,7 +436,7 @@ public class SyncService extends IntentService {
                 .execute();
     }
 
-    private void storeMedias(JSONArray media_arr) throws JSONException {
+    private void storeMedias(final JSONArray media_arr) throws JSONException {
         Log.d("Sync", "storing medias");
 
         Media[] medias = new Media[media_arr.length()];
@@ -431,6 +456,9 @@ public class SyncService extends IntentService {
                 medias[i] = media;
             }
         }
+
+        final Media[] medias_ = medias;
+
         Log.d("Sync", "medias: " + medias.length);
         if (medias.length > 0) {
             new StoreMedia(this, getFilePath(null), medias)
@@ -457,6 +485,25 @@ public class SyncService extends IntentService {
                             decide();
                         }
                     })
+                    .onProgress(new StoreMedia.Progress() {
+                        @Override
+                        public void onProgress(Object result, Object args) {
+                            ArrayList<Integer> downloaded = null;
+                            ArrayList<String> downloading = new ArrayList<>();
+
+                            if (args != null && args instanceof ArrayList) {
+                                downloaded = (ArrayList) args;
+
+                                for (int i = 0; i < medias_.length; i++) {
+                                    if (!downloaded.contains(medias_[i].getId())) {
+                                        downloading.add(medias_[i].getUrl());
+                                    }
+                                }
+                            }
+
+                            sendProgressBroadcast((Integer) result, downloading);
+                        }
+                    })
                     .execute();
         } else {
             _isFilesDownloaded = true;
@@ -478,6 +525,9 @@ public class SyncService extends IntentService {
             category.setName(c.getString("name"));
             category.setDescription(c.getString("description"));
             category.setIs_marketing_partner((c.getInt("is_marketing_partner") == 1));
+
+            if (!c.isNull("display_order"))
+                category.setDisplay_order(c.getInt("display_order"));
 
             if (!c.isNull("meta"))
                 category.setMeta(c.getJSONArray("meta").toString());

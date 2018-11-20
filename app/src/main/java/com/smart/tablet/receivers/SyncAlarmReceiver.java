@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.smart.tablet.Constants;
+import com.smart.tablet.MessagePopupActivity;
+import com.smart.tablet.R;
 import com.smart.tablet.helpers.ScheduledJobs;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.models.HotelModel;
@@ -14,36 +16,17 @@ import com.smart.tablet.tasks.RetrieveHotel;
 
 public class SyncAlarmReceiver extends BroadcastReceiver {
     public static final int REQUEST_CODE = 123;
+    public static final String TRANSACTION_BEFORE_SYNC = SyncAlarmReceiver.class.getName() + ":BEFORE";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.d("SchedulingAlarms", "executing");
 
-        boolean isConnected = false;
-
-        /*
-        if (!isConnected) {
-            new RetrieveHotel(context)
-                    .onSuccess(new AsyncResultBag.Success() {
-                        @Override
-                        public void onSuccess(Object result) {
-                            String timezone = Constants.DEFAULT_TIMEZONE;
-
-                            if (result != null) {
-                                HotelModel hotel = (HotelModel) result;
-
-                                if (hotel.getTimezone() != null && !hotel.getTimezone().equals(""))
-                                    timezone = hotel.getTimezone();
-                            }
-
-                            ScheduledJobs.scheduleSyncAlarmAt(context, timezone, "", false);
-                        }
-                    })
-                    .execute();
-        }
-        */
-
         Intent intent1 = new Intent(context, SyncService.class);
+        intent1.putExtra(context.getString(R.string.param_sync_wait), Constants.SYNC_BEFORE_WAIT);
         context.startService(intent1);
+
+        Intent i = new Intent(TRANSACTION_BEFORE_SYNC);
+        context.sendBroadcast(i);
     }
 }

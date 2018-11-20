@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -42,7 +43,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
     int _service_id;
     com.smart.tablet.entities.Service _service;
     Bundle _bundle;
-    Button btn_booking, btn_featured;
+    Button btn_booking, btn_featured, btn_transport;
     private com.smart.tablet.listeners.FragmentActivityListener activityListener;
     private com.smart.tablet.listeners.FragmentListener fragmentListener;
     private com.smart.tablet.MainActivity _activity;
@@ -73,19 +74,26 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         footerContent = view.findViewById(R.id.footerContent);
         btn_booking = view.findViewById(R.id.btn_booking);
         btn_featured = view.findViewById(R.id.btn_featured);
+        btn_transport = view.findViewById(R.id.btn_transport);
 
         btn_booking.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         btn_featured.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
+        btn_transport.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_title.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         footerContent.setVisibility(View.GONE);
         btn_booking.setVisibility(View.GONE);
         btn_featured.setVisibility(View.GONE);
+        btn_transport.setVisibility(View.GONE);
 
         btn_featured.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+
+                if (v.getTag() == null) {
+                    return;
+                }
 
                 bundle.putInt(getString(R.string.param_service_id), Integer.parseInt(v.getTag().toString()));
 
@@ -109,6 +117,27 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceBookingFragment);
+            }
+        });
+
+        btn_transport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+
+                if (v.getTag() == null) {
+                    return;
+                }
+
+                bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(v.getTag().toString()));
+
+                CategoryFragment serviceFragment = new CategoryFragment();
+                serviceFragment.setArguments(bundle);
+
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed transport options in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceFragment);
             }
         });
 
@@ -273,8 +302,17 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                                         btn_featured.setVisibility(View.VISIBLE);
                                     }
                                     break;
+                                case Constants.TOP_MENU_SHOW_TRANSPORT:
+                                    if (meta_value.equals("1")) {
+                                        footerContent.setVisibility(View.VISIBLE);
+                                        btn_transport.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
                                 case "featured_service":
                                     btn_featured.setTag(meta_value);
+                                    break;
+                                case "transport_category":
+                                    btn_transport.setTag(meta_value);
                                     break;
                             }
 

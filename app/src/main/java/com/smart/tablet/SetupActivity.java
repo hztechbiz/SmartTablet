@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.smart.tablet.entities.Setting;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveSetting;
@@ -38,6 +40,7 @@ import com.smart.tablet.tasks.StoreSetting;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +52,8 @@ public class SetupActivity extends Activity {
     private String TOKEN = Constants.TOKEN_KEY;
     private String _token;
     private RelativeLayout _sync_container;
+    private EditText _txt_device_identity;
+    private TextView _txt_progress, _txt_sync_debug;
     private BroadcastReceiver syncStartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -59,6 +64,18 @@ public class SetupActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             showSynchronizing(true);
+        }
+    };
+    private BroadcastReceiver syncProgressReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("SchedulingAlarms", "syncProgressReceiver");
+            _txt_progress.setText(intent.getIntExtra("progress", 0) + "% Downloaded. Please wait...");
+
+            ArrayList<String> downloading = intent.getStringArrayListExtra("downloading");
+            String debug = "";
+
+            Log.d("FilesList", downloading + "!");
         }
     };
     private BroadcastReceiver syncReceiver = new BroadcastReceiver() {
@@ -90,6 +107,8 @@ public class SetupActivity extends Activity {
 
     private void showSynchronizing(boolean b) {
         _sync_container.setVisibility(b ? View.VISIBLE : View.GONE);
+        _txt_progress.setText(getString(R.string.synchronizing_please_wait));
+
         _btn_sync.setEnabled(!b);
     }
 
@@ -100,6 +119,7 @@ public class SetupActivity extends Activity {
         registerReceiver(syncCompleteReceiver, new IntentFilter(SyncService.TRANSACTION_COMPLETE));
         registerReceiver(syncStartReceiver, new IntentFilter(SyncService.TRANSACTION_START));
         registerReceiver(syncHeartBeatReceiver, new IntentFilter(SyncService.TRANSACTION_HEART_BEAT));
+        registerReceiver(syncProgressReceiver, new IntentFilter(SyncService.TRANSACTION_PROGRESS));
 
         //fetchDeviceToken();
 
@@ -151,6 +171,9 @@ public class SetupActivity extends Activity {
         if (syncFailedReceiver != null)
             unregisterReceiver(syncFailedReceiver);
 
+        if (syncProgressReceiver != null)
+            unregisterReceiver(syncProgressReceiver);
+
         if (syncStartReceiver != null)
             unregisterReceiver(syncStartReceiver);
 
@@ -175,14 +198,22 @@ public class SetupActivity extends Activity {
         _progressDialog = new ProgressDialog(this);
         _sync_container = findViewById(R.id.syncContainer);
         _btn_sync = findViewById(R.id.btn_sync);
+        _txt_device_identity = findViewById(R.id.txt_device_identity);
+        _txt_progress = findViewById(R.id.syncProgressText);
+
+        _txt_device_identity.setText(getMacAddress());
+        _txt_progress.setTypeface(Util.getTypeFace(this));
 
         _btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String key = ((EditText) findViewById(R.id.txt_key)).getText().toString();
+                final String device_idn = _txt_device_identity.getText() + "";
 
                 if (key.isEmpty()) {
                     showMessage("Please enter API key provided by the Hotel Manager");
+                } else if (device_idn.isEmpty()) {
+                    showMessage("Please enter device identity");
                 } else {
                     showProgressDialog("Please wait...");
 
@@ -194,6 +225,7 @@ public class SetupActivity extends Activity {
                     try {
                         jsonRequest.put("udid", _token);
                         jsonRequest.put("api_key", key);
+                        jsonRequest.put("device_identity", device_idn);
                         jsonRequest.put("mac_address", getMacAddress());
                     } catch (Exception ex) {
                         showMessage(ex.getMessage());

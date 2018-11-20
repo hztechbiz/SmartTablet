@@ -48,9 +48,9 @@
                 <TextView
                     android:id="@+id/txt_description"
                     android:layout_width="wrap_content"
-                    android:textSize="20sp"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -64,20 +64,32 @@
         android:visibility="gone">
 
         <Button
+            android:id="@+id/btn_featured"
+            style="@style/ButtonBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="@string/featured_partner_learn_more"
+            android:textColor="#fff"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/btn_booking"
             style="@style/ButtonBlue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:text="@string/book_now_here"
             android:textColor="#fff"
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btn_featured"
+            android:id="@+id/btn_transport"
             style="@style/ButtonBlue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/featured_partner_learn_more"
+            android:layout_marginEnd="10dp"
+            android:text="@string/transport_options"
             android:textColor="#fff"
             android:visibility="gone" />
     </LinearLayout>

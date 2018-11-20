@@ -17,13 +17,14 @@ public class Category {
     private int children_count;
     private boolean is_marketing_partner;
     private String embed_url;
+    private int display_order;
     @ColumnInfo(typeAffinity = 2)
     private String meta;
 
     public Category() {
     }
 
-    public Category(int id, String name, String description, int parent_id, int children_count, boolean is_marketing_partner, String embed_url, String meta) {
+    public Category(int id, String name, String description, int parent_id, int children_count, boolean is_marketing_partner, String embed_url, int display_order, String meta) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,6 +32,7 @@ public class Category {
         this.children_count = children_count;
         this.is_marketing_partner = is_marketing_partner;
         this.embed_url = embed_url;
+        this.display_order = display_order;
         this.meta = meta;
     }
 
@@ -82,6 +84,7 @@ public class Category {
                 ", description='" + description + '\'' +
                 ", parent_id=" + parent_id +
                 ", children_count=" + children_count +
+                ", display_order=" + display_order +
                 ", meta=" + meta +
                 '}';
     }
@@ -108,5 +111,13 @@ public class Category {
 
     public void setMeta(String meta) {
         this.meta = meta;
+    }
+
+    public int getDisplay_order() {
+        return display_order;
+    }
+
+    public void setDisplay_order(int display_order) {
+        this.display_order = display_order;
     }
 }

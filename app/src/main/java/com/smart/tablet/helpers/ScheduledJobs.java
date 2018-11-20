@@ -32,10 +32,10 @@ public class ScheduledJobs {
     }
 
     public static void scheduleSyncAlarm(final Context context, String timezone) {
-        scheduleSyncAlarmAt(context, timezone, "03:00:00", true);
+        scheduleSyncAlarmAt(context, timezone, "11:00:00", true);
     }
 
-    public static void scheduleSyncAlarmAt(final Context context, String timezone, String sync_time, boolean repeating) {
+    private static void scheduleSyncAlarmAt(final Context context, String timezone, String sync_time, boolean repeating) {
         Intent intent = new Intent(context, SyncAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, SyncAlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

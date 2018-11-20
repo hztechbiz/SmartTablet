@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -23,11 +24,14 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
+    private Progress _progressCallback;
     private Media[] _media;
     private Object error;
     private String _filepath;
     private int _totalMedia;
     private int _downloaded;
+    private int _last_progress;
+    private ArrayList<Integer> _files;
 
     public StoreMedia(Context context, String filepath, Media... media) {
         _db = DatabaseHelper.getInstance(context);
@@ -35,6 +39,8 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
         _filepath = filepath;
         _totalMedia = media.length;
         _downloaded = 0;
+        _last_progress = 0;
+        _files = new ArrayList<>();
     }
 
     @Override
@@ -53,8 +59,8 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
 
             ThreadPoolExecutor executor = new ThreadPoolExecutor(
                     NUMBER_OF_CORES * 2,
-                    NUMBER_OF_CORES * 2,
-                    60L,
+                    Integer.MAX_VALUE, //NUMBER_OF_CORES * 2
+                    Long.MAX_VALUE,//60L,
                     TimeUnit.SECONDS,
                     new LinkedBlockingQueue<Runnable>()
             );
@@ -64,8 +70,20 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
             }
 
             while (_downloaded < (_totalMedia)) {
-                Log.d("StoreMedia", "" + _downloaded + " < " + _totalMedia);
+
+                _downloaded = 0;
+
+                for (Media m : _media) {
+                    if (m.getPath() != null)
+                        _downloaded++;
+                }
+
+                //Log.d("StoreMedia", "" + _downloaded + " < " + _totalMedia);
                 Thread.sleep(1000);
+
+                if (_downloaded > _last_progress && _progressCallback != null) {
+                    _progressCallback.onProgress(100 - (((_totalMedia - _downloaded) * 100) / _totalMedia), _files);
+                }
             }
 
             _db.getAppDatabase().mediaDao().insertAll(_media);
@@ -93,6 +111,11 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
         return this;
     }
 
+    public com.smart.tablet.tasks.StoreMedia onProgress(Progress callback) {
+        _progressCallback = callback;
+        return this;
+    }
+
     public com.smart.tablet.tasks.StoreMedia beforeExecuting(AsyncResultBag.Before callback) {
         _beforeCallback = callback;
         return this;
@@ -112,28 +135,31 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         public void run() {
+
             if (_media[index] != null) {
 
                 String path = null;
-                Log.d("StoreMedia", "downloading: " + _media[index].getUrl());
+                //Log.d("StoreMedia", "downloading: " + _media[index].getUrl());
 
                 try {
                     path = downloadImage(_media[index].getUrl());
-                    //downloadFile(_media[index].getUrl(), index);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException | OutOfMemoryError e) {
+                    path = "";
+
+                    //e.printStackTrace();
                 }
+
+                _files.add(_media[index].getId());
                 _media[index].setPath(path);
 
-                Log.d("StoreMedia", "downloaded: " + _media[index].getPath());
+                Log.d("StoreMedia", "downloaded : " + _media[index].getPath());
 
             } else {
                 Log.d("StoreMedia", "media null");
             }
-            _downloaded++;
         }
 
-        private String downloadImage(String object_url) throws IOException {
+        private String downloadImage(String object_url) throws IOException, OutOfMemoryError {
             URL url = new URL(object_url);
 
             InputStream in = url.openStream();
@@ -163,7 +189,12 @@ public class StoreMedia extends AsyncTask<Void, Void, Boolean> {
             if (imgFile.exists()) {
                 //return BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             }
+
             return filename;
         }
+    }
+
+    public interface Progress {
+        void onProgress(Object result, Object args);
     }
 }

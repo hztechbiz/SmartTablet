@@ -48,6 +48,7 @@ public class Constants {
     public static final String TOP_MENU_SHOW_PRICE_LIST = "show_price_list";
     public static final String TOP_MENU_SHOW_WEBSITE = "show_website";
     public static final String TOP_MENU_SHOW_FEATURED = "show_featured";
+    public static final String TOP_MENU_SHOW_TRANSPORT = "show_transport";
     public static final String META_LOCATION_TITLE = "location_title";
     public static final String META_LOCATION_DESCRIPTION = "location_short_description";
     public static final String META_LOCATION_ADDRESS = "location_address";
@@ -63,6 +64,7 @@ public class Constants {
     public static final long BACK_TO_HOME_WAIT = 3 * 60 * 1000;
     public static final long BACK_TO_ENTRY_PAGE = 2 * 60 * 1000;
     public static final long SCREEN_WAKEUP_WAIT = 60 * 1000;
+    public static final long SYNC_BEFORE_WAIT = 10 * 1000;
     public static final String CITY_SYDNEY = "nsw/sydney";
     public static final String CITY_MELBOURNE = "vic/melbourne";
     public static final String CITY_BRISBANE = "qld/brisbane";

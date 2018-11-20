@@ -1055,6 +1055,7 @@
             android:indeterminateTint="@color/colorPrimary" />
 
         <TextView
+            android:id="@+id/syncProgressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/syncProgressBar"
@@ -1062,6 +1063,7 @@
             android:text="@string/synchronizing_please_wait"
             android:textColor="@color/colorPrimary"
             android:textSize="17sp" />
+
     </RelativeLayout>
 
 </RelativeLayout>

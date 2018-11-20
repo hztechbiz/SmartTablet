@@ -13,6 +13,20 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/txt_device_identity"
+            android:layout_width="700dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/enter_device_identity"
+            android:inputType="textPersonName"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <EditText
             android:id="@+id/txt_key"
             android:layout_width="700dp"
             android:layout_height="wrap_content"
@@ -51,6 +65,7 @@
             android:indeterminateTint="@color/colorPrimary" />
 
         <TextView
+            android:id="@+id/syncProgressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/syncProgressBar"
@@ -58,5 +73,6 @@
             android:text="@string/synchronizing_please_wait"
             android:textColor="@color/colorPrimary"
             android:textSize="17sp" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
