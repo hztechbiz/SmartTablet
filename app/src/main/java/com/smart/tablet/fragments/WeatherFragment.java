@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import me.drakeet.support.toast.ToastCompat;
+
 public class WeatherFragment extends Fragment implements View.OnClickListener {
     private static final String ns = null;
     Bundle _bundle;
@@ -122,7 +124,11 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        try {
+            ToastCompat.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void readResponse(String xml) throws IOException, XmlPullParserException {

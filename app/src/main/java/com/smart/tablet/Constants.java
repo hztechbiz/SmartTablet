@@ -24,6 +24,8 @@ public class Constants {
     public static final String SETTING_ENTRY_PAGE_END_TIME = "entry_page_end_time";
     public static final String SETTING_PASSWORD = "pwd";
     public static final String SETTING_SLEEP_TIME = "sleep_time";
+    public static final String SETTING_WAKEUP_TIME = "wakeup_time";
+    public static final String SETTING_SYNC_TIME = "sync_time";
     public static final String TOP_GUEST_CATEGORIES = "top_menu_item_guest_categories";
     public static final String TOP_MENU_SHOW_WELCOME = "show_welcome";
     public static final String TOP_MENU_WELCOME_TEXT = "welcome_text";
@@ -64,7 +66,7 @@ public class Constants {
     public static final long BACK_TO_HOME_WAIT = 3 * 60 * 1000;
     public static final long BACK_TO_ENTRY_PAGE = 2 * 60 * 1000;
     public static final long SCREEN_WAKEUP_WAIT = 60 * 1000;
-    public static final long SYNC_BEFORE_WAIT = 10 * 1000;
+    public static final long SYNC_BEFORE_WAIT = 60 * 1000;
     public static final String CITY_SYDNEY = "nsw/sydney";
     public static final String CITY_MELBOURNE = "vic/melbourne";
     public static final String CITY_BRISBANE = "qld/brisbane";

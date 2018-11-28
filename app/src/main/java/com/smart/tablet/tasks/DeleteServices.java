@@ -6,14 +6,14 @@ import android.os.AsyncTask;
 import com.smart.tablet.helpers.DatabaseHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 
-public class DeleteCategories extends AsyncTask<Void, Void, Boolean> {
+public class DeleteServices extends AsyncTask<Void, Void, Boolean> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
     private Object error;
 
-    public DeleteCategories(Context context) {
+    public DeleteServices(Context context) {
         _db = DatabaseHelper.getInstance(context);
     }
 
@@ -28,7 +28,7 @@ public class DeleteCategories extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            _db.getAppDatabase().categoryDao().deleteAll();
+            _db.getAppDatabase().serviceDao().deleteAll();
         } catch (Exception e) {
             error = e;
         }
@@ -47,17 +47,17 @@ public class DeleteCategories extends AsyncTask<Void, Void, Boolean> {
             _errorCallback.onError(error);
     }
 
-    public com.smart.tablet.tasks.DeleteCategories onError(AsyncResultBag.Error callback) {
+    public DeleteServices onError(AsyncResultBag.Error callback) {
         _errorCallback = callback;
         return this;
     }
 
-    public com.smart.tablet.tasks.DeleteCategories beforeExecuting(AsyncResultBag.Before callback) {
+    public DeleteServices beforeExecuting(AsyncResultBag.Before callback) {
         _beforeCallback = callback;
         return this;
     }
 
-    public com.smart.tablet.tasks.DeleteCategories onSuccess(AsyncResultBag.Success callback) {
+    public DeleteServices onSuccess(AsyncResultBag.Success callback) {
         _successCallback = callback;
         return this;
     }

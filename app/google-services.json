@@ -8,9 +8,71 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:695983273631:android:53669844b45280b0",
+        "mobilesdk_app_id": "1:695983273631:android:f954cbda43e42b82",
+        "android_client_info": {
+          "package_name": "com.islam.assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695983273631-u6jr832uo8iq1hdmpu25k31mahuu6qof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJde9HNv5hepz3StAPS3mFM-5UWO1uyXA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695983273631:android:6736087fc570052c",
         "android_client_info": {
           "package_name": "com.smart.tablet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695983273631-u6jr832uo8iq1hdmpu25k31mahuu6qof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJde9HNv5hepz3StAPS3mFM-5UWO1uyXA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695983273631:android:53669844b45280b0",
+        "android_client_info": {
+          "package_name": "com.smartapp.hztech.smarttebletapp"
         }
       },
       "oauth_client": [

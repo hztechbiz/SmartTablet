@@ -191,7 +191,9 @@ public class SetupActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_setup);
 
@@ -331,7 +333,12 @@ public class SetupActivity extends Activity {
 
     private void showProgressDialog(String message) {
         _progressDialog.setMessage(message);
-        _progressDialog.show();
+
+        try {
+            _progressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void hideProgressDialog() {
@@ -342,6 +349,10 @@ public class SetupActivity extends Activity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message).setPositiveButton("Ok", null);
 
-        builder.show();
+        try {
+            builder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

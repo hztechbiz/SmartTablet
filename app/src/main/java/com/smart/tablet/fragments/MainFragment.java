@@ -136,7 +136,8 @@ public class MainFragment extends Fragment {
                 fragment.setParentListener(parentListener);
                 fragment.setArguments(bundle);
 
-                fragmentListener.onUpdateFragment(fragment);
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(fragment);
             }
         });
 

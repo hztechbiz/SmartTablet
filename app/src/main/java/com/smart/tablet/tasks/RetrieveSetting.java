@@ -44,15 +44,19 @@ public class RetrieveSetting extends AsyncTask<Void, Void, HashMap<String, Strin
         try {
             settings = _db.getAppDatabase().settingDao().getAll(_keys);
 
-            for (int i = 0; i < settings.length; i++) {
-                String value = settings[i].getValue();
+            if (settings.length > 0) {
+                for (int i = 0; i < settings.length; i++) {
+                    String value = settings[i].getValue();
 
-                if (_media_keys != null && Arrays.asList(_media_keys).contains(settings[i].getName())) {
-                    Media media = _db.getAppDatabase().mediaDao().get(Integer.parseInt(value));
-                    value = media.getPath();
+                    if (_media_keys != null && Arrays.asList(_media_keys).contains(settings[i].getName())) {
+                        Media media = _db.getAppDatabase().mediaDao().get(Integer.parseInt(value));
+                        value = media.getPath();
+                    }
+
+                    values.put(settings[i].getName(), value);
                 }
-
-                values.put(settings[i].getName(), value);
+            } else if (_keys.length == 1) {
+                values.put(_keys[0], null);
             }
         } catch (Exception e) {
             error = e;

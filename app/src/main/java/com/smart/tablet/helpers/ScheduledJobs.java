@@ -11,13 +11,17 @@ import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.receivers.SyncAlarmReceiver;
 import com.smart.tablet.receivers.WakeupReceiver;
 import com.smart.tablet.tasks.RetrieveHotel;
+import com.smart.tablet.tasks.RetrieveSetting;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 public class ScheduledJobs {
+    private static String default_sync_time = "03:00:00";
+
     public static void scheduleWakeupAlarm(Context context) {
         Intent intent = new Intent(context, WakeupReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, WakeupReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -31,8 +35,22 @@ public class ScheduledJobs {
         }
     }
 
-    public static void scheduleSyncAlarm(final Context context, String timezone) {
-        scheduleSyncAlarmAt(context, timezone, "11:00:00", true);
+    public static void scheduleSyncAlarm(final Context context, final String timezone) {
+        new RetrieveSetting(context, Constants.SETTING_SYNC_TIME)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        String sync_time = (result != null && !result.toString().equals("")) ? result.toString() : default_sync_time;
+                        scheduleSyncAlarmAt(context, timezone, sync_time, true);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        scheduleSyncAlarmAt(context, timezone, default_sync_time, true);
+                    }
+                })
+                .execute();
     }
 
     private static void scheduleSyncAlarmAt(final Context context, String timezone, String sync_time, boolean repeating) {
@@ -51,7 +69,7 @@ public class ScheduledJobs {
         SimpleDateFormat df = new SimpleDateFormat(date_format);
         SimpleDateFormat sdf = new SimpleDateFormat(datetime_format);
 
-        Log.d("SyncAlarm", timezone);
+        Log.d("SyncAlarm", sync_time);
 
         if (timezone != null && !timezone.equals("")) {
             df.setTimeZone(TimeZone.getTimeZone(timezone));

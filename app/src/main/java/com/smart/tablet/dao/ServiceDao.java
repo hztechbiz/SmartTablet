@@ -20,7 +20,7 @@ public interface ServiceDao {
     com.smart.tablet.entities.Service[] getAll(int[] ids);
 
     @Query("SELECT * FROM services WHERE category_id = :category_id")
-    com.smart.tablet.entities.Service[]  getAll(int category_id);
+    com.smart.tablet.entities.Service[] getAll(int category_id);
 
     @Query("SELECT * FROM services WHERE id = :id LIMIT 1")
     com.smart.tablet.entities.Service get(int id);
@@ -33,4 +33,7 @@ public interface ServiceDao {
 
     @Delete
     void delete(com.smart.tablet.entities.Service service);
+
+    @Query("DELETE FROM services")
+    void deleteAll();
 }

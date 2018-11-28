@@ -67,7 +67,7 @@ public class PingResponse extends IntentService {
                             }, new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.d(TAG, error.getMessage());
+                                    Log.d(TAG, error + "");
                                 }
                             }) {
                                 @Override

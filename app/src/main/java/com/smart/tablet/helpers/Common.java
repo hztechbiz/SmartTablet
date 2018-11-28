@@ -12,10 +12,16 @@ import com.smart.tablet.MainActivity;
 import com.smart.tablet.SplashActivity;
 import com.smart.tablet.receivers.AdminReceiver;
 
+import me.drakeet.support.toast.ToastCompat;
+
 public class Common {
 
     public static void showToast(Context context, String text) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+        try {
+            ToastCompat.makeText(context, text, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getHomeActivity(Context c) {

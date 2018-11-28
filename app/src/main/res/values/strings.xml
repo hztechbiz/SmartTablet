@@ -7,7 +7,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="device_admin">Smart Tablet</string>
     <string name="sync_title">Time to sync application</string>
-    <string name="sync_message">Smart Tablet is about to download new content. You will not be able to use Smart Tablet whilst new content is being downloaded. This should only take a few minutes. We apologise for any inconvenience</string>
+    <string name="sync_message">Smart Tablet is about to download new content. You will not be able to use Smart Tablet whilst new content is being downloaded. This should only take a few minutes. We apologise for any inconvenience.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

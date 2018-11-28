@@ -1,5 +1,6 @@
 package com.smart.tablet;
 
+import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.SystemUpdatePolicy;
 import android.content.BroadcastReceiver;
@@ -85,10 +86,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 
+import me.drakeet.support.toast.ToastCompat;
+
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
-    private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, timezone;
+    private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, wakeupTime, timezone;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
     private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text, _txt_progress, _txt_sync_debug;
@@ -155,6 +158,8 @@ public class MainActivity extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             Log.d("SchedulingAlarms", "syncreceiver");
             showSynchronizing(false);
+            scheduleAlarms();
+
             isServiceRunning = false;
         }
     };
@@ -394,7 +399,7 @@ public class MainActivity extends FragmentActivity {
     private void showToast(String text) {
         try {
             if (!this.isFinishing()) {
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                ToastCompat.makeText(this, text, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -407,6 +412,7 @@ public class MainActivity extends FragmentActivity {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_main);
 
@@ -621,7 +627,8 @@ public class MainActivity extends FragmentActivity {
     private void getTimeSettings() {
         new RetrieveSetting(this, Constants.SETTING_ENTRY_PAGE_START_TIME,
                 Constants.SETTING_ENTRY_PAGE_END_TIME,
-                Constants.SETTING_SLEEP_TIME)
+                Constants.SETTING_SLEEP_TIME,
+                Constants.SETTING_WAKEUP_TIME)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -631,6 +638,7 @@ public class MainActivity extends FragmentActivity {
                             entryPageStart = values.containsKey("entry_page_start_time") ? values.get("entry_page_start_time") : null;
                             entryPageEnd = values.containsKey("entry_page_end_time") ? values.get("entry_page_end_time") : null;
                             sleepTime = values.containsKey("sleep_time") ? values.get("sleep_time") : null;
+                            wakeupTime = values.containsKey("wakeup_time") ? values.get("wakeup_time") : null;
                         }
                     }
                 })
@@ -788,6 +796,7 @@ public class MainActivity extends FragmentActivity {
 
                                 checkEntryPageConditions();
                                 checkSleepPageConditions();
+                                checkWakeupPageConditions();
                             }
                         });
                         Thread.sleep((1000 * 60));
@@ -906,6 +915,32 @@ public class MainActivity extends FragmentActivity {
 
         if (date.equals(this.sleepTime)) {
             showNightMode(true);
+        }
+    }
+
+    private void checkWakeupPageConditions() {
+        if (wakeupTime == null || wakeupTime.isEmpty())
+            return;
+
+        DateFormat df = new SimpleDateFormat("HH:mm");
+
+        if (timezone != null && !timezone.equals("")) {
+            df.setTimeZone(TimeZone.getTimeZone(timezone));
+        }
+
+        String date = df.format(Calendar.getInstance().getTime());
+        Date wakeupDateTime = null;
+
+        try {
+            wakeupDateTime = df.parse(this.wakeupTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        wakeupTime = df.format(wakeupDateTime.getTime());
+
+        if (date.equals(this.wakeupTime)) {
+            showNightMode(false);
         }
     }
 
@@ -1374,10 +1409,6 @@ public class MainActivity extends FragmentActivity {
 
     public void onBackClick(View view) {
         onBackPressed();
-    }
-
-    private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     public void onTimeClick(View view) {

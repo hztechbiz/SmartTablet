@@ -27,7 +27,9 @@ import com.smart.tablet.entities.Service;
 import com.smart.tablet.entities.Setting;
 import com.smart.tablet.entities.Testimonial;
 import com.smart.tablet.listeners.AsyncResultBag;
+import com.smart.tablet.tasks.DeleteCategories;
 import com.smart.tablet.tasks.DeleteMedia;
+import com.smart.tablet.tasks.DeleteServices;
 import com.smart.tablet.tasks.RetrieveSetting;
 import com.smart.tablet.tasks.StoreArrival;
 import com.smart.tablet.tasks.StoreCategory;
@@ -50,6 +52,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import me.drakeet.support.toast.ToastCompat;
 
 public class SyncService extends IntentService {
 
@@ -368,11 +372,38 @@ public class SyncService extends IntentService {
         storeHotelSettings(hotel_obj.getJSONArray("meta"));
         storeHotelInfo(hotel);
 
-        JSONArray categories_arr = data.getJSONArray("categories");
-        storeCategories(categories_arr);
+        final JSONArray categories_arr = data.getJSONArray("categories");
+        final JSONArray services_arr = data.getJSONArray("services");
 
-        JSONArray services_arr = data.getJSONArray("services");
-        storeServices(services_arr);
+        new DeleteCategories(this)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        startStoringCategories(categories_arr);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        startStoringCategories(categories_arr);
+                    }
+                })
+                .execute();
+
+        new DeleteServices(this)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        startStoringServices(services_arr);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        startStoringServices(services_arr);
+                    }
+                })
+                .execute();
 
         final JSONArray media_arr = data.getJSONArray("objects");
 
@@ -404,6 +435,32 @@ public class SyncService extends IntentService {
                     }
                 })
                 .execute();
+    }
+
+    private void startStoringCategories(JSONArray categories_arr) {
+        try {
+            storeCategories(categories_arr);
+        } catch (Exception e) {
+            Log.e(TAG, "sync: " + e.getMessage());
+
+            _hasError = true;
+            _error = e;
+
+            decide();
+        }
+    }
+
+    private void startStoringServices(JSONArray services_arr) {
+        try {
+            storeServices(services_arr);
+        } catch (Exception e) {
+            Log.e(TAG, "sync: " + e.getMessage());
+
+            _hasError = true;
+            _error = e;
+
+            decide();
+        }
     }
 
     private void storeDeviceInfo(Device device) {
@@ -849,7 +906,11 @@ public class SyncService extends IntentService {
     private void showMessage(String message) {
         if (isRunning) {
             Log.d("SYNCMESSAGE", message);
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            try {
+                ToastCompat.makeText(this, message, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

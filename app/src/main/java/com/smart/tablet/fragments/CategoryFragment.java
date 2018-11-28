@@ -450,7 +450,7 @@ public class CategoryFragment extends Fragment {
                                                                             servicesAdapter.notifyDataSetChanged();
                                                                         }
                                                                     }
-                                                                } catch (Exception ex) {
+                                                                } catch (Exception | OutOfMemoryError ex) {
                                                                     ex.printStackTrace();
                                                                 }
                                                             }

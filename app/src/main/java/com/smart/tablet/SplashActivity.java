@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +28,7 @@ import com.smart.tablet.Constants;
 import com.smart.tablet.MainActivity;
 import com.smart.tablet.R;
 import com.smart.tablet.SetupActivity;
+import com.smart.tablet.entities.Setting;
 import com.smart.tablet.helpers.Common;
 import com.smart.tablet.helpers.ImageHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
@@ -39,6 +41,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.drakeet.support.toast.ToastCompat;
+
 public class SplashActivity extends Activity {
 
     private String TAG = this.getClass().getName();
@@ -48,13 +52,14 @@ public class SplashActivity extends Activity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
-    private int SPLASH_TIME_OUT = 1000;
+    private int SPLASH_TIME_OUT = 1000, askedTimes = 0;
     private Boolean _isRegistered;
     private Boolean _isSyncDone;
     private Boolean _isLoaded;
     private Boolean _isTimeout;
     private Boolean _permissionsGranted;
     private Boolean _hasEntryPage;
+    private Boolean _hasSettingsAccess;
     private ImageView _iv_background, _iv_logo;
     private boolean inKioskMode = false;
     private DevicePolicyManager dpm;
@@ -64,10 +69,12 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = _permissionsGranted = _hasEntryPage = false;
+        _isRegistered = _isLoaded = _isSyncDone = _isTimeout = _permissionsGranted = _hasEntryPage = _hasSettingsAccess = false;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_splash);
 
@@ -79,7 +86,11 @@ public class SplashActivity extends Activity {
     }
 
     private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        try {
+            ToastCompat.makeText(this, text, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setKioskMode(boolean on) {
@@ -199,6 +210,8 @@ public class SplashActivity extends Activity {
     private void checkPermissions() {
         List<String> revoked = new ArrayList<>();
 
+        _hasSettingsAccess = Settings.System.canWrite(this);
+
         for (int i = 0; i < permissions.length; i++) {
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[i]) != PackageManager.PERMISSION_GRANTED) {
                 revoked.add(permissions[i]);
@@ -206,11 +219,29 @@ public class SplashActivity extends Activity {
         }
 
         if (!revoked.isEmpty()) {
-            String[] request_permissions = revoked.toArray(new String[0]);
-            ActivityCompat.requestPermissions(this, request_permissions, 1);
+            if (askedTimes < 2) {
+                String[] request_permissions = revoked.toArray(new String[0]);
+
+                try {
+                    ActivityCompat.requestPermissions(this, request_permissions, 1);
+                } catch (Exception | StackOverflowError e) {
+                    e.printStackTrace();
+                }
+
+                askedTimes++;
+            } else {
+                showToast("Please enable permissions from settings");
+            }
         } else {
-            _permissionsGranted = true;
-            decide();
+            if (_hasSettingsAccess) {
+                _permissionsGranted = true;
+                decide();
+            } else {
+                showToast("Please allow Smart Tablet to modify system settings.");
+
+                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                startActivity(intent);
+            }
         }
     }
 

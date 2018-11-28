@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.smart.tablet.AppController;
 import com.smart.tablet.entities.Analytics;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveAnalytics;
@@ -92,7 +95,10 @@ public class SendAnalytics extends IntentService {
                                                         return params;
                                                     }
                                                 };
-                                                com.smart.tablet.AppController.getInstance().addToRequestQueue(request);
+
+                                                request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                                                AppController.getInstance().addToRequestQueue(request);
                                             }
                                         }
                                     })
