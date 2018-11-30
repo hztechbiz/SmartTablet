@@ -138,48 +138,51 @@ public class SplashActivity extends Activity {
             public void onSuccess(Object result) {
                 HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
 
-                if (values != null) {
-                    String is_synced = values.containsKey(Constants.SETTING_SYNC_DONE) ? values.get(Constants.SETTING_SYNC_DONE) : "1";
-                    String logo = values.containsKey(Constants.SETTING_LOGO) ? values.get(Constants.SETTING_LOGO) : null;
-                    String background = values.containsKey(Constants.SETTING_BACKGROUND) ? values.get(Constants.SETTING_BACKGROUND) : null;
+                try {
+                    if (values != null) {
+                        String is_synced = values.containsKey(Constants.SETTING_SYNC_DONE) ? values.get(Constants.SETTING_SYNC_DONE) : "1";
+                        String logo = values.containsKey(Constants.SETTING_LOGO) ? values.get(Constants.SETTING_LOGO) : null;
+                        String background = values.containsKey(Constants.SETTING_BACKGROUND) ? values.get(Constants.SETTING_BACKGROUND) : null;
 
-                    if (is_synced.equals("1")) {
-                        if (logo != null) {
+                        if (is_synced.equals("1")) {
+                            if (logo != null) {
 
-                            File logo_file = new File(logo);
+                                File logo_file = new File(logo);
 
-                            if (logo_file.exists()) {
-                                Bitmap logo_bitmap = BitmapFactory.decodeFile(logo_file.getAbsolutePath());
-                                logo_bitmap = ImageHelper.getResizedBitmap(logo_bitmap, 500);
+                                if (logo_file.exists()) {
+                                    Bitmap logo_bitmap = BitmapFactory.decodeFile(logo_file.getAbsolutePath());
+                                    logo_bitmap = ImageHelper.getResizedBitmap(logo_bitmap, 500);
 
-                                _iv_logo.setVisibility(View.VISIBLE);
-                                _iv_logo.setImageBitmap(logo_bitmap);
+                                    _iv_logo.setVisibility(View.VISIBLE);
+                                    _iv_logo.setImageBitmap(logo_bitmap);
+                                }
+                            }
+
+                            if (background != null) {
+
+                                File bg_file = new File(background);
+
+                                if (bg_file.exists()) {
+                                    Resources res = getResources();
+                                    Bitmap bg_bitmap = BitmapFactory.decodeFile(bg_file.getAbsolutePath());
+                                    bg_bitmap = ImageHelper.getResizedBitmap(bg_bitmap, 1000);
+                                    BitmapDrawable bd = new BitmapDrawable(res, bg_bitmap);
+
+                                    _iv_background.setBackgroundDrawable(bd);
+                                }
                             }
                         }
+                    } else {
+                        Resources res1 = getResources();
+                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
+                        bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
+                        BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
 
-                        if (background != null) {
-
-                            File bg_file = new File(background);
-
-                            if (bg_file.exists()) {
-                                Resources res = getResources();
-                                Bitmap bg_bitmap = BitmapFactory.decodeFile(bg_file.getAbsolutePath());
-                                bg_bitmap = ImageHelper.getResizedBitmap(bg_bitmap, 1000);
-                                BitmapDrawable bd = new BitmapDrawable(res, bg_bitmap);
-
-                                _iv_background.setBackgroundDrawable(bd);
-                            }
-                        }
+                        _iv_background.setBackgroundDrawable(bd);
                     }
-                } else {
-                    Resources res1 = getResources();
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner);
-                    bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
-                    BitmapDrawable bd = new BitmapDrawable(res1, bitmap);
-
-                    _iv_background.setBackgroundDrawable(bd);
+                } catch (Exception | OutOfMemoryError e) {
+                    e.printStackTrace();
                 }
-
             }
         });
         retrieveSetting.execute();

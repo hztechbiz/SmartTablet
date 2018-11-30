@@ -685,16 +685,20 @@ public class MainActivity extends FragmentActivity {
                     String filePath = values.get(Constants.SETTING_BACKGROUND);
 
                     if (filePath != null) {
-                        File imageFile = new File(filePath);
+                        try {
+                            File imageFile = new File(filePath);
 
-                        if (imageFile.exists()) {
-                            Resources res = getResources();
-                            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                            bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
-                            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                            if (imageFile.exists()) {
+                                Resources res = getResources();
+                                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                                bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
+                                BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
-                            bg_image.setBackgroundDrawable(bd);
-                            entry_bg_img.setBackgroundDrawable(bd);
+                                bg_image.setBackgroundDrawable(bd);
+                                entry_bg_img.setBackgroundDrawable(bd);
+                            }
+                        } catch (Exception | OutOfMemoryError e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -712,7 +716,7 @@ public class MainActivity extends FragmentActivity {
                                 small_logo.setImageBitmap(bitmap_small);
                                 main_logo.setImageBitmap(bitmap_large);
                                 entry_logo.setImageBitmap(bitmap_large);
-                            } catch (Exception ex) {
+                            } catch (Exception | OutOfMemoryError ex) {
                                 ex.printStackTrace();
                             }
                         }
@@ -727,13 +731,17 @@ public class MainActivity extends FragmentActivity {
     private void setBackgroundImage(String filePath) {
         File imgBG = new File(filePath);
 
-        if (imgBG.exists()) {
-            Resources res = getResources();
-            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-            bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
-            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+        try {
+            if (imgBG.exists()) {
+                Resources res = getResources();
+                Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                bitmap = ImageHelper.getResizedBitmap(bitmap, 1000);
+                BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
-            bg_image.setBackgroundDrawable(bd);
+                bg_image.setBackgroundDrawable(bd);
+            }
+        } catch (Exception | OutOfMemoryError e) {
+            e.printStackTrace();
         }
     }
 

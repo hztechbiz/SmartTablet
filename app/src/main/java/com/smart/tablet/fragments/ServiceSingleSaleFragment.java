@@ -76,13 +76,17 @@ public class ServiceSingleSaleFragment extends Fragment implements com.smart.tab
 
     private void setupImage(String filePath) {
         if (filePath != null) {
-            File imgBG = new File(filePath);
+            try {
+                File imgBG = new File(filePath);
 
-            if (imgBG.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
+                if (imgBG.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                    bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
 
-                iv_image.setImageBitmap(bitmap);
+                    iv_image.setImageBitmap(bitmap);
+                }
+            } catch (Exception | OutOfMemoryError e) {
+                e.printStackTrace();
             }
         }
     }

@@ -126,17 +126,21 @@ public class ServiceArrivalsFragment extends Fragment implements com.smart.table
                 offerModel.setTitle(offer.getTitle());
 
                 if (offer.getMedia() != null) {
-                    String filePath = offer.getMedia().getPath();
+                    try {
+                        String filePath = offer.getMedia().getPath();
 
-                    if (filePath != null) {
-                        File imgBG = new File(filePath);
+                        if (filePath != null) {
+                            File imgBG = new File(filePath);
 
-                        if (imgBG.exists()) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                            bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 300);
+                            if (imgBG.exists()) {
+                                Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 300);
 
-                            offerModel.setImage(bitmap);
+                                offerModel.setImage(bitmap);
+                            }
                         }
+                    } catch (Exception | OutOfMemoryError e) {
+                        e.printStackTrace();
                     }
                 }
             }

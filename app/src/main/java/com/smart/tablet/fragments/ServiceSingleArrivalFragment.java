@@ -76,11 +76,15 @@ public class ServiceSingleArrivalFragment extends Fragment implements AsyncResul
         if (filePath != null) {
             File imgBG = new File(filePath);
 
-            if (imgBG.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                bitmap = ImageHelper.getResizedBitmap(bitmap, 500);
+            try {
+                if (imgBG.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                    bitmap = ImageHelper.getResizedBitmap(bitmap, 500);
 
-                iv_image.setImageBitmap(bitmap);
+                    iv_image.setImageBitmap(bitmap);
+                }
+            } catch (Exception | OutOfMemoryError e) {
+                e.printStackTrace();
             }
         }
     }

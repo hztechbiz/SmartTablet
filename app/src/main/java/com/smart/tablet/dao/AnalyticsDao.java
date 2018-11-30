@@ -24,6 +24,9 @@ public interface AnalyticsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Analytics... analytics);
 
+    @Query("DELETE FROM analytics")
+    void deleteAll();
+
     @Delete
     void delete(Analytics analytics);
 }

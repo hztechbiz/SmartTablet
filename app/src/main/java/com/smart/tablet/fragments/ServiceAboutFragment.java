@@ -96,15 +96,19 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
                             String filePath = result.toString();
 
                             if (filePath != null) {
-                                File imgBG = new File(filePath);
+                                try {
+                                    File imgBG = new File(filePath);
 
-                                if (imgBG.exists()) {
-                                    Resources res = getResources();
-                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
-                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                    if (imgBG.exists()) {
+                                        Resources res = getResources();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                        bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
+                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
-                                    iv_image.setImageDrawable(bd);
+                                        iv_image.setImageDrawable(bd);
+                                    }
+                                } catch (Exception | OutOfMemoryError e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }
