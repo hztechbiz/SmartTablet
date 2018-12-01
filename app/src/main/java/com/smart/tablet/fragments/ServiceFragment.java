@@ -99,6 +99,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
                 ServiceFragment serviceFragment = new ServiceFragment();
                 serviceFragment.setArguments(bundle);
+                serviceFragment.setFragmentListener(fragmentListener);
 
                 AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
 
