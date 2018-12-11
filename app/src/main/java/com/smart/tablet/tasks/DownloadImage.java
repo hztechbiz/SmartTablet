@@ -68,8 +68,8 @@ public class DownloadImage extends AsyncTask<Void, Void, Bitmap> {
             if (imgFile.exists()) {
                 return BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             }
-        } catch (Exception ex) {
-            Log.e("Error_Check", ex.getMessage());
+        } catch (Exception | OutOfMemoryError e) {
+            e.printStackTrace();
         }
         return null;
     }

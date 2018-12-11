@@ -152,14 +152,19 @@ public class ServiceGalleryFragment extends Fragment implements AsyncResultBag.S
                                 if (path != null) {
                                     _items.add(path);
 
-                                    File image_file = new File(path);
+                                    try {
 
-                                    if (image_file.exists()) {
-                                        Resources res = getContext().getResources();
-                                        Bitmap bitmap = BitmapFactory.decodeFile(image_file.getAbsolutePath());
-                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                        File image_file = new File(path);
 
-                                        _items_drawables.add(bd);
+                                        if (image_file.exists()) {
+                                            Resources res = getContext().getResources();
+                                            Bitmap bitmap = BitmapFactory.decodeFile(image_file.getAbsolutePath());
+                                            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+
+                                            _items_drawables.add(bd);
+                                        }
+                                    } catch (Exception | OutOfMemoryError e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }

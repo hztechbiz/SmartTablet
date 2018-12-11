@@ -142,12 +142,16 @@ public class MarketPartner extends FragmentActivity {
                         if (result != null) {
                             String filePath = result.toString();
                             if (filePath != null) {
-                                File backImg = new File(filePath + "/Background.jpg");
-                                if (backImg.exists()) {
-                                    Resources res = getResources();
-                                    Bitmap bitmap = BitmapFactory.decodeFile(backImg.getAbsolutePath());
-                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-                                    BackgroudImage.setBackgroundDrawable(bd);
+                                try {
+                                    File backImg = new File(filePath + "/Background.jpg");
+                                    if (backImg.exists()) {
+                                        Resources res = getResources();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(backImg.getAbsolutePath());
+                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                        BackgroudImage.setBackgroundDrawable(bd);
+                                    }
+                                } catch (Exception | OutOfMemoryError e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }

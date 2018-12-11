@@ -282,22 +282,26 @@ public class CategoryFragment extends Fragment {
                             String filePath = result.toString();
 
                             if (filePath != null) {
-                                File imgBG = new File(filePath + "/Background.jpg");
-                                File imglogo = new File(filePath + "/Logo.jpg");
+                                try {
+                                    File imgBG = new File(filePath + "/Background.jpg");
+                                    File imglogo = new File(filePath + "/Logo.jpg");
 
-                                if (imgBG.exists()) {
+                                    if (imgBG.exists()) {
 //                                    Bitmap myBitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
 //                                    _bgImageView.setImageBitmap(myBitmap);
 
-                                    Resources res = getResources();
-                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-                                    _bgImageView.setBackgroundDrawable(bd);
-                                }
+                                        Resources res = getResources();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+                                        _bgImageView.setBackgroundDrawable(bd);
+                                    }
 
-                                if (imglogo.exists()) {
-                                    Bitmap LogoBitmap = BitmapFactory.decodeFile(imglogo.getAbsolutePath());
-                                    _logoImageView.setImageBitmap(LogoBitmap);
+                                    if (imglogo.exists()) {
+                                        Bitmap LogoBitmap = BitmapFactory.decodeFile(imglogo.getAbsolutePath());
+                                        _logoImageView.setImageBitmap(LogoBitmap);
+                                    }
+                                } catch (Exception | OutOfMemoryError e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }

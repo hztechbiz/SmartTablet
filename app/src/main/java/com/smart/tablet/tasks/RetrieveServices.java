@@ -47,7 +47,7 @@ public class RetrieveServices extends AsyncTask<Void, Void, Service[] > {
             else
                 values = serviceDao.getAll();
 
-        } catch (Exception e) {
+        } catch (Exception | OutOfMemoryError e) {
             error = e;
         }
 

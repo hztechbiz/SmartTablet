@@ -32,11 +32,15 @@ public class ImagePopupActivity extends FragmentActivity {
         File imgBG = new File(path);
 
         if (imgBG.exists()) {
-            Resources res = getResources();
-            Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-            BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+            try {
+                Resources res = getResources();
+                Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                BitmapDrawable bd = new BitmapDrawable(res, bitmap);
 
-            popImage.setImageDrawable(bd);
+                popImage.setImageDrawable(bd);
+            } catch (Exception | OutOfMemoryError e) {
+                e.printStackTrace();
+            }
         }
 
         Button close = (Button) findViewById(R.id.close);

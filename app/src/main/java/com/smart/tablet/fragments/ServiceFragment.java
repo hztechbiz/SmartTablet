@@ -100,6 +100,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                 ServiceFragment serviceFragment = new ServiceFragment();
                 serviceFragment.setArguments(bundle);
                 serviceFragment.setFragmentListener(fragmentListener);
+                serviceFragment.setActivityListener(activityListener);
 
                 AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed featured partner in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
 
@@ -112,6 +113,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
             @Override
             public void onClick(View v) {
                 ServiceBookingFragment serviceBookingFragment = new ServiceBookingFragment();
+                serviceBookingFragment.setParentListener(activityListener);
                 serviceBookingFragment.setArguments(_bundle);
 
                 AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed booking section in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
@@ -132,13 +134,15 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
                 bundle.putInt(getString(R.string.param_category_id), Integer.parseInt(v.getTag().toString()));
 
-                CategoryFragment serviceFragment = new CategoryFragment();
-                serviceFragment.setArguments(bundle);
+                CategoryFragment categoryFragment = new CategoryFragment();
+                categoryFragment.setArguments(bundle);
+                categoryFragment.setFragmentListener(fragmentListener);
+                categoryFragment.setParentListener(activityListener);
 
                 AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed transport options in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
 
                 if (fragmentListener != null)
-                    fragmentListener.onUpdateFragment(serviceFragment);
+                    fragmentListener.onUpdateFragment(categoryFragment);
             }
         });
 
@@ -221,13 +225,17 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                             String filePath = result.toString();
 
                             if (filePath != null) {
-                                File imgBG = new File(filePath);
+                                try {
+                                    File imgBG = new File(filePath);
 
-                                if (imgBG.exists()) {
-                                    Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
-                                    bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
+                                    if (imgBG.exists()) {
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imgBG.getAbsolutePath());
+                                        bitmap = com.smart.tablet.helpers.ImageHelper.getResizedBitmap(bitmap, 500);
 
-                                    iv_image.setImageBitmap(bitmap);
+                                        iv_image.setImageBitmap(bitmap);
+                                    }
+                                } catch (Exception | OutOfMemoryError e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }

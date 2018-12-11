@@ -833,6 +833,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setDefaultCosuPolicies(boolean active) {
+        if (!dpm.isDeviceOwnerApp(getPackageName()))
+            return;
+
         // set user restrictions
         setUserRestriction(UserManager.DISALLOW_SAFE_BOOT, active);
         setUserRestriction(UserManager.DISALLOW_FACTORY_RESET, active);
@@ -1236,7 +1239,7 @@ public class MainActivity extends FragmentActivity {
         mainFragment.setParentListener(activityListener);
 
         if (action != null) {
-            if (action.equals(R.string.tag_action_category) && value != null) {
+            if (action.equals(R.string.tag_action_category) && value != null && !value.toString().equals("")) {
                 bundle.putInt(getString(R.string.param_main_category_id),
                         Integer.parseInt(value.toString()));
 
@@ -1352,66 +1355,70 @@ public class MainActivity extends FragmentActivity {
             view.setBackgroundColor(Color.parseColor("#2cb3dc"));
         }
 
-        item_icon_1.setImageResource(R.drawable.operatingthetelevision);
-        item_icon_2.setImageResource(R.drawable.connecttowifi);
-        item_icon_3.setImageResource(R.drawable.usemobile);
-        item_icon_4.setImageResource(R.drawable.userinformation);
-        item_icon_5.setImageResource(R.drawable.localmap);
-        item_icon_6.setImageResource(R.drawable.localregion);
-        item_icon_7.setImageResource(R.drawable.weather);
-        item_icon_8.setImageResource(R.drawable.news);
-        item_icon_9.setImageResource(R.drawable.transport_icon);
-        item_icon_10.setImageResource(R.drawable.partner_offer);
+        try {
+            item_icon_1.setImageResource(R.drawable.operatingthetelevision);
+            item_icon_2.setImageResource(R.drawable.connecttowifi);
+            item_icon_3.setImageResource(R.drawable.usemobile);
+            item_icon_4.setImageResource(R.drawable.userinformation);
+            item_icon_5.setImageResource(R.drawable.localmap);
+            item_icon_6.setImageResource(R.drawable.localregion);
+            item_icon_7.setImageResource(R.drawable.weather);
+            item_icon_8.setImageResource(R.drawable.news);
+            item_icon_9.setImageResource(R.drawable.transport_icon);
+            item_icon_10.setImageResource(R.drawable.partner_offer);
 
-        String text = null;
+            String text = null;
 
-        if (view != null) {
-            switch (view.getId()) {
-                case R.id.ott:
-                    item_icon_1.setImageResource(R.drawable.operating_the_television_black);
-                    text = getString(R.string.operating_the_television);
-                    break;
-                case R.id.itemWifi:
-                    item_icon_2.setImageResource(R.drawable.connect_to_wifi_black);
-                    text = getString(R.string.connect_to_wifi);
-                    break;
-                case R.id.itemHow:
-                    item_icon_3.setImageResource(R.drawable.how_to_use_smart_tablet_black);
-                    text = getString(R.string.how_to_use_smart_tablet);
-                    break;
-                case R.id.itemInfo:
-                    item_icon_4.setImageResource(R.drawable.useful_info_black);
-                    text = getString(R.string.useful_information);
-                    break;
-                case R.id.itemMap:
-                    item_icon_5.setImageResource(R.drawable.local_map_black);
-                    text = getString(R.string.local_map);
-                    break;
-                case R.id.itemLocalRegion:
-                    item_icon_6.setImageResource(R.drawable.the_local_region_black);
-                    text = getString(R.string.local_region);
-                    break;
-                case R.id.itemWeather:
-                    item_icon_7.setImageResource(R.drawable.weather_black);
-                    text = getString(R.string.weather);
-                    break;
-                case R.id.itemNews:
-                    item_icon_8.setImageResource(R.drawable.news_black);
-                    text = getString(R.string.news);
-                    break;
-                case R.id.itemTransport:
-                    item_icon_9.setImageResource(R.drawable.transport_icon_black);
-                    text = getString(R.string.transport_options);
-                    break;
-                case R.id.itemPartner:
-                    item_icon_10.setImageResource(R.drawable.partner_offer_black);
-                    text = getString(R.string.partner_offers);
-                    break;
+            if (view != null) {
+                switch (view.getId()) {
+                    case R.id.ott:
+                        item_icon_1.setImageResource(R.drawable.operating_the_television_black);
+                        text = getString(R.string.operating_the_television);
+                        break;
+                    case R.id.itemWifi:
+                        item_icon_2.setImageResource(R.drawable.connect_to_wifi_black);
+                        text = getString(R.string.connect_to_wifi);
+                        break;
+                    case R.id.itemHow:
+                        item_icon_3.setImageResource(R.drawable.how_to_use_smart_tablet_black);
+                        text = getString(R.string.how_to_use_smart_tablet);
+                        break;
+                    case R.id.itemInfo:
+                        item_icon_4.setImageResource(R.drawable.useful_info_black);
+                        text = getString(R.string.useful_information);
+                        break;
+                    case R.id.itemMap:
+                        item_icon_5.setImageResource(R.drawable.local_map_black);
+                        text = getString(R.string.local_map);
+                        break;
+                    case R.id.itemLocalRegion:
+                        item_icon_6.setImageResource(R.drawable.the_local_region_black);
+                        text = getString(R.string.local_region);
+                        break;
+                    case R.id.itemWeather:
+                        item_icon_7.setImageResource(R.drawable.weather_black);
+                        text = getString(R.string.weather);
+                        break;
+                    case R.id.itemNews:
+                        item_icon_8.setImageResource(R.drawable.news_black);
+                        text = getString(R.string.news);
+                        break;
+                    case R.id.itemTransport:
+                        item_icon_9.setImageResource(R.drawable.transport_icon_black);
+                        text = getString(R.string.transport_options);
+                        break;
+                    case R.id.itemPartner:
+                        item_icon_10.setImageResource(R.drawable.partner_offer_black);
+                        text = getString(R.string.partner_offers);
+                        break;
+                }
+
+                if (makeActive) {
+                    AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text), null, null);
+                }
             }
-
-            if (makeActive) {
-                AnalyticsHelper.track(this, String.format("Tapped %s from side menu", text), null, null);
-            }
+        } catch (Exception | OutOfMemoryError e) {
+            e.printStackTrace();
         }
     }
 

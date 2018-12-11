@@ -365,9 +365,14 @@ public class SyncService extends IntentService {
 
         hotel.setId(hotel_obj.getInt("id"));
         hotel.setCountry(hotel_obj.getString("country"));
-        hotel.setGroup_id(hotel_obj.getInt("group_id"));
         hotel.setName(hotel_obj.getString("name"));
         hotel.setTimezone(hotel_obj.getString("timezone"));
+
+        if (!hotel_obj.isNull("group_id")) {
+            hotel.setGroup_id(hotel_obj.getInt("group_id"));
+        } else {
+            hotel.setGroup_id(0);
+        }
 
         storeHotelSettings(hotel_obj.getJSONArray("meta"));
         storeHotelInfo(hotel);
