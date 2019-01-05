@@ -26,6 +26,7 @@ public class Constants {
     public static final String SETTING_SLEEP_TIME = "sleep_time";
     public static final String SETTING_WAKEUP_TIME = "wakeup_time";
     public static final String SETTING_SYNC_TIME = "sync_time";
+    public static final String SETTING_SYNC_ENABLE = "sync_enable";
     public static final String TOP_GUEST_CATEGORIES = "top_menu_item_guest_categories";
     public static final String TOP_MENU_SHOW_WELCOME = "show_welcome";
     public static final String TOP_MENU_WELCOME_TEXT = "welcome_text";

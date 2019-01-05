@@ -13,6 +13,7 @@ import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.models.HotelModel;
 import com.smart.tablet.service.SyncService;
 import com.smart.tablet.tasks.RetrieveHotel;
+import com.smart.tablet.tasks.RetrieveSetting;
 
 public class SyncAlarmReceiver extends BroadcastReceiver {
     public static final int REQUEST_CODE = 123;
@@ -22,11 +23,31 @@ public class SyncAlarmReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         Log.d("SchedulingAlarms", "executing");
 
-        Intent intent1 = new Intent(context, SyncService.class);
-        intent1.putExtra(context.getString(R.string.param_sync_wait), Constants.SYNC_BEFORE_WAIT);
-        context.startService(intent1);
+        new RetrieveSetting(context, Constants.SETTING_SYNC_ENABLE)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        Log.d("SyncAlarmReceiver", result + "");
 
-        Intent i = new Intent(TRANSACTION_BEFORE_SYNC);
-        context.sendBroadcast(i);
+                        if (result == null)
+                            result = "1";
+
+                        if (result.equals("1")) {
+                            Intent intent1 = new Intent(context, SyncService.class);
+                            intent1.putExtra(context.getString(R.string.param_sync_wait), Constants.SYNC_BEFORE_WAIT);
+                            context.startService(intent1);
+
+                            Intent i = new Intent(TRANSACTION_BEFORE_SYNC);
+                            context.sendBroadcast(i);
+                        }
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        Log.e("SyncAlarmReceiver", error + "");
+                    }
+                })
+                .execute();
     }
 }
