@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.smart.tablet.AppController;
 import com.smart.tablet.entities.Analytics;
 import com.smart.tablet.listeners.AsyncResultBag;
+import com.smart.tablet.tasks.DeleteAnalytics;
 import com.smart.tablet.tasks.RetrieveAnalytics;
 
 import org.json.JSONArray;
@@ -78,6 +79,7 @@ public class SendAnalytics extends IntentService {
                                                     @Override
                                                     public void onResponse(JSONObject response) {
                                                         Log.d("SendAnalytics", response + "");
+                                                        new DeleteAnalytics(_context).execute();
                                                     }
                                                 }, new Response.ErrorListener() {
                                                     @Override
@@ -95,8 +97,6 @@ public class SendAnalytics extends IntentService {
                                                         return params;
                                                     }
                                                 };
-
-                                                request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                                                 AppController.getInstance().addToRequestQueue(request);
                                             }
