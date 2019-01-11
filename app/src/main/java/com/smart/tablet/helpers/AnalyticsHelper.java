@@ -1,8 +1,10 @@
 package com.smart.tablet.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.smart.tablet.Constants;
+import com.smart.tablet.R;
 import com.smart.tablet.entities.Analytics;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.models.HotelModel;
@@ -30,6 +32,21 @@ public class AnalyticsHelper {
         _instance._context = context;
 
         return _instance;
+    }
+
+    public static boolean canSendAnalytics(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.sp_analytics_time), Context.MODE_PRIVATE);
+
+        long last_sync = sharedPref.getLong(context.getString(R.string.sp_analytics_time), 0);
+        long current_time = System.currentTimeMillis();
+        long hour_millis = 300000;
+
+        if (last_sync == 0) {
+            last_sync = current_time - (hour_millis * 2);
+        }
+
+        return last_sync < (current_time - hour_millis);
     }
 
     public static void track(final Context context, final String purpose, final String service_id, final String category_id) {

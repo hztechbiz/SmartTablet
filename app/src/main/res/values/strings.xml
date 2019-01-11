@@ -128,4 +128,7 @@
     <string name="wake_me_up">Wake me up</string>
     <string name="featured_partner_learn_more">Featured Partner - Learn More</string>
     <string name="enter_device_identity">ENTER DEVICE IDENTITY</string>
+
+    <!-- Shared Preferences -->
+    <string name="sp_analytics_time">SP@ANALYTICS_TIME</string>
 </resources>
