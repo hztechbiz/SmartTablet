@@ -1,6 +1,7 @@
 package com.smart.tablet.service;
 
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -71,11 +72,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 switch (command) {
                     case Constants.COMMAND_EXECUTE_SEND_REPORT:
                         intent = new Intent(this, SendAnalytics.class);
-                        startService(intent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
                         break;
                     case Constants.COMMAND_PING:
                         intent = new Intent(this, PingResponse.class);
-                        startService(intent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
                         break;
                 }
             }

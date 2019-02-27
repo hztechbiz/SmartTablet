@@ -3,6 +3,7 @@ package com.smart.tablet.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.smart.tablet.Constants;
@@ -35,7 +36,11 @@ public class SyncAlarmReceiver extends BroadcastReceiver {
                         if (result.equals("1")) {
                             Intent intent1 = new Intent(context, SyncService.class);
                             intent1.putExtra(context.getString(R.string.param_sync_wait), Constants.SYNC_BEFORE_WAIT);
-                            context.startService(intent1);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                context.startForegroundService(intent1);
+                            } else {
+                                context.startService(intent1);
+                            }
 
                             Intent i = new Intent(TRANSACTION_BEFORE_SYNC);
                             context.sendBroadcast(i);

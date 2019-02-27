@@ -321,10 +321,10 @@ public class SetupActivity extends Activity {
                         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         */
                         Intent intent = new Intent(SetupActivity.this, SyncService.class);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                            startService(intent);
-                        } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(intent);
+                        } else {
+                            startService(intent);
                         }
                     }
                 })
