@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import java.util.Locale;
 
 public class WelcomeFragment extends Fragment {
     TextView txtHotelName, txtDescription;
+    WebView txt_description_html;
     String _heading, _description, _new_heading, _new_description;
     Button _btn_location;
     private FragmentActivityListener parentListener;
@@ -49,10 +51,13 @@ public class WelcomeFragment extends Fragment {
 
         txtHotelName = view.findViewById(R.id.txt_hotel_name);
         txtDescription = view.findViewById(R.id.txt_description);
+        txt_description_html = view.findViewById(R.id.txt_description_html);
         _btn_location = view.findViewById(R.id.btn_location);
 
         txtHotelName.setTypeface(Util.getBoldTypeFace(getContext()));
         txtDescription.setTypeface(Util.getTypeFace(getContext()));
+
+        txt_description_html.setBackgroundColor(0);
 
         bind();
 
@@ -126,9 +131,12 @@ public class WelcomeFragment extends Fragment {
         else
             txtHotelName.setText(_heading);
 
-        if (_new_description != null)
+        if (_new_description != null) {
             txtDescription.setText(Html.fromHtml(_new_description));
-        else
+            txt_description_html.loadData(_new_description.trim(), "text/html", "utf-8");
+        } else {
             txtDescription.setText(Html.fromHtml(_description));
+            txt_description_html.loadData(_description.trim(), "text/html", "utf-8");
+        }
     }
 }

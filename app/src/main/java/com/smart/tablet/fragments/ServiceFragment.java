@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import java.util.Map;
 public class ServiceFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
 
     TextView txt_title, txt_description;
+    WebView txt_description_html;
     RoundedImageView iv_image;
     LinearLayout mainContent, footerContent;
     int _service_id;
@@ -69,6 +71,7 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
         txt_title = view.findViewById(R.id.txt_title);
         txt_description = view.findViewById(R.id.txt_description);
+        txt_description_html = view.findViewById(R.id.txt_description_html);
         iv_image = view.findViewById(R.id.imageView);
         mainContent = view.findViewById(R.id.mainContent);
         footerContent = view.findViewById(R.id.footerContent);
@@ -85,6 +88,8 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         btn_booking.setVisibility(View.GONE);
         btn_featured.setVisibility(View.GONE);
         btn_transport.setVisibility(View.GONE);
+
+        txt_description_html.setBackgroundColor(0);
 
         btn_featured.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,7 +270,8 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
             if (!service.isIs_marketing_partner()) {
                 txt_title.setText(service.getTitle());
-                txt_description.setText(Html.fromHtml(service.getDescription()));
+                txt_description.setText(Html.fromHtml(service.getDescription()), TextView.BufferType.SPANNABLE);
+                txt_description_html.loadData(service.getDescription(), "text/html", "utf-8");
             } else {
                 ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_app_heading), null));

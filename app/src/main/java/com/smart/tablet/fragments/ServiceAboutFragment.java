@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,7 @@ import java.util.Locale;
 
 public class ServiceAboutFragment extends Fragment implements com.smart.tablet.listeners.AsyncResultBag.Success {
     TextView txt_description;
+    WebView txt_description_html;
     ImageView iv_image;
     Button btn_booking;
     LinearLayout footer_content;
@@ -58,12 +60,15 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
         }
 
         txt_description = view.findViewById(R.id.txt_description);
+        txt_description_html = view.findViewById(R.id.txt_description_html);
         iv_image = view.findViewById(R.id.imageView);
         btn_booking = view.findViewById(R.id.btn_booking);
         footer_content = view.findViewById(R.id.footerContent);
 
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         btn_booking.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
+
+        txt_description_html.setBackgroundColor(0);
 
         btn_booking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +154,7 @@ public class ServiceAboutFragment extends Fragment implements com.smart.tablet.l
                                     break;
                                 case "about_text":
                                     txt_description.setText(Html.fromHtml(meta_value));
+                                    txt_description_html.loadData(meta_value.trim(), "text/html", "utf-8");
                                     break;
                                 case Constants.TOP_MENU_SHOW_BOOK:
                                     if (meta_value.equals("1"))

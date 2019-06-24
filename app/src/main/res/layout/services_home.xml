@@ -48,7 +48,17 @@
                         android:layout_marginRight="30dp"
                         android:gravity="center"
                         android:padding="15dp"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <WebView
+                        android:id="@+id/txt_description_html"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:gravity="center"
+                        android:padding="15dp"></WebView>
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
