@@ -44,6 +44,7 @@
     <string name="param_activity_menu_items">ACTIVITY_MENU_ITEMS</string>
     <string name="param_sync_popup">SYNC_POPUP</string>
     <string name="param_sync_wait">SYNC_WAIT_BEFORE</string>
+    <string name="param_sync_reset">SYNC_WAIT_RESET</string>
 
     <!-- MESSAGES -->
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>

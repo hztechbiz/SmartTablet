@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.smart.tablet.entities.Setting;
@@ -321,6 +322,8 @@ public class SetupActivity extends Activity {
                         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         */
                         Intent intent = new Intent(SetupActivity.this, SyncService.class);
+                        intent.putExtra(getString(R.string.param_sync_reset), true);
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(intent);
                         } else {

@@ -94,7 +94,7 @@ public class SyncActivity extends Activity {
     }
 
     private void sync() {
-        String url = com.smart.tablet.Constants.GetApiUrl("export");
+        String url = com.smart.tablet.Constants.GetApiUrl("export") + "?reset=1";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

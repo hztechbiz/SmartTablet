@@ -34,6 +34,9 @@ public interface ServiceDao {
     @Delete
     void delete(com.smart.tablet.entities.Service service);
 
+    @Query("DELETE FROM services WHERE id IN (:ids)")
+    void deleteAll(int... ids);
+
     @Query("DELETE FROM services")
     void deleteAll();
 }

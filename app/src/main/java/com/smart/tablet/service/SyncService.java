@@ -57,6 +57,7 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.drakeet.support.toast.ToastCompat;
@@ -86,6 +87,7 @@ public class SyncService extends IntentService {
     private boolean _isArrivalsStored;
     private boolean _isSalesStored;
     private boolean _imageProcessing;
+    private boolean _isReset;
     private String _token;
     private int _extraFieldsLength;
     private int _indexesFilled;
@@ -199,11 +201,13 @@ public class SyncService extends IntentService {
         _isOffersStored = _isArrivalsStored = _isSalesStored = true;
         _extraFieldsLength = 1;
         _indexesFilled = 0;
+        _isReset = false;
 
         long wait_before_seconds = 0;
 
         if (intent != null) {
             wait_before_seconds = intent.getLongExtra(getString(R.string.param_sync_wait), 0);
+            _isReset = intent.getBooleanExtra(getString(R.string.param_sync_reset), false);
         }
 
         if (!isRunning) {
@@ -251,24 +255,7 @@ public class SyncService extends IntentService {
                     e.printStackTrace();
                 }
             }
-            //scheduleHeartBeat();
         }
-    }
-
-    private void scheduleHeartBeat() {
-        Log.d("SchedulingAlarms", "heart beat scheduled");
-        try {
-            Thread.sleep(1000);
-            sendHeartBeat();
-        } catch (InterruptedException e) {
-            Log.e(TAG, "scheduleHeartBeat: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        if (isRunning)
-            scheduleHeartBeat();
-        else
-            notifyFinish();
     }
 
     private void retrieveTokenAndStartSync() {
@@ -312,6 +299,11 @@ public class SyncService extends IntentService {
 
     private void sync() {
         String url = Constants.GetApiUrl("export");
+
+        if (_isReset) {
+            url += "?reset=1";
+        }
+
         Log.d("SchedulingAlarms", "sync");
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -408,40 +400,62 @@ public class SyncService extends IntentService {
 
         final JSONArray categories_arr = data.getJSONArray("categories");
         final JSONArray services_arr = data.getJSONArray("services");
-
-        new DeleteCategories(this)
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        startStoringCategories(categories_arr);
-                    }
-                })
-                .onError(new AsyncResultBag.Error() {
-                    @Override
-                    public void onError(Object error) {
-                        startStoringCategories(categories_arr);
-                    }
-                })
-                .execute();
-
-        new DeleteServices(this)
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        startStoringServices(services_arr);
-                    }
-                })
-                .onError(new AsyncResultBag.Error() {
-                    @Override
-                    public void onError(Object error) {
-                        startStoringServices(services_arr);
-                    }
-                })
-                .execute();
-
         final JSONArray media_arr = data.getJSONArray("objects");
 
-        new DeleteMedia(this)
+        JSONArray deleted_categories = data.getJSONArray("deleted_categories");
+        JSONArray deleted_services = data.getJSONArray("deleted_services");
+        JSONArray deleted_objects = data.getJSONArray("deleted_objects");
+
+        List<Integer> deleted_category_ids = new ArrayList<>();
+        List<Integer> deleted_service_ids = new ArrayList<>();
+        List<Integer> deleted_object_ids = new ArrayList<>();
+
+        for (int i = 0; i < deleted_categories.length(); i++) {
+            JSONObject deleted_category = deleted_categories.getJSONObject(i);
+            deleted_category_ids.add(deleted_category.getInt("id"));
+        }
+
+        for (int i = 0; i < deleted_services.length(); i++) {
+            JSONObject deleted_service = deleted_services.getJSONObject(i);
+            deleted_service_ids.add(deleted_service.getInt("id"));
+        }
+
+        for (int i = 0; i < deleted_objects.length(); i++) {
+            JSONObject deleted_object = deleted_objects.getJSONObject(i);
+            deleted_object_ids.add(deleted_object.getInt("id"));
+        }
+
+        new DeleteCategories(this, deleted_category_ids)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        startStoringCategories(categories_arr);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        startStoringCategories(categories_arr);
+                    }
+                })
+                .execute();
+
+        new DeleteServices(this, deleted_service_ids)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        startStoringServices(services_arr);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        startStoringServices(services_arr);
+                    }
+                })
+                .execute();
+
+        new DeleteMedia(this, deleted_object_ids)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
                     public void onSuccess(Object result) {
@@ -908,7 +922,8 @@ public class SyncService extends IntentService {
         Log.d("SchedulingAlarms", "all done: " + (isDone ? "yes" : "no"));
 
         if (isDone) {
-            new StoreSetting(this, new Setting(SYNC_DONE, "1"))
+            String url = Constants.GetApiUrl("exported");
+            final StoreSetting storeSetting = new StoreSetting(this, new Setting(SYNC_DONE, "1"))
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override
                         public void onSuccess(Object result) {
@@ -923,8 +938,28 @@ public class SyncService extends IntentService {
 
                             decide();
                         }
-                    })
-                    .execute();
+                    });
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    storeSetting.execute();
+                }
+            }, null) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+
+                    params.put("AppKey", Constants.APP_KEY);
+                    params.put("Authorization", _token);
+
+                    return params;
+                }
+            };
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(request);
+
         } else if (_hasError) {
             _error = "Sync failed";
 

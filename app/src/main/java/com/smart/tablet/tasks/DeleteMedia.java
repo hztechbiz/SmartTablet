@@ -10,6 +10,7 @@ import com.smart.tablet.helpers.DatabaseHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 
 import java.io.File;
+import java.util.List;
 
 public class DeleteMedia extends AsyncTask<Void, Void, Boolean> {
     private DatabaseHelper _db;
@@ -18,9 +19,13 @@ public class DeleteMedia extends AsyncTask<Void, Void, Boolean> {
     private AsyncResultBag.Success _successCallback;
     private Media[] _media;
     private Object error;
-    private int _ids[];
+    private List<Integer> _ids;
 
-    public DeleteMedia(Context context, int... ids) {
+    public DeleteMedia(Context context) {
+        _db = DatabaseHelper.getInstance(context);
+    }
+
+    public DeleteMedia(Context context, List<Integer> ids) {
         _db = DatabaseHelper.getInstance(context);
         _ids = ids;
     }
@@ -37,7 +42,19 @@ public class DeleteMedia extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... voids) {
         try {
             MediaDao mediaDao = _db.getAppDatabase().mediaDao();
-            Media[] medias = mediaDao.getAll();
+            Media[] medias;
+
+            if (_ids != null) {
+                int[] ids = new int[_ids.size()];
+
+                for (int i = 0; i < _ids.size(); i++) {
+                    ids[i] = _ids.get(i);
+                }
+
+                medias = mediaDao.getAll(ids);
+            } else {
+                medias = mediaDao.getAll();
+            }
 
             for (Media media : medias) {
                 if (media != null) {

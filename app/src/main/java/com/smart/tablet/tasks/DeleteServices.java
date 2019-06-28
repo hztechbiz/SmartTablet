@@ -6,15 +6,23 @@ import android.os.AsyncTask;
 import com.smart.tablet.helpers.DatabaseHelper;
 import com.smart.tablet.listeners.AsyncResultBag;
 
+import java.util.List;
+
 public class DeleteServices extends AsyncTask<Void, Void, Boolean> {
     private DatabaseHelper _db;
     private AsyncResultBag.Error _errorCallback;
     private AsyncResultBag.Before _beforeCallback;
     private AsyncResultBag.Success _successCallback;
+    private List<Integer> _ids;
     private Object error;
 
     public DeleteServices(Context context) {
         _db = DatabaseHelper.getInstance(context);
+    }
+
+    public DeleteServices(Context context, List<Integer> ids) {
+        _db = DatabaseHelper.getInstance(context);
+        _ids = ids;
     }
 
     @Override
@@ -28,7 +36,20 @@ public class DeleteServices extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            _db.getAppDatabase().serviceDao().deleteAll();
+            if (_ids != null) {
+                int[] ids = new int[_ids.size()];
+
+                for (int i = 0; i < _ids.size(); i++) {
+                    ids[i] = _ids.get(i);
+                }
+
+                if (ids.length > 0) {
+                    _db.getAppDatabase().serviceDao().deleteAll(ids);
+                }
+
+            } else {
+                _db.getAppDatabase().serviceDao().deleteAll();
+            }
         } catch (Exception e) {
             error = e;
         }

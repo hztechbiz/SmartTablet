@@ -1521,7 +1521,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    public void setBattery(float percentage) {
+    public void setBattery(float percentage, boolean is_charging) {
         int res = R.drawable.battery_icon;
 
         if (percentage < 10) {
@@ -1546,7 +1546,7 @@ public class MainActivity extends FragmentActivity {
             res = R.drawable.btfull1;
         }
 
-        if (percentage < 5 && !_battery_low_popup) {
+        if (percentage < 5 && !_battery_low_popup && !is_charging) {
             _battery_low_popup = true;
             showPopupMessage("Battery Low", "Warning! Connect Power");
         } else {
@@ -1725,7 +1725,7 @@ public class MainActivity extends FragmentActivity {
                     status == BatteryManager.BATTERY_STATUS_FULL;
 
             showElectricImage(isCharging);
-            setBattery(level);
+            setBattery(level, status == BatteryManager.BATTERY_STATUS_CHARGING);
         }
     }
 

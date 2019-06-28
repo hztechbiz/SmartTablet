@@ -47,4 +47,7 @@ public interface CategoryDao {
 
     @Query("DELETE FROM categories")
     void deleteAll();
+
+    @Query("DELETE FROM categories WHERE id IN (:ids)")
+    void deleteAll(int... ids);
 }
