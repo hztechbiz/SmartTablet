@@ -1,27 +1,12 @@
 package com.smart.tablet;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.BatteryManager;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.smart.tablet.R;
-import com.smart.tablet.receivers.NetworkChangeReceiver;
-
-import java.util.List;
 
 public class topBarActivity extends Activity {
     private ImageView set_sginal_img, setBatteryStatus;

@@ -1,6 +1,6 @@
 package com.smart.tablet.listeners;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 public interface FragmentListener {
     void onUpdateFragment(Fragment fragment);

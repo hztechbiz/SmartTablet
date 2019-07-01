@@ -7,9 +7,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -62,7 +62,7 @@ import java.util.Map;
 
 import me.drakeet.support.toast.ToastCompat;
 
-import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 public class SyncService extends IntentService {
 

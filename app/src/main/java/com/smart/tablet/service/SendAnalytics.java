@@ -8,16 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.smart.tablet.AppController;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Analytics;
@@ -33,7 +31,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 
 public class SendAnalytics extends IntentService {
     private static final String TAG = SendAnalytics.class.getName();

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,7 +22,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Analytics;
 import com.smart.tablet.helpers.AnalyticsHelper;
 
 import org.json.JSONArray;

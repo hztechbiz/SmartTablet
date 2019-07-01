@@ -1,6 +1,6 @@
 package com.smart.tablet.PopUps;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;

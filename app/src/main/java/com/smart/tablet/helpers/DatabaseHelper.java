@@ -1,9 +1,7 @@
 package com.smart.tablet.helpers;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
-
-import com.smart.tablet.helpers.AppDatabase;
 
 public class DatabaseHelper {
 

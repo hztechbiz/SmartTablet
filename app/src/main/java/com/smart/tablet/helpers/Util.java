@@ -2,7 +2,7 @@ package com.smart.tablet.helpers;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.core.content.res.ResourcesCompat;
 import android.text.Html;
 
 import com.smart.tablet.R;

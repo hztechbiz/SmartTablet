@@ -5,15 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.smart.tablet.R;
 
 import java.io.File;
 

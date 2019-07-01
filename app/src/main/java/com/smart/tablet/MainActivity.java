@@ -1,6 +1,5 @@
 package com.smart.tablet;
 
-import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.SystemUpdatePolicy;
 import android.content.BroadcastReceiver;
@@ -24,11 +23,11 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;

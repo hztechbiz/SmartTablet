@@ -1,13 +1,9 @@
 package com.smart.tablet.MarketingPartnerSection;
 
-import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.VideoView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.MediaController;
 import android.util.Log;
 import android.media.MediaPlayer;

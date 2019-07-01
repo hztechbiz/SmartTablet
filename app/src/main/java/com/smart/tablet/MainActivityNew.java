@@ -14,9 +14,9 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,14 +25,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.smart.tablet.Constants;
-import com.smart.tablet.R;
-import com.smart.tablet.fragments.CategoryFragment;
-import com.smart.tablet.fragments.ServiceFragment;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.tasks.RetrieveSetting;
 
 import java.io.File;
 import java.text.DateFormat;

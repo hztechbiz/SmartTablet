@@ -3,7 +3,7 @@ package com.smart.tablet.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +12,9 @@ import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.R;
-import com.smart.tablet.entities.Arrival;
-import com.smart.tablet.entities.Sale;
 import com.smart.tablet.entities.Service;
 import com.smart.tablet.helpers.AnalyticsHelper;
-import com.smart.tablet.helpers.ImageHelper;
-import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.listeners.FragmentActivityListener;
-import com.smart.tablet.listeners.FragmentListener;
-import com.smart.tablet.tasks.RetrieveSingleArrival;
-import com.smart.tablet.tasks.RetrieveSingleSale;
 import com.smart.tablet.tasks.RetrieveSingleService;
 
 import java.io.File;

@@ -1,7 +1,7 @@
 package com.smart.tablet.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,6 @@ import android.widget.Button;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Service;
-import com.smart.tablet.fragments.ServiceBookingFragment;
 import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;

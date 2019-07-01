@@ -1,7 +1,7 @@
 package com.smart.tablet.helpers;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 import com.smart.tablet.dao.AnalyticsDao;
 import com.smart.tablet.dao.ArrivalDao;

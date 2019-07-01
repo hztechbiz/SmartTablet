@@ -93,6 +93,8 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
+        FirebaseApp.initializeApp(this);
+
         registerReceiver(wifiStatusReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_POWER_CONNECTED));

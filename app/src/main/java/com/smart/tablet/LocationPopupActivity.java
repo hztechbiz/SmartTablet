@@ -1,7 +1,7 @@
 package com.smart.tablet;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -15,10 +15,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.smart.tablet.Constants;
-import com.smart.tablet.R;
-import com.smart.tablet.listeners.AsyncResultBag;
-import com.smart.tablet.tasks.RetrieveSetting;
 
 import java.util.HashMap;
 
