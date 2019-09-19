@@ -115,7 +115,7 @@ public class MainActivity extends FragmentActivity {
     private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, wakeupTime, timezone;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
-    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text, _txt_progress, _txt_sync_debug;
+    private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_local_map_text, item_local_region_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, item_today_offer_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text, _txt_progress, _txt_sync_debug;
     private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left, _top_right_buttons, language_container;
     private Button _btn_night_mode, _btn_night_mode_2;
     private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
@@ -506,10 +506,13 @@ public class MainActivity extends FragmentActivity {
         item_wifi_text = findViewById(R.id.item_wifi_text);
         item_how_text = findViewById(R.id.item_how_text);
         item_useful_info_text = findViewById(R.id.item_useful_info_text);
+        item_local_map_text = findViewById(R.id.item_local_map_text);
+        item_local_region_text = findViewById(R.id.item_local_region_text);
         item_weather_text = findViewById(R.id.item_weather_text);
         item_news_text = findViewById(R.id.item_news_text);
         item_transport_text = findViewById(R.id.item_transport_text);
         item_partner_text = findViewById(R.id.item_partner_text);
+        item_today_offer_text = findViewById(R.id.item_today_offer_text);
         img_wifi_signals = findViewById(R.id.wifi_connect);
         img_electric = findViewById(R.id.img_electric);
         img_electric_2 = findViewById(R.id.img_electric_2);
@@ -571,10 +574,13 @@ public class MainActivity extends FragmentActivity {
         item_wifi_text.setTypeface(Util.getTypeFace(this));
         item_how_text.setTypeface(Util.getTypeFace(this));
         item_useful_info_text.setTypeface(Util.getTypeFace(this));
+        item_local_map_text.setTypeface(Util.getTypeFace(this));
+        item_local_region_text.setTypeface(Util.getTypeFace(this));
         item_weather_text.setTypeface(Util.getTypeFace(this));
         item_news_text.setTypeface(Util.getTypeFace(this));
         item_transport_text.setTypeface(Util.getTypeFace(this));
         item_partner_text.setTypeface(Util.getTypeFace(this));
+        item_today_offer_text.setTypeface(Util.getTypeFace(this));
         _app_heading.setTypeface(Util.getTypeFace(this));
         _txt_progress.setTypeface(Util.getTypeFace(this));
 
@@ -703,7 +709,7 @@ public class MainActivity extends FragmentActivity {
         setupMenuItems();
         setBranding();
         scheduleAlarms();
-        getSidebarInformation();
+        getSidebarSettings();
         //getLanguageSettings();
 
         wakeupScreen();
@@ -766,7 +772,7 @@ public class MainActivity extends FragmentActivity {
                 .execute();
     }
 
-    private void getSidebarInformation() {
+    private void getSidebarSettings() {
         new RetrieveSetting(this, Constants.SETTING_SIDEBAR)
                 .onSuccess(new AsyncResultBag.Success() {
                     @Override
@@ -1322,7 +1328,18 @@ public class MainActivity extends FragmentActivity {
                 "today_offers_category",
                 "local_map_address",
                 "local_map_latitude",
-                "local_map_longitude"
+                "local_map_longitude",
+                "operating_the_television_text_color",
+                "connect_to_wifi_text_color",
+                "how_use_tablet_text_color",
+                "useful_information_text_color",
+                "local_region_text_color",
+                "weather_text_color",
+                "news_text_color",
+                "local_map_text_color",
+                "transport_options_text_color",
+                "partner_offers_text_color",
+                "today_offers_text_color"
         ).onSuccess(new AsyncResultBag.Success() {
             @Override
             public void onSuccess(Object result) {
@@ -1447,6 +1464,50 @@ public class MainActivity extends FragmentActivity {
                         news_linear.setVisibility(View.VISIBLE);
                     } else {
                         news_linear.setVisibility(View.GONE);
+                    }
+
+                    if (values.containsKey("operating_the_television_text_color") && values.get("operating_the_television_text_color") != null) {
+                        item_tv_text.setTextColor(Color.parseColor("#" + values.get("operating_the_television_text_color")));
+                    }
+
+                    if (values.containsKey("connect_to_wifi_text_color") && values.get("connect_to_wifi_text_color") != null) {
+                        item_wifi_text.setTextColor(Color.parseColor("#" + values.get("connect_to_wifi_text_color")));
+                    }
+
+                    if (values.containsKey("how_use_tablet_text_color") && values.get("how_use_tablet_text_color") != null) {
+                        item_how_text.setTextColor(Color.parseColor("#" + values.get("how_use_tablet_text_color")));
+                    }
+
+                    if (values.containsKey("useful_information_text_color") && values.get("useful_information_text_color") != null) {
+                        item_useful_info_text.setTextColor(Color.parseColor("#" + values.get("useful_information_text_color")));
+                    }
+
+                    if (values.containsKey("local_region_text_color") && values.get("local_region_text_color") != null) {
+                        item_local_region_text.setTextColor(Color.parseColor("#" + values.get("local_region_text_color")));
+                    }
+
+                    if (values.containsKey("weather_text_color") && values.get("weather_text_color") != null) {
+                        item_weather_text.setTextColor(Color.parseColor("#" + values.get("weather_text_color")));
+                    }
+
+                    if (values.containsKey("news_text_color") && values.get("news_text_color") != null) {
+                        item_news_text.setTextColor(Color.parseColor("#" + values.get("news_text_color")));
+                    }
+
+                    if (values.containsKey("local_map_text_color") && values.get("local_map_text_color") != null) {
+                        item_local_map_text.setTextColor(Color.parseColor("#" + values.get("local_map_text_color")));
+                    }
+
+                    if (values.containsKey("transport_options_text_color") && values.get("transport_options_text_color") != null) {
+                        item_transport_text.setTextColor(Color.parseColor("#" + values.get("transport_options_text_color")));
+                    }
+
+                    if (values.containsKey("partner_offers_text_color") && values.get("partner_offers_text_color") != null) {
+                        item_partner_text.setTextColor(Color.parseColor("#" + values.get("partner_offers_text_color")));
+                    }
+
+                    if (values.containsKey("today_offers_text_color") && values.get("today_offers_text_color") != null) {
+                        item_today_offer_text.setTextColor(Color.parseColor("#" + values.get("today_offers_text_color")));
                     }
                 }
             }
