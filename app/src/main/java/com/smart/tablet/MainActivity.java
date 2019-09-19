@@ -703,6 +703,7 @@ public class MainActivity extends FragmentActivity {
         setupMenuItems();
         setBranding();
         scheduleAlarms();
+        getSidebarInformation();
         //getLanguageSettings();
 
         wakeupScreen();
@@ -760,6 +761,20 @@ public class MainActivity extends FragmentActivity {
                         }
 
                         init();
+                    }
+                })
+                .execute();
+    }
+
+    private void getSidebarInformation() {
+        new RetrieveSetting(this, Constants.SETTING_SIDEBAR)
+                .onSuccess(new AsyncResultBag.Success() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        if (result != null) {
+                            String sidebarColor = result.toString();
+                            _sidebar.setBackgroundColor(Color.parseColor("#" + sidebarColor));
+                        }
                     }
                 })
                 .execute();
