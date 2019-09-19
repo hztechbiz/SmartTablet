@@ -45,6 +45,7 @@
     <string name="param_sync_popup">SYNC_POPUP</string>
     <string name="param_sync_wait">SYNC_WAIT_BEFORE</string>
     <string name="param_sync_reset">SYNC_WAIT_RESET</string>
+    <string name="param_language">LANGUAGE</string>
 
     <!-- MESSAGES -->
     <string name="msg_hide_sidebar">HIDE_SIDEBAR</string>
@@ -70,6 +71,8 @@
     <string name="msg_hide_guest_button">HIDE_GUEST_BUTTON</string>
     <string name="msg_show_top_right_buttons">SHOW_TOP_RIGHT_BUTTONS</string>
     <string name="msg_hide_top_right_buttons">HIDE_TOP_RIGHT_BUTTONS</string>
+    <string name="msg_show_language_button">SHOW_LANGUAGE_BUTTON</string>
+    <string name="msg_hide_language_button">HIDE_LANGUAGE_BUTTON</string>
     <string name="msg_show_app_heading">SHOW_APP_HEADING</string>
     <string name="msg_hide_app_heading">HIDE_APP_HEADING</string>
     <string name="msg_set_app_heading">SET_APP_HEADING</string>
@@ -107,6 +110,7 @@
     <string name="news">NEWS</string>
     <string name="transport_options">TRANSPORT OPTIONS</string>
     <string name="partner_offers">PARTNER OFFERS</string>
+    <string name="today_offers">TODAY\'S OFFERS</string>
     <string name="synchronizing_please_wait">Synchronizing, please wait...</string>
     <string name="sync">Sync</string>
     <string name="enter_hotel_key_here">ENTER HOTEL KEY HERE</string>
@@ -132,4 +136,8 @@
 
     <!-- Shared Preferences -->
     <string name="sp_analytics_time">SP@ANALYTICS_TIME</string>
+    <string name="sp_language">SP@LANGUAGE</string>
+    <string name="change_language">Change Language</string>
+    <string name="battery_low">BATTERY LOW</string>
+    <string name="get_your_coupon_here">GET YOUR COUPON HERE</string>
 </resources>

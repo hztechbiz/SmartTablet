@@ -31,21 +31,21 @@
             android:orientation="vertical"
             android:padding="15dp">
 
-            <TextView
+            <com.smart.tablet.components.LocalizedTextView
                 android:id="@+id/offer_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
-            <TextView
+            <com.smart.tablet.components.LocalizedTextView
                 android:id="@+id/offer_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:maxLines="3"
                 android:textColor="#000"
                 android:textSize="15sp" />

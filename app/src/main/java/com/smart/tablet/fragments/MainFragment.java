@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.smart.tablet.R;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.helpers.AnalyticsHelper;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.models.CategoryModel;
 import com.smart.tablet.tasks.RetrieveCategories;
 
@@ -42,6 +43,7 @@ public class MainFragment extends Fragment {
     private String _listing_type;
     private Bundle _bundle;
     private com.smart.tablet.MainActivity _activity;
+    private String language_code;
 
     public MainFragment() {
 
@@ -72,6 +74,7 @@ public class MainFragment extends Fragment {
         _map_marker = null;
         _is_weather = false;
         _display_services = false;
+        language_code = Util.getLanguage(getContext());
 
         if (_bundle != null) {
             if (_bundle.containsKey(getString(R.string.param_category_id))) {
@@ -168,6 +171,7 @@ public class MainFragment extends Fragment {
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_main_logo), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_welcome_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_top_right_buttons), null));
+        actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_language_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_night_mode_button), null));
         actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_copyright), null));

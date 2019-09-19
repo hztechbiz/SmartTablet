@@ -1,15 +1,33 @@
 package com.smart.tablet.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+
 import androidx.core.content.res.ResourcesCompat;
+
 import android.text.Html;
 
+import com.smart.tablet.Constants;
 import com.smart.tablet.R;
 
 import java.util.Date;
 
 public class Util {
+    public static void setLanguage(Context context, String language_code) {
+        SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences(context.getString(R.string.sp_language), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(R.string.sp_language), language_code);
+        editor.commit();
+    }
+
+    public static String getLanguage(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.sp_language), Context.MODE_PRIVATE);
+
+        return sharedPref.getString(context.getString(R.string.sp_language), Constants.DEFAULT_LANG);
+    }
+
     public static Typeface getTypeFace(Context context) {
         return ResourcesCompat.getFont(context, R.font.lato_regular);
     }

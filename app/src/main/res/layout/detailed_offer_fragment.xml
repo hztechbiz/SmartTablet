@@ -35,7 +35,7 @@
                 android:paddingBottom="40dp"
                 android:paddingTop="40dp">
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     android:textColor="#000000"
                     android:textSize="30sp" />
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/txt_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

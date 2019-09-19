@@ -1,5 +1,8 @@
 package com.smart.tablet;
 
+import android.app.AlarmManager;
+import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.SystemUpdatePolicy;
 import android.content.BroadcastReceiver;
@@ -8,6 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -23,11 +28,13 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.UserManager;
 import android.provider.Settings;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -39,11 +46,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
+import com.smart.tablet.adapters.LanguagesListAdapter;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Device;
 import com.smart.tablet.fragments.MainFragment;
@@ -59,6 +76,7 @@ import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
 import com.smart.tablet.models.ActivityAction;
 import com.smart.tablet.models.HotelModel;
+import com.smart.tablet.models.LanguageModel;
 import com.smart.tablet.models.MapMarker;
 import com.smart.tablet.receivers.AdminReceiver;
 import com.smart.tablet.receivers.BootReceiver;
@@ -76,6 +94,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +103,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 
 import me.drakeet.support.toast.ToastCompat;
@@ -90,22 +111,23 @@ import me.drakeet.support.toast.ToastCompat;
 public class MainActivity extends FragmentActivity {
 
     private String TAG = this.getClass().getName();
+    private int APP_UPDATE_REQUEST_CODE = 233;
     private String entryPageStart, entryPageEnd, kioskPassword, sleepTime, wakeupTime, timezone;
     private FrameLayout _fragment_container;
     private ImageView img_wifi_signals, img_battery_level, entry_page_img_wifi_signals, entry_page_img_battery_level, bg_image, small_logo, main_logo, entry_logo, entry_bg_img, img_electric, img_electric_2;
     private TextView txt_battery_percentage, entry_page_txt_battery_percentage, txt_time, entry_page_txt_time, _btn_home_text, _btn_back_text, item_home_text, item_tv_text, item_wifi_text, item_how_text, item_useful_info_text, item_weather_text, item_news_text, item_transport_text, item_partner_text, _app_heading, _txt_copyright, _btn_guest_info_text, _btn_top_guest_info_text, _btn_welcome_2_text, _txt_progress, _txt_sync_debug;
-    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left, _top_right_buttons;
+    private LinearLayout _sidebar, _btn_home, _btn_back, _time_box, small_logo_container, main_logo_container, _btn_welcome, _btn_guest_info, _bottom_bar, _btn_top_guest_info, _app_heading_container, _top_bar_right, _top_bar_left, _top_right_buttons, language_container;
     private Button _btn_night_mode, _btn_night_mode_2;
     private RelativeLayout _sync_container, _entry_page_container, _night_mode_container, _main_activity;
     private BatteryBroadcastReceiver batteryBroadcastReceiver;
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private int timerClicked, _btn_kiosk_clicks;
-    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage, _battery_low_popup;
+    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage, _battery_low_popup, _updatePopupShowing;
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
-    private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8, item_icon_9, item_icon_10;
+    private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8, item_icon_9, item_icon_10, item_icon_11;
     private static final String Battery_PLUGGED_ANY = Integer.toString(
             BatteryManager.BATTERY_PLUGGED_AC |
                     BatteryManager.BATTERY_PLUGGED_USB |
@@ -242,6 +264,12 @@ public class MainActivity extends FragmentActivity {
                 case R.string.msg_hide_top_right_buttons:
                     showTopRightButtons(false);
                     break;
+                case R.string.msg_show_language_button:
+                    showLanguageOption(true);
+                    break;
+                case R.string.msg_hide_language_button:
+                    showLanguageOption(false);
+                    break;
                 case R.string.msg_set_app_heading:
                     if (arguments != null)
                         _app_heading.setText(arguments.toString());
@@ -300,6 +328,12 @@ public class MainActivity extends FragmentActivity {
     private DevicePolicyManager dpm;
     private ComponentName deviceAdmin;
     private boolean _isNightMode;
+    private InstallStateUpdatedListener appInstallListener = state -> {
+        if (state.installStatus() == InstallStatus.INSTALLED) {
+            restartApp();
+        }
+    };
+
 
     private void showPopupMessage(String title, String message) {
         Intent intent = new Intent(this, MessagePopupActivity.class);
@@ -393,6 +427,10 @@ public class MainActivity extends FragmentActivity {
 
     private void showTopRightButtons(boolean b) {
         _top_right_buttons.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+    private void showLanguageOption(boolean b) {
+        language_container.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     private void showToast(String text) {
@@ -493,6 +531,7 @@ public class MainActivity extends FragmentActivity {
         small_logo_container = findViewById(R.id.small_logo);
         main_logo_container = findViewById(R.id.main_logo);
         _bottom_bar = findViewById(R.id.bottom_bar);
+        language_container = findViewById(R.id.language_container);
         item_icon_1 = findViewById(R.id.tv);
         item_icon_2 = findViewById(R.id.wifi);
         item_icon_3 = findViewById(R.id.useTablet);
@@ -503,6 +542,7 @@ public class MainActivity extends FragmentActivity {
         item_icon_8 = findViewById(R.id.news);
         item_icon_9 = findViewById(R.id.transport);
         item_icon_10 = findViewById(R.id.partner);
+        item_icon_11 = findViewById(R.id.today_offer);
         _txt_progress = findViewById(R.id.syncProgressText);
 
         if (_fragment_container != null) {
@@ -545,7 +585,34 @@ public class MainActivity extends FragmentActivity {
         _btn_kiosk.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                toggleKioskMode(v);
+                final View v1 = v;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Lock or Unlock?");
+                builder.setNegativeButton("Lock", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!dpm.isAdminActive(deviceAdmin)) {
+                            showToast("This app is not a device admin!");
+                        }
+
+                        if (dpm.isDeviceOwnerApp(getPackageName())) {
+                            setDefaultCosuPolicies(true);
+                            //dpm.setLockTaskPackages(deviceAdmin, new String[]{getPackageName()});
+                            //setKioskMode(true);
+                        } else {
+                            showToast("This app is not the device owner!");
+                        }
+                    }
+                });
+                builder.setPositiveButton("Unlock", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        toggleKioskMode(v1);
+                    }
+                });
+                builder.show();
+
                 return false;
             }
         });
@@ -576,18 +643,106 @@ public class MainActivity extends FragmentActivity {
         getHotelInformation();
     }
 
+    public static boolean InstallAPK(Context context, String apk_file_name) {
+        try {
+
+            File apkfile = new File(apk_file_name);
+            Log.d("APKFILE", apk_file_name);
+
+            if (apkfile.exists()) {
+
+                FileInputStream in = new FileInputStream(apkfile);
+
+                PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
+                PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
+                        PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+                params.setAppPackageName(context.getPackageName());
+
+                // set params
+                int sessionId = packageInstaller.createSession(params);
+
+                PackageInstaller.Session session = packageInstaller.openSession(sessionId);
+                OutputStream out = session.openWrite("COSU", 0, -1);
+
+                byte[] buffer = new byte[65536];
+                int c;
+
+                while ((c = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, c);
+                }
+
+                session.fsync(out);
+                in.close();
+                out.close();
+
+                session.commit(createIntentSender(context, sessionId));
+
+                return true;
+            } else
+                return false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static IntentSender createIntentSender(Context context, int sessionId) {
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                sessionId,
+                new Intent(MainActivity.class.getName()),
+                0);
+        return pendingIntent.getIntentSender();
+    }
+
+
     private void init() {
         getTimeSettings();
         getKioskPassword();
         setupMenuItems();
         setBranding();
         scheduleAlarms();
+        //getLanguageSettings();
 
         wakeupScreen();
 
         if (_hasEntryPage) {
             showEntryPage(true);
         }
+    }
+
+    private void getLanguageSettings() {
+        new RetrieveSetting(this, Constants.SETTING_LANGUAGE_ENABLE, Constants.SETTING_LANGUAGES)
+                .onSuccess(result -> {
+                    HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+
+                    if (values != null) {
+                        boolean is_enable = values.get(Constants.SETTING_LANGUAGE_ENABLE).equals("1");
+
+                        showLanguageOption(is_enable);
+
+                        if (is_enable && values.containsKey(Constants.SETTING_LANGUAGES)) {
+                            JSONArray languages = null;
+                            try {
+                                languages = new JSONArray(values.get(Constants.SETTING_LANGUAGES));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (languages == null) {
+                                showLanguageOption(false);
+                            } else {
+                                populateLanguages(languages);
+                            }
+                        }
+                    }
+                })
+                .execute();
+    }
+
+    private void populateLanguages(JSONArray languages) {
+
     }
 
     private void getHotelInformation() {
@@ -652,7 +807,7 @@ public class MainActivity extends FragmentActivity {
         PowerManager powerManager = ((PowerManager) getSystemService(Context.POWER_SERVICE));
         if (powerManager != null) {
             PowerManager.WakeLock screenLock = powerManager.newWakeLock(
-                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
             screenLock.acquire(10 * 60 * 1000L);
         }
     }
@@ -804,6 +959,7 @@ public class MainActivity extends FragmentActivity {
                                 checkEntryPageConditions();
                                 checkSleepPageConditions();
                                 checkWakeupPageConditions();
+                                checkForUpdate();
                             }
                         });
                         Thread.sleep((1000 * 60));
@@ -816,6 +972,7 @@ public class MainActivity extends FragmentActivity {
 
         t.start();
 
+        /*
         if (!dpm.isAdminActive(deviceAdmin)) {
             showToast("This app is not a device admin!");
         }
@@ -827,8 +984,78 @@ public class MainActivity extends FragmentActivity {
         } else {
             showToast("This app is not the device owner!");
         }
+        */
 
         super.onStart();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == APP_UPDATE_REQUEST_CODE) {
+            _updatePopupShowing = false;
+
+            if (resultCode == RESULT_OK) {
+                //restartApp();
+            } else {
+                // showToast("Update flow failed!");
+                checkForUpdate();
+                // If the update is cancelled or fails,
+                // you can request to start the update again.
+            }
+        }
+    }
+
+    private void restartApp() {
+        Intent mStartActivity = new Intent(this, SplashActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if (mgr != null) {
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+            System.exit(0);
+        }
+    }
+
+    private void checkForUpdate() {
+
+        if (_updatePopupShowing)
+            return;
+
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        // Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // For a flexible update, use AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                // Request the update.
+                try {
+                    _updatePopupShowing = true;
+
+                    appUpdateManager.registerListener(appInstallListener);
+                    appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                            AppUpdateType.FLEXIBLE,
+                            // The current activity making the update request.
+                            this,
+                            // Include a request code to later monitor this update request.
+                            APP_UPDATE_REQUEST_CODE);
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                    //showToast(e.getMessage());
+                }
+            } else if (appUpdateInfo.updateAvailability() != UpdateAvailability.UPDATE_AVAILABLE) {
+                //showToast("Update not available!");
+            } else if (!appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                //showToast("Update type not allowed!");
+            }
+        });
     }
 
     private void setDefaultCosuPolicies(boolean active) {
@@ -1069,6 +1296,7 @@ public class MainActivity extends FragmentActivity {
                 "enable_news",
                 "enable_transport_options",
                 "enable_partner_offers",
+                "enable_today_offers",
                 "operating_the_television_category",
                 "connect_to_wifi_category",
                 "how_use_tablet_category",
@@ -1076,6 +1304,7 @@ public class MainActivity extends FragmentActivity {
                 "local_region_category",
                 "transport_options_category",
                 "partner_offers_category",
+                "today_offers_category",
                 "local_map_address",
                 "local_map_latitude",
                 "local_map_longitude"
@@ -1095,6 +1324,7 @@ public class MainActivity extends FragmentActivity {
                     String enable_news = values.containsKey("enable_news") ? values.get("enable_news") : "0";
                     String enable_transport_options = values.containsKey("enable_transport_options") ? values.get("enable_transport_options") : "0";
                     String enable_partner_offers = values.containsKey("enable_partner_offers") ? values.get("enable_partner_offers") : "0";
+                    String enable_today_offers = values.containsKey("enable_today_offers") ? values.get("enable_today_offers") : "0";
                     String operating_the_television_category = values.containsKey("operating_the_television_category") ? values.get("operating_the_television_category") : "0";
                     String connect_to_wifi_category = values.containsKey("connect_to_wifi_category") ? values.get("connect_to_wifi_category") : "0";
                     String how_use_tablet_category = values.containsKey("how_use_tablet_category") ? values.get("how_use_tablet_category") : "0";
@@ -1102,6 +1332,7 @@ public class MainActivity extends FragmentActivity {
                     String local_region_category = values.containsKey("local_region_category") ? values.get("local_region_category") : "0";
                     String transport_options_category = values.containsKey("transport_options_category") ? values.get("transport_options_category") : "0";
                     String partner_offers_category = values.containsKey("partner_offers_category") ? values.get("partner_offers_category") : "0";
+                    String today_offers_category = values.containsKey("today_offers_category") ? values.get("today_offers_category") : "0";
                     String local_map_address = values.containsKey("local_map_address") ? values.get("local_map_address") : null;
                     double local_map_latitude = values.containsKey("local_map_latitude") ? Double.parseDouble(values.get("local_map_latitude")) : 0;
                     double local_map_longitude = values.containsKey("local_map_longitude") ? Double.parseDouble(values.get("local_map_longitude")) : 0;
@@ -1116,6 +1347,7 @@ public class MainActivity extends FragmentActivity {
                     LinearLayout local_map = findViewById(R.id.itemMap);
                     LinearLayout transport_options = findViewById(R.id.itemTransport);
                     LinearLayout partner_offers = findViewById(R.id.itemPartner);
+                    LinearLayout today_offers = findViewById(R.id.itemTodayOffer);
 
                     if (enable_operating_the_television.equals("1")) {
                         ott_linear.setVisibility(View.VISIBLE);
@@ -1181,6 +1413,14 @@ public class MainActivity extends FragmentActivity {
                         partner_offers.setVisibility(View.GONE);
                     }
 
+                    if (enable_today_offers.equals("1")) {
+                        today_offers.setVisibility(View.VISIBLE);
+                        today_offers.setTag(R.string.tag_value, today_offers_category);
+                        today_offers.setTag(R.string.tag_action, R.string.tag_action_category);
+                    } else {
+                        today_offers.setVisibility(View.GONE);
+                    }
+
                     if (enable_weather.equals("1")) {
                         weather_linear.setVisibility(View.VISIBLE);
                         weather_linear.setTag(R.string.tag_action, R.string.tag_action_weather);
@@ -1222,7 +1462,7 @@ public class MainActivity extends FragmentActivity {
 
         if (has_permit) {
             Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, (b ? 0 : 100));
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, (b ? 0 : 255));
         }
     }
 
@@ -1286,6 +1526,38 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    public void onLanguageClick(View view) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.list_languages);
+
+        ListView lv_languages = (ListView) dialog.findViewById(R.id.languages);
+        List<LanguageModel> languages = new ArrayList<LanguageModel>();
+
+        for (int i = 0; i < Constants.LANGUAGE_NAMES.length; i++) {
+            LanguageModel languageModel = new LanguageModel();
+
+            languageModel.setName(Constants.LANGUAGE_NAMES[i]);
+            languageModel.setIcon(Constants.LANGUAGE_ICONS[i]);
+            languageModel.setValue(Constants.LANGUAGE_CODES[i]);
+
+            languages.add(languageModel);
+        }
+
+        lv_languages.setAdapter(new LanguagesListAdapter(this, languages, v -> {
+            String language_code = v.getTag().toString();
+
+            Util.setLanguage(this, language_code);
+
+            Intent i = new Intent(Constants.ACTION_LANGUAGE_CHANGE);
+            i.putExtra(getString(R.string.param_language), language_code);
+            sendBroadcast(i);
+
+            dialog.dismiss();
+        }));
+
+        dialog.show();
+    }
+
     public void onWelcomeClick(View view) {
         WelcomeFragment welcomeFragment = new WelcomeFragment();
         welcomeFragment.setParentListener(activityListener);
@@ -1342,9 +1614,10 @@ public class MainActivity extends FragmentActivity {
         LinearLayout news_linear = findViewById(R.id.itemNews);
         LinearLayout transport_options = findViewById(R.id.itemTransport);
         LinearLayout partner_offers = findViewById(R.id.itemPartner);
+        LinearLayout today_offers = findViewById(R.id.itemTodayOffer);
 
         LinearLayout[] all_items = new LinearLayout[]{ott_linear, wifi_linear, howTo_linear, Info_linear, map_linear, localReg_linear,
-                weather_linear, news_linear, transport_options, partner_offers};
+                weather_linear, news_linear, transport_options, partner_offers, today_offers};
 
         for (LinearLayout all_item : all_items) {
             all_item.setBackgroundColor(0);
@@ -1365,6 +1638,7 @@ public class MainActivity extends FragmentActivity {
             item_icon_8.setImageResource(R.drawable.news);
             item_icon_9.setImageResource(R.drawable.transport_icon);
             item_icon_10.setImageResource(R.drawable.partner_offer);
+            item_icon_11.setImageResource(R.drawable.today_offers);
 
             String text = null;
 
@@ -1409,6 +1683,10 @@ public class MainActivity extends FragmentActivity {
                     case R.id.itemPartner:
                         item_icon_10.setImageResource(R.drawable.partner_offer_black);
                         text = getString(R.string.partner_offers);
+                        break;
+                    case R.id.itemTodayOffer:
+                        item_icon_11.setImageResource(R.drawable.today_offers_black);
+                        text = getString(R.string.today_offers);
                         break;
                 }
 
@@ -1654,9 +1932,18 @@ public class MainActivity extends FragmentActivity {
                                 }
                             }
 
+                            String version_name = "N/A";
+
+                            try {
+                                version_name = getPackageManager()
+                                        .getPackageInfo(getPackageName(), 0).versionName;
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setTitle("Device Information");
-                            builder.setMessage("MAC Address: " + mac_address + "\nDIN: " + din + "\nRoom Number: " + room_number);
+                            builder.setMessage("MAC Address: " + mac_address + "\nDIN: " + din + "\nRoom Number: " + room_number + "\nApp Version: " + version_name);
 
                             builder.show();
                         }
@@ -1725,6 +2012,10 @@ public class MainActivity extends FragmentActivity {
 
             showElectricImage(isCharging);
             setBattery(level, status == BatteryManager.BATTERY_STATUS_CHARGING);
+
+            if (!_isNightMode) {
+                showNightMode(false);
+            }
         }
     }
 

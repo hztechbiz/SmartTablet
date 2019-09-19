@@ -298,7 +298,7 @@ public class SyncService extends IntentService {
     }
 
     private void sync() {
-        String url = Constants.GetApiUrl("export");
+        String url = Constants.GetApiUrl("export", "v2");
 
         if (_isReset) {
             url += "?reset=1";
@@ -922,7 +922,7 @@ public class SyncService extends IntentService {
         Log.d("SchedulingAlarms", "all done: " + (isDone ? "yes" : "no"));
 
         if (isDone) {
-            String url = Constants.GetApiUrl("exported");
+            String url = Constants.GetApiUrl("exported", "v2");
             final StoreSetting storeSetting = new StoreSetting(this, new Setting(SYNC_DONE, "1"))
                     .onSuccess(new AsyncResultBag.Success() {
                         @Override

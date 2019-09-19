@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Service;
 import com.smart.tablet.helpers.AnalyticsHelper;
 import com.smart.tablet.helpers.ImageHelper;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.listeners.FragmentActivityListener;
 import com.smart.tablet.listeners.FragmentListener;
@@ -94,7 +96,6 @@ public class CategoryFragment extends Fragment {
         Bundle bundle = getArguments();
 
         _activity = (MainActivity) getActivity();
-
         gridView = view.findViewById(R.id.gridview);
         webView = view.findViewById(R.id.webview);
         webview_container = view.findViewById(R.id.webview_container);
@@ -205,6 +206,7 @@ public class CategoryFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_show_logo_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
         actions.add(new ActivityAction((R.string.msg_hide_top_right_buttons), null));
+        actions.add(new ActivityAction((R.string.msg_hide_language_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));

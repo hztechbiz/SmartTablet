@@ -14,9 +14,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -196,8 +198,10 @@ public class SplashActivity extends Activity {
         }
 
         if (dpm.isDeviceOwnerApp(getPackageName())) {
+            /*
             dpm.setLockTaskPackages(deviceAdmin,
                     new String[]{getPackageName()});
+                    */
             setKioskMode(true);
         } else {
             showToast("This app is not the device owner!");

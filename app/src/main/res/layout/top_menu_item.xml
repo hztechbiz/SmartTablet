@@ -7,7 +7,7 @@
     android:paddingTop="15dp"
     android:paddingBottom="15dp">
 
-    <TextView
+    <com.smart.tablet.components.LocalizedTextView
         android:id="@+id/menu_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -9,49 +9,46 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="100dp"
         android:background="@drawable/white_background_corner_radius"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="100dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btrylow"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/btrylow" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/battery_low"
             android:textColor="#000"
-            android:textSize="40dp"
-            android:text="BATTERY LOW"/>
+            android:textSize="40dp" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
             android:paddingLeft="250dp"
             android:paddingRight="250dp"
-            android:layout_marginTop="10dp"
-            android:textSize="18dp"
-            android:gravity="center_horizontal"
-            android:text="PLEASE RE-CONNECT THE SMART TABLET TO THE POWER SOURCE NOW" />
+            android:text="PLEASE RE-CONNECT THE SMART TABLET TO THE POWER SOURCE NOW"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
         <Button
+            android:id="@+id/closebattry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_radius"
-            android:textColor="#fff"
             android:layout_marginTop="10dp"
-            android:textSize="16dp"
-            android:paddingRight="40dp"
+            android:background="@drawable/blue_radius"
             android:paddingLeft="40dp"
+            android:paddingRight="40dp"
             android:text="OK"
-            android:id="@+id/closebattry"
-            />
+            android:textColor="#fff"
+            android:textSize="16dp" />
 
     </LinearLayout>
-
-
 </RelativeLayout>

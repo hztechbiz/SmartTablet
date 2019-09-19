@@ -21,7 +21,7 @@
         android:paddingRight="10dp"
         android:paddingTop="8dp">
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_height="40dp"
             android:src="@drawable/iconweat" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_min_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         android:paddingTop="8dp"
         android:visibility="invisible">
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_title_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
             android:layout_height="40dp"
             android:src="@drawable/iconweat" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_description_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/txt_min_max_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,6 +7,7 @@ import android.os.PowerManager;
 
 public class WakeupReceiver extends BroadcastReceiver {
     public static final int REQUEST_CODE = 124;
+    private static final String TAG = WakeupReceiver.class.getName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -14,7 +15,7 @@ public class WakeupReceiver extends BroadcastReceiver {
 
         if (powerManager != null) {
             PowerManager.WakeLock screenLock = powerManager.newWakeLock(
-                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
             screenLock.acquire(10 * 60 * 1000L);
         }
     }

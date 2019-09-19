@@ -14,8 +14,8 @@
         <LinearLayout
             android:layout_width="430dp"
             android:layout_height="match_parent"
-            android:padding="5dp"
-            android:background="@drawable/white_background_corner_radius">
+            android:background="@drawable/white_background_corner_radius"
+            android:padding="5dp">
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/map"
@@ -32,12 +32,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
                 android:paddingLeft="30dp"
+                android:paddingTop="20dp"
                 android:paddingRight="30dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="20dp">
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -46,14 +46,14 @@
                     android:textColor="#25a8d0"
                     android:textStyle="bold" />
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/txt_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:textColor="#000" />
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/addressTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,16 +73,16 @@
                         android:layout_height="20dp"
                         android:src="@drawable/localmap" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/txt_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp" />
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp" />
 
                 </LinearLayout>
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/emailTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,13 +106,13 @@
                         android:id="@+id/txt_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp" />
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp" />
 
                 </LinearLayout>
 
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/phoneTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,23 +133,23 @@
                         android:layout_height="20dp"
                         android:src="@drawable/phone" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/txt_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp" />
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp" />
 
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_booking"
                     style="@style/ButtonBlue"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/book_now_here"
-                    android:textColor="#fff" />
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </ScrollView>

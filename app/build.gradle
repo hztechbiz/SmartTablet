@@ -7,8 +7,8 @@ android {
         applicationId "com.smart.tablet"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 23
-        versionName "0.0.23"
+        versionCode 40
+        versionName "0.0.40"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,6 +19,14 @@ android {
     }
     lintOptions {
         checkReleaseBuilds false
+    }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 
@@ -66,6 +74,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'me.drakeet.support:toastcompat:1.1.0'
+    implementation 'com.google.cloud:google-cloud-translate:1.84.0'
+    implementation 'com.google.android.play:core:1.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 }
 

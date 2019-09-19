@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="0dp">
 
-    <TextView
+    <com.smart.tablet.components.LocalizedTextView
         android:id="@+id/heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

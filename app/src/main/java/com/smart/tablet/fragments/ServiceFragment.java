@@ -1,10 +1,16 @@
 package com.smart.tablet.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
+import android.os.StrictMode;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,16 +25,23 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.smart.tablet.Constants;
 import com.smart.tablet.R;
 import com.smart.tablet.helpers.AnalyticsHelper;
+import com.smart.tablet.helpers.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -43,11 +56,12 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
     int _service_id;
     com.smart.tablet.entities.Service _service;
     Bundle _bundle;
-    Button btn_booking, btn_featured, btn_transport;
+    Button btn_booking, btn_featured, btn_coupon, btn_transport;
     private com.smart.tablet.listeners.FragmentActivityListener activityListener;
     private com.smart.tablet.listeners.FragmentListener fragmentListener;
     private com.smart.tablet.MainActivity _activity;
     private com.smart.tablet.fragments.NavigationFragment _parentFragment;
+    Translate translate;
 
     public ServiceFragment() {
 
@@ -74,16 +88,19 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
         mainContent = view.findViewById(R.id.mainContent);
         footerContent = view.findViewById(R.id.footerContent);
         btn_booking = view.findViewById(R.id.btn_booking);
+        btn_coupon = view.findViewById(R.id.btn_coupon);
         btn_featured = view.findViewById(R.id.btn_featured);
         btn_transport = view.findViewById(R.id.btn_transport);
 
         btn_booking.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
+        btn_coupon.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         btn_featured.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         btn_transport.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_description.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         txt_title.setTypeface(com.smart.tablet.helpers.Util.getTypeFace(getContext()));
         footerContent.setVisibility(View.GONE);
         btn_booking.setVisibility(View.GONE);
+        btn_coupon.setVisibility(View.GONE);
         btn_featured.setVisibility(View.GONE);
         btn_transport.setVisibility(View.GONE);
 
@@ -123,6 +140,20 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
 
                 if (fragmentListener != null)
                     fragmentListener.onUpdateFragment(serviceBookingFragment);
+            }
+        });
+
+        btn_coupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceCouponFragment serviceCouponFragment = new ServiceCouponFragment();
+                serviceCouponFragment.setParentListener(activityListener);
+                serviceCouponFragment.setArguments(_bundle);
+
+                AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed coupon section in #%d %s", _service.getId(), _service.getTitle()), _service.getId() + "", _service.getCategory_id() + "");
+
+                if (fragmentListener != null)
+                    fragmentListener.onUpdateFragment(serviceCouponFragment);
             }
         });
 
@@ -265,15 +296,18 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
             _service = service;
 
             AnalyticsHelper.track(getContext(), String.format(Locale.US, "Viewed Service #%d %s", service.getId(), service.getTitle()), service.getId() + "", service.getCategory_id() + "");
+            String title = service.getTitle();
 
             if (!service.isIs_marketing_partner()) {
-                txt_title.setText(service.getTitle());
+                String description = service.getDescription();
+
+                txt_title.setText(title);
                 txt_description.setText(Html.fromHtml(service.getDescription()), TextView.BufferType.SPANNABLE);
-                txt_description_html.loadData(service.getDescription(), "text/html", "utf-8");
+                txt_description_html.loadData(description, "text/html", "utf-8");
             } else {
                 ArrayList<com.smart.tablet.models.ActivityAction> actions = new ArrayList<>();
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_show_app_heading), null));
-                actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_set_app_heading), service.getTitle().toUpperCase()));
+                actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_set_app_heading), title.toUpperCase()));
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_welcome_button), null));
                 actions.add(new com.smart.tablet.models.ActivityAction((R.string.msg_hide_top_guest_button), null));
 
@@ -307,6 +341,12 @@ public class ServiceFragment extends Fragment implements com.smart.tablet.listen
                                     if (meta_value.equals("1")) {
                                         footerContent.setVisibility(View.VISIBLE);
                                         btn_booking.setVisibility(View.VISIBLE);
+                                    }
+                                    break;
+                                case Constants.TOP_MENU_SHOW_COUPON:
+                                    if (meta_value.equals("1")) {
+                                        footerContent.setVisibility(View.VISIBLE);
+                                        btn_coupon.setVisibility(View.VISIBLE);
                                     }
                                     break;
                                 case Constants.TOP_MENU_SHOW_FEATURED:

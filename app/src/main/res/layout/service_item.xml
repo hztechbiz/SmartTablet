@@ -6,6 +6,7 @@
     android:padding="10dp">
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="@drawable/white_background_corner_radius"
@@ -22,34 +23,33 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/white_background_corner_radius"
             android:orientation="vertical"
             android:padding="10dp">
 
-            <TextView
+            <com.smart.tablet.components.LocalizedTextView
                 android:id="@+id/offer_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint=""
-                android:textColor="#000"
+                android:lines="1"
                 android:maxLines="1"
                 android:minLines="1"
-                android:lines="1"
+                android:textColor="#000"
                 android:textSize="22sp" />
 
-            <TextView
+            <com.smart.tablet.components.LocalizedTextView
                 android:id="@+id/offer_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="8dp"
-                android:textSize="15sp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="8dp"
+                android:hint=""
+                android:lines="3"
                 android:maxLines="3"
                 android:minLines="3"
-                android:lines="3"
-                android:hint=""
-                android:layout_marginEnd="5dp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/btn_more"

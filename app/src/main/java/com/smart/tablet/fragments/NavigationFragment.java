@@ -1,11 +1,16 @@
 package com.smart.tablet.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -348,6 +353,7 @@ public class NavigationFragment extends Fragment {
         actions.add(new ActivityAction((R.string.msg_hide_main_logo), null));
         actions.add(new ActivityAction((R.string.msg_hide_welcome_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_top_right_buttons), null));
+        actions.add(new ActivityAction((R.string.msg_hide_language_button), null));
         actions.add(new ActivityAction((R.string.msg_hide_app_heading), null));
         actions.add(new ActivityAction((R.string.msg_hide_night_mode_button), null));
         actions.add(new ActivityAction((R.string.msg_show_copyright), null));
@@ -471,9 +477,10 @@ public class NavigationFragment extends Fragment {
             final MenuItem menuItem = menuItems.get(i);
             LinearLayout view = (LinearLayout) inflater.inflate(R.layout.top_menu_item, null);
             TextView txt_item = view.findViewById(R.id.menu_item_text);
+            String title = menuItem.title;
 
             txt_item.setTypeface(Util.getTypeFace(getContext()));
-            txt_item.setText(menuItem.title);
+            txt_item.setText(title);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -23,7 +23,7 @@
                 android:layout_height="70dp"
                 android:src="@drawable/resort" />
 
-            <TextView
+            <com.smart.tablet.components.LocalizedTextView
                 android:id="@+id/txt_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

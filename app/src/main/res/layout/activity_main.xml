@@ -19,8 +19,8 @@
         android:id="@+id/sidebar"
         android:layout_width="150dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="#fff"
         android:orientation="vertical">
@@ -51,7 +51,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/home" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_home_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -64,8 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
                     android:background="#c5c6c9" />
 
                 <LinearLayout
@@ -75,8 +75,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/tv"
@@ -84,7 +84,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/operatingthetelevision" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_tv_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -111,8 +111,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/wifi"
@@ -120,7 +120,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/connecttowifi" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_wifi_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -145,8 +145,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/useTablet"
@@ -154,7 +154,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/usemobile" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_how_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -179,8 +179,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/info"
@@ -188,7 +188,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/userinformation" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_useful_info_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -213,8 +213,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/map"
@@ -222,7 +222,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/localmap" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_local_map_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -247,8 +247,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/region"
@@ -256,7 +256,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/localregion" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_local_region_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -281,8 +281,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/transport"
@@ -290,7 +290,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/transport_icon" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_transport_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -315,8 +315,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/partner"
@@ -324,12 +324,39 @@
                         android:layout_height="23dp"
                         android:src="@drawable/partner_offer" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_partner_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/partner_offers"
+                        android:textColor="#000"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/itemTodayOffer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:onClick="onNavItemClick"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/today_offer"
+                        android:layout_width="35dp"
+                        android:layout_height="23dp"
+                        android:src="@drawable/today_offers" />
+
+                    <com.smart.tablet.components.LocalizedTextView
+                        android:id="@+id/item_today_offer_text"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/today_offers"
                         android:textColor="#000"
                         android:textSize="13sp" />
 
@@ -349,8 +376,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/weather"
@@ -358,7 +385,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/weather" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_weather_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -383,8 +410,8 @@
                     android:gravity="center"
                     android:onClick="onNavItemClick"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <ImageView
                         android:id="@+id/news"
@@ -392,7 +419,7 @@
                         android:layout_height="23dp"
                         android:src="@drawable/news" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/item_news_text"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
@@ -438,8 +465,8 @@
                 android:id="@+id/top_bar_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="0.45"
                 android:orientation="horizontal">
@@ -448,8 +475,8 @@
                     android:id="@+id/main_logo"
                     android:layout_width="250dp"
                     android:layout_height="100dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
                     android:background="@drawable/white_background_corner_radius"
                     android:gravity="center"
                     android:padding="10dp">
@@ -464,8 +491,8 @@
                     android:id="@+id/btn_back"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/blue_radius"
                     android:gravity="center"
                     android:onClick="onBackClick"
@@ -481,7 +508,7 @@
                         android:layout_marginRight="5dp"
                         android:src="@drawable/back" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/btn_back_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -494,8 +521,8 @@
                     android:id="@+id/btn_home"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/blue_radius"
                     android:gravity="center"
                     android:onClick="onNavItemClick"
@@ -510,7 +537,7 @@
                         android:layout_marginRight="5dp"
                         android:src="@drawable/homeicon" />
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/btn_home_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -523,8 +550,8 @@
                     android:id="@+id/small_logo"
                     android:layout_width="70dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/white_background_corner_radius"
                     android:gravity="center"
                     android:padding="5dp"
@@ -540,8 +567,8 @@
                     android:id="@+id/btn_welcome"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/black_transparent_with_radius"
                     android:gravity="center"
                     android:onClick="onWelcomeClick"
@@ -549,7 +576,7 @@
                     android:paddingRight="20dp"
                     android:visibility="gone">
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/btn_welcome_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -563,8 +590,8 @@
                     android:id="@+id/btn_top_guest_info"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@drawable/black_transparent_with_radius"
                     android:gravity="center"
                     android:onClick="onGuestInfoClick"
@@ -572,7 +599,7 @@
                     android:paddingRight="20dp"
                     android:visibility="gone">
 
-                    <TextView
+                    <com.smart.tablet.components.LocalizedTextView
                         android:id="@+id/btn_top_guest_info_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -588,23 +615,23 @@
                 android:id="@+id/app_heading_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
                 android:layout_weight="0.3"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <TextView
+                <com.smart.tablet.components.LocalizedTextView
                     android:id="@+id/app_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_transparent"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
                     android:textAlignment="center"
                     android:textColor="#000"
                     android:textSize="18sp"
@@ -616,9 +643,9 @@
                 android:id="@+id/top_bar_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
                 android:layout_weight="0.55"
                 android:gravity="end"
                 android:orientation="vertical">
@@ -631,7 +658,7 @@
 
                     <Button
                         android:id="@+id/btn_night_mode"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
@@ -715,14 +742,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:id="@+id/btn_welcome_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="end"
                         android:gravity="end"
                         android:onClick="onWelcomeClick">
 
@@ -735,7 +762,7 @@
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp">
 
-                            <TextView
+                            <com.smart.tablet.components.LocalizedTextView
                                 android:id="@+id/btn_welcome_2_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -750,7 +777,7 @@
                         android:id="@+id/btn_guest_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="end"
                         android:gravity="end"
                         android:onClick="onGuestInfoClick">
 
@@ -762,9 +789,10 @@
                             android:background="@drawable/black_transparent_with_radius"
                             android:padding="10dp"
                             android:paddingLeft="20dp"
+                            android:orientation="vertical"
                             android:paddingRight="20dp">
 
-                            <TextView
+                            <com.smart.tablet.components.LocalizedTextView
                                 android:id="@+id/btn_guest_info_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -783,8 +811,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/top_bar">
+            android:layout_below="@id/top_bar"
+            android:layout_alignParentBottom="true">
 
             <LinearLayout
                 android:id="@+id/fragment_main_container"
@@ -808,11 +836,36 @@
                 android:weightSum="2">
 
                 <LinearLayout
+                    android:id="@+id/language_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="10dp">
 
+                    <LinearLayout
+                        android:id="@+id/btn_language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:gravity="center_vertical"
+                        android:onClick="onLanguageClick"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="15dp"
+                            android:background="@color/colorWhite"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/flag_us" />
+
+                        <com.smart.tablet.components.LocalizedTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/change_language"
+                            android:textColor="@color/colorWhite" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -864,14 +917,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:paddingEnd="160dp"
-            android:paddingStart="160dp">
+            android:paddingStart="160dp"
+            android:paddingEnd="160dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -996,10 +1049,10 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/black_transparent_with_radius"
                     android:onClick="onGuestInfoClick"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/guest_information"
                     android:textColor="#FFF" />
 
@@ -1008,10 +1061,10 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/blue_radius"
                     android:onClick="onEntryPageEnter"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
                     android:text="@string/enter"
                     android:textColor="#FFF"
                     android:textSize="25sp" />
@@ -1054,7 +1107,7 @@
             android:layout_centerInParent="true"
             android:indeterminateTint="@color/colorPrimary" />
 
-        <TextView
+        <com.smart.tablet.components.LocalizedTextView
             android:id="@+id/syncProgressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
