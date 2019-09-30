@@ -180,6 +180,7 @@ public class MainActivity extends FragmentActivity {
             Log.d("SchedulingAlarms", "syncreceiver");
             showSynchronizing(false);
             scheduleAlarms();
+            init();
 
             isServiceRunning = false;
         }
@@ -635,18 +636,17 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                WifiInfo info = wifiManager.getConnectionInfo();
-                final int wifi_signals_level = WifiManager.calculateSignalLevel(info.getRssi()
-                        , 4);
-
-                setSignal(wifi_signals_level);
-            }
-        }, 1000);
+        new Handler().postDelayed(this::checkWifi, 1000);
 
         getHotelInformation();
+    }
+
+    public void checkWifi() {
+        WifiInfo info = wifiManager.getConnectionInfo();
+        final int wifi_signals_level = WifiManager.calculateSignalLevel(info.getRssi()
+                , 4);
+
+        setSignal(wifi_signals_level);
     }
 
     public static boolean InstallAPK(Context context, String apk_file_name) {
@@ -704,13 +704,14 @@ public class MainActivity extends FragmentActivity {
 
 
     private void init() {
+        checkWifi();
         getTimeSettings();
         getKioskPassword();
         setupMenuItems();
         setBranding();
         scheduleAlarms();
         getSidebarSettings();
-        //getLanguageSettings();
+        getLanguageSettings();
 
         wakeupScreen();
 
@@ -740,9 +741,17 @@ public class MainActivity extends FragmentActivity {
                             if (languages == null) {
                                 showLanguageOption(false);
                             } else {
-                                populateLanguages(languages);
+                                //populateLanguages(languages);
                             }
                         }
+                    } else {
+                        showLanguageOption(false);
+                    }
+                })
+                .onError(new AsyncResultBag.Error() {
+                    @Override
+                    public void onError(Object error) {
+                        showLanguageOption(false);
                     }
                 })
                 .execute();
@@ -1650,27 +1659,24 @@ public class MainActivity extends FragmentActivity {
         showEntryPage(false);
 
         new RetrieveCategories(this, 0, "gsd")
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        if (result != null) {
-                            Category[] categories = (Category[]) result;
+                .onSuccess(result -> {
+                    if (result != null) {
+                        Category[] categories = (Category[]) result;
 
-                            if (categories.length > 0) {
-                                Category category = categories[0];
-                                Bundle bundle = new Bundle();
+                        if (categories.length > 0) {
+                            Category category = categories[0];
+                            Bundle bundle = new Bundle();
 
-                                bundle.putInt(getString(R.string.param_category_id), category.getId());
-                                bundle.putBoolean(getString(R.string.param_has_children), (category.getChildren_count() > 0));
-                                bundle.putString(getString(R.string.param_listing_type), "gsd");
+                            bundle.putInt(getString(R.string.param_category_id), category.getId());
+                            bundle.putBoolean(getString(R.string.param_has_children), (category.getChildren_count() > 0));
+                            bundle.putString(getString(R.string.param_listing_type), "gsd");
 
-                                NavigationFragment fragment = new NavigationFragment();
-                                fragment.setFragmentListener(fragmentListener);
-                                fragment.setParentListener(activityListener);
-                                fragment.setArguments(bundle);
+                            NavigationFragment fragment = new NavigationFragment();
+                            fragment.setFragmentListener(fragmentListener);
+                            fragment.setParentListener(activityListener);
+                            fragment.setArguments(bundle);
 
-                                fragmentListener.onUpdateFragment(fragment);
-                            }
+                            fragmentListener.onUpdateFragment(fragment);
                         }
                     }
                 })
@@ -1700,7 +1706,16 @@ public class MainActivity extends FragmentActivity {
         }
 
         if (makeActive && view != null) {
-            view.setBackgroundColor(Color.parseColor("#2cb3dc"));
+            new RetrieveSetting(this, Constants.SETTING_MENU_ITEM_ACTIVE_BACKGROUND_COLOR)
+                    .onSuccess(result -> {
+                        if (result != null) {
+                            view.setBackgroundColor(Color.parseColor("#" + result));
+                        } else {
+                            view.setBackgroundColor(Color.parseColor("#" + Constants.MENU_ITEM_DEFAULT_ACTIVE_BACKGROUND));
+                        }
+                    })
+                    .onError(error -> view.setBackgroundColor(Color.parseColor("#" + Constants.MENU_ITEM_DEFAULT_ACTIVE_BACKGROUND)))
+                    .execute();
         }
 
         try {

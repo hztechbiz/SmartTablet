@@ -30,6 +30,7 @@ public class Constants {
     public static final String SETTING_LANGUAGE_ENABLE = "language_enable";
     public static final String SETTING_LANGUAGES = "languages";
     public static final String SETTING_SIDEBAR = "sidebar_color";
+    public static final String SETTING_MENU_ITEM_ACTIVE_BACKGROUND_COLOR = "menu_item_active_background_color";
     public static final String TOP_GUEST_CATEGORIES = "top_menu_item_guest_categories";
     public static final String TOP_MENU_SHOW_WELCOME = "show_welcome";
     public static final String TOP_MENU_WELCOME_TEXT = "welcome_text";
@@ -99,6 +100,7 @@ public class Constants {
     public static String[] LANGUAGE_NAMES = new String[]{"English", "عربى", "中文"};
     public static String[] LANGUAGE_ICONS = new String[]{"flag_us", "flag_iraq", "flag_china"};
     public static String[] LANGUAGE_CODES = new String[]{"en", "ar", "zh"};
+    public static String MENU_ITEM_DEFAULT_ACTIVE_BACKGROUND = "2cb3dc";
 
     public static String GetApiUrl(String path) {
         return com.smart.tablet.Constants.URL + "/v1/" + path;
