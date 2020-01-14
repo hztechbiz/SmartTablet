@@ -10,6 +10,7 @@ import android.os.Build;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.smart.tablet.entities.Sale;
 import com.smart.tablet.entities.Service;
 import com.smart.tablet.entities.Setting;
 import com.smart.tablet.entities.Testimonial;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.DeleteCategories;
 import com.smart.tablet.tasks.DeleteMedia;
@@ -940,7 +942,16 @@ public class SyncService extends IntentService {
                         }
                     });
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            String version_name = Util.getVersionName(this);
+            JSONObject jsonRequest = new JSONObject();
+
+            try {
+                jsonRequest.put("app_version", version_name);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     storeSetting.execute();

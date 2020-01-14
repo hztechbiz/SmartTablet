@@ -11,7 +11,9 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -20,15 +22,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.smart.tablet.entities.Setting;
 import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
@@ -45,6 +51,7 @@ import java.util.Map;
 
 public class SetupActivity extends Activity {
 
+    public static final String TAG = SetupActivity.class.getName();
     private ProgressDialog _progressDialog;
     private Button _btn_sync;
     private String API_KEY = Constants.API_KEY;
@@ -122,18 +129,23 @@ public class SetupActivity extends Activity {
 
         //fetchDeviceToken();
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                _token = instanceIdResult.getToken();
-                Log.d("DeviceToken", instanceIdResult + "");
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("DeviceToken", e.getMessage());
-            }
-        });
+        try {
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(task -> {
+
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        _token = task.getResult().getToken();
+                        Log.d(TAG, "Token:" + _token);
+                    });
+
+        } catch (Exception e) {
+            _token = null;
+            Log.e(TAG, "Token not found!! " + e.getMessage());
+        }
 
         super.onStart();
     }

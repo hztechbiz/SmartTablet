@@ -51,6 +51,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -60,6 +66,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.smart.tablet.adapters.LanguagesListAdapter;
 import com.smart.tablet.entities.Category;
 import com.smart.tablet.entities.Device;
@@ -103,7 +110,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import me.drakeet.support.toast.ToastCompat;
@@ -123,11 +131,12 @@ public class MainActivity extends FragmentActivity {
     private WifiScanReceiver wifiScanReceiver;
     private WifiManager wifiManager;
     private int timerClicked, _btn_kiosk_clicks;
-    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage, _battery_low_popup, _updatePopupShowing;
+    private boolean timerClickedTimerAdded, isServiceRunning, _hasEntryPage, _isActivityUp, _isCheckingToShowEntryPage, _battery_low_popup, _updatePopupShowing, _is_language_option_enabled;
     private Handler _activeScreenHandler, _entryPageHandler;
     private Runnable _activeScreenRunnable, _entryPageRunnable;
     private ImageButton _btn_kiosk;
     private ImageView item_icon_1, item_icon_2, item_icon_3, item_icon_4, item_icon_5, item_icon_6, item_icon_7, item_icon_8, item_icon_9, item_icon_10, item_icon_11;
+    private ArrayList<LanguageModel> _languageModels;
     private static final String Battery_PLUGGED_ANY = Integer.toString(
             BatteryManager.BATTERY_PLUGGED_AC |
                     BatteryManager.BATTERY_PLUGGED_USB |
@@ -431,7 +440,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void showLanguageOption(boolean b) {
-        language_container.setVisibility(b ? View.VISIBLE : View.GONE);
+        language_container.setVisibility((b && _is_language_option_enabled) ? View.VISIBLE : View.GONE);
     }
 
     private void showToast(String text) {
@@ -702,6 +711,55 @@ public class MainActivity extends FragmentActivity {
         return pendingIntent.getIntentSender();
     }
 
+    private void sendDeviceTokenToServer() {
+        try {
+            FirebaseInstanceId
+                    .getInstance()
+                    .getInstanceId()
+                    .addOnSuccessListener(this, instanceIdResult -> {
+                        String token = instanceIdResult.getToken();
+                        Log.d("DeviceTokenMain", instanceIdResult.getToken() + "");
+
+                        String url = Constants.GetApiUrl("device/update");
+                        JSONObject jsonRequest = new JSONObject();
+
+                        try {
+                            jsonRequest.put("udid", token);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        new RetrieveSetting(this, Constants.TOKEN_KEY)
+                                .onSuccess(result -> {
+                                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, response -> Log.d(TAG, response.toString() + "!!"), new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.d(TAG, error.getMessage() + "");
+                                        }
+                                    }) {
+                                        @Override
+                                        public Map<String, String> getHeaders() {
+                                            Map<String, String> params = new HashMap<String, String>();
+
+                                            params.put("AppKey", Constants.APP_KEY);
+                                            params.put("Authorization", result + "");
+
+                                            return params;
+                                        }
+                                    };
+
+                                    RequestQueue queue = Volley.newRequestQueue(this);
+                                    queue.add(request);
+                                })
+                                .onError(error -> Log.e(TAG, ((Exception) error).getMessage()))
+                                .execute();
+
+                    })
+                    .addOnFailureListener(this, e -> Log.e("DeviceToken", e.getMessage()));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage() + "");
+        }
+    }
 
     private void init() {
         checkWifi();
@@ -721,16 +779,34 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void getLanguageSettings() {
-        new RetrieveSetting(this, Constants.SETTING_LANGUAGE_ENABLE, Constants.SETTING_LANGUAGES)
+        new RetrieveSetting(this, Constants.SETTING_LANGUAGE_ENABLE, Constants.SETTING_LANGUAGES, Constants.SETTING_LANGUAGES_FLAGS, Constants.SETTING_LANGUAGES_NAMES)
                 .onSuccess(result -> {
                     HashMap<String, String> values = result != null ? (HashMap<String, String>) result : null;
+                    JSONObject languages_flags = null;
+                    JSONObject languages_names = null;
 
                     if (values != null) {
-                        boolean is_enable = values.get(Constants.SETTING_LANGUAGE_ENABLE).equals("1");
+                        _is_language_option_enabled = values.get(Constants.SETTING_LANGUAGE_ENABLE) != null && Objects.equals(values.get(Constants.SETTING_LANGUAGE_ENABLE), "1");
 
-                        showLanguageOption(is_enable);
+                        showLanguageOption(_is_language_option_enabled);
 
-                        if (is_enable && values.containsKey(Constants.SETTING_LANGUAGES)) {
+                        if (values.containsKey(Constants.SETTING_LANGUAGES_FLAGS)) {
+                            try {
+                                languages_flags = new JSONObject(values.get(Constants.SETTING_LANGUAGES_FLAGS));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (values.containsKey(Constants.SETTING_LANGUAGES_NAMES)) {
+                            try {
+                                languages_names = new JSONObject(values.get(Constants.SETTING_LANGUAGES_NAMES));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (_is_language_option_enabled && values.containsKey(Constants.SETTING_LANGUAGES)) {
                             JSONArray languages = null;
                             try {
                                 languages = new JSONArray(values.get(Constants.SETTING_LANGUAGES));
@@ -741,24 +817,36 @@ public class MainActivity extends FragmentActivity {
                             if (languages == null) {
                                 showLanguageOption(false);
                             } else {
-                                //populateLanguages(languages);
+                                populateLanguages(languages, languages_names, languages_flags);
                             }
                         }
                     } else {
                         showLanguageOption(false);
                     }
                 })
-                .onError(new AsyncResultBag.Error() {
-                    @Override
-                    public void onError(Object error) {
-                        showLanguageOption(false);
-                    }
-                })
+                .onError(error -> showLanguageOption(false))
                 .execute();
     }
 
-    private void populateLanguages(JSONArray languages) {
+    private void populateLanguages(JSONArray languages, JSONObject languages_names, JSONObject languages_flags) {
+        _languageModels = new ArrayList<>();
 
+        if (languages == null || languages_names == null)
+            return;
+
+        for (int i = 0; i < languages.length(); i++) {
+            try {
+                String code = languages.getString(i);
+                String flag = (languages_flags != null && languages_flags.has(code)) ? "flag_" + languages_flags.getString(code).toLowerCase() : "";
+
+                if (languages_names.has(code)) {
+                    _languageModels.add(new LanguageModel(languages_names.getString(code), flag, code.toLowerCase()));
+                }
+
+            } catch (Exception e) {
+                // exception
+            }
+        }
     }
 
     private void getHotelInformation() {
@@ -775,6 +863,7 @@ public class MainActivity extends FragmentActivity {
                                 timezone = hotel.getTimezone();
                         }
 
+                        //sendDeviceTokenToServer();
                         init();
                     }
                 })
@@ -1021,6 +1110,8 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == APP_UPDATE_REQUEST_CODE) {
             _updatePopupShowing = false;
 
@@ -1180,7 +1271,7 @@ public class MainActivity extends FragmentActivity {
 
         sleepTime = df.format(sleepTimeDate.getTime());
 
-        if (date.equals(this.sleepTime)) {
+        if (date != null && date.equals(this.sleepTime)) {
             showNightMode(true);
         }
     }
@@ -1612,35 +1703,27 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void onLanguageClick(View view) {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.list_languages);
+        if (_languageModels != null) {
 
-        ListView lv_languages = (ListView) dialog.findViewById(R.id.languages);
-        List<LanguageModel> languages = new ArrayList<LanguageModel>();
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.list_languages);
 
-        for (int i = 0; i < Constants.LANGUAGE_NAMES.length; i++) {
-            LanguageModel languageModel = new LanguageModel();
+            ListView lv_languages = (ListView) dialog.findViewById(R.id.languages);
 
-            languageModel.setName(Constants.LANGUAGE_NAMES[i]);
-            languageModel.setIcon(Constants.LANGUAGE_ICONS[i]);
-            languageModel.setValue(Constants.LANGUAGE_CODES[i]);
+            lv_languages.setAdapter(new LanguagesListAdapter(this, _languageModels, v -> {
+                String language_code = v.getTag().toString();
 
-            languages.add(languageModel);
+                Util.setLanguage(this, language_code);
+
+                Intent i = new Intent(Constants.ACTION_LANGUAGE_CHANGE);
+                i.putExtra(getString(R.string.param_language), language_code);
+                sendBroadcast(i);
+
+                dialog.dismiss();
+            }));
+
+            dialog.show();
         }
-
-        lv_languages.setAdapter(new LanguagesListAdapter(this, languages, v -> {
-            String language_code = v.getTag().toString();
-
-            Util.setLanguage(this, language_code);
-
-            Intent i = new Intent(Constants.ACTION_LANGUAGE_CHANGE);
-            i.putExtra(getString(R.string.param_language), language_code);
-            sendBroadcast(i);
-
-            dialog.dismiss();
-        }));
-
-        dialog.show();
     }
 
     public void onWelcomeClick(View view) {

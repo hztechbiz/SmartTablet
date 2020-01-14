@@ -1,5 +1,10 @@
 package com.smart.tablet;
 
+import com.smart.tablet.models.LanguageModel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Constants {
     /*
      * Device setting keys
@@ -29,6 +34,8 @@ public class Constants {
     public static final String SETTING_SYNC_ENABLE = "sync_enable";
     public static final String SETTING_LANGUAGE_ENABLE = "language_enable";
     public static final String SETTING_LANGUAGES = "languages";
+    public static final String SETTING_LANGUAGES_FLAGS = "languages_flags";
+    public static final String SETTING_LANGUAGES_NAMES = "languages_names";
     public static final String SETTING_SIDEBAR = "sidebar_color";
     public static final String SETTING_MENU_ITEM_ACTIVE_BACKGROUND_COLOR = "menu_item_active_background_color";
     public static final String TOP_GUEST_CATEGORIES = "top_menu_item_guest_categories";
@@ -97,9 +104,6 @@ public class Constants {
     public static String URL = "http://api.ask-me.com.au/api";
     public static String DEFAULT_TIMEZONE = "Australia/Sydney";
     public static String DEFAULT_LANG = "en";
-    public static String[] LANGUAGE_NAMES = new String[]{"English", "عربى", "中文"};
-    public static String[] LANGUAGE_ICONS = new String[]{"flag_us", "flag_iraq", "flag_china"};
-    public static String[] LANGUAGE_CODES = new String[]{"en", "ar", "zh"};
     public static String MENU_ITEM_DEFAULT_ACTIVE_BACKGROUND = "2cb3dc";
 
     public static String GetApiUrl(String path) {
@@ -108,5 +112,16 @@ public class Constants {
 
     public static String GetApiUrl(String path, String version) {
         return com.smart.tablet.Constants.URL + "/" + version + "/" + path;
+    }
+
+    public static HashMap<String, LanguageModel> getLanguages() {
+        HashMap<String, LanguageModel> languages = new HashMap<>();
+
+        languages.put("en", new LanguageModel("English", "flag_us", "en"));
+        languages.put("zh", new LanguageModel("中文", "flag_zh", "zh"));
+        languages.put("es", new LanguageModel("Español", "flag_cn", "es"));
+        languages.put("ar", new LanguageModel("عربى", "flag_iq", "ar"));
+
+        return languages;
     }
 }

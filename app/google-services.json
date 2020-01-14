@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:695983273631:android:f954cbda43e42b82",
+        "mobilesdk_app_id": "1:695983273631:android:e77851f22008fb54ba14aa",
         "android_client_info": {
-          "package_name": "com.islam.assistant"
+          "package_name": "biz.hztech.myapplication"
         }
       },
       "oauth_client": [
@@ -25,15 +25,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695983273631-u6jr832uo8iq1hdmpu25k31mahuu6qof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -56,23 +54,21 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695983273631-u6jr832uo8iq1hdmpu25k31mahuu6qof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:695983273631:android:53669844b45280b0",
+        "mobilesdk_app_id": "1:695983273631:android:fc49ab70c6b5f25cba14aa",
         "android_client_info": {
-          "package_name": "com.smartapp.hztech.smarttebletapp"
+          "package_name": "com.smart.tablet2"
         }
       },
       "oauth_client": [
@@ -87,15 +83,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695983273631-u6jr832uo8iq1hdmpu25k31mahuu6qof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -3,6 +3,7 @@ package com.smart.tablet.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.smart.tablet.Constants;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveSetting;
 
@@ -74,13 +76,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     private void sendStatusToServer(String wifiName, int signalsLevel) throws JSONException {
         String url = Constants.GetApiUrl("device/update");
-
-        Log.d(TAG, wifiName + " / " + signalsLevel);
-
         JSONObject jsonRequest = new JSONObject();
+
+        String version_name = Util.getVersionName(_context);
 
         jsonRequest.put("wifi_connected_name", wifiName);
         jsonRequest.put("wifi_signals", signalsLevel);
+        jsonRequest.put("app_version", version_name);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override

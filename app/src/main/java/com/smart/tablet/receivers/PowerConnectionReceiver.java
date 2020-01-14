@@ -14,6 +14,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.smart.tablet.Constants;
 import com.smart.tablet.entities.Setting;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveSetting;
 import com.smart.tablet.tasks.StoreSetting;
@@ -85,10 +86,12 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         String url = Constants.GetApiUrl("device/update");
 
         JSONObject jsonRequest = new JSONObject();
+        String version_name = Util.getVersionName(_context);
 
         jsonRequest.put("is_charging", isCharging ? "true" : "false");
         jsonRequest.put("usb_charge", usbCharge ? "true" : "false");
         jsonRequest.put("ac_charge", acCharge ? "true" : "false");
+        jsonRequest.put("app_version", version_name);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override

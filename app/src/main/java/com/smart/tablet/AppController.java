@@ -18,7 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveSetting;
 
@@ -26,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.fabric.sdk.android.Fabric;
 
 public class AppController extends Application {
 
@@ -93,14 +97,15 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
-        FirebaseApp.initializeApp(this);
-
         registerReceiver(wifiStatusReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         registerReceiver(batteryStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_POWER_CONNECTED));
         registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_POWER_DISCONNECTED));
 
         fetchSettings();
+        Fabric.with(this, new Crashlytics());
+
+        FirebaseApp.initializeApp(this);
     }
 
     @Override

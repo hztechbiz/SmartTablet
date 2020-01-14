@@ -14,6 +14,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.smart.tablet.Constants;
 import com.smart.tablet.entities.Setting;
+import com.smart.tablet.helpers.Util;
 import com.smart.tablet.listeners.AsyncResultBag;
 import com.smart.tablet.tasks.RetrieveSetting;
 import com.smart.tablet.tasks.StoreSetting;
@@ -43,36 +44,29 @@ public class BatteryLevelReceiver extends BroadcastReceiver {
                 .execute();
 
         new RetrieveSetting(context, Constants.TOKEN_KEY)
-                .onSuccess(new AsyncResultBag.Success() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        try {
-                            if (result != null) {
-                                _token = result.toString();
-                                sendStatusToServer(percentage);
-                            } else {
-                                Log.e(TAG, "Token not found");
-                            }
-                        } catch (Exception ex) {
-                            Log.d(TAG, ex.getMessage());
+                .onSuccess(result -> {
+                    try {
+                        if (result != null) {
+                            _token = result.toString();
+                            sendStatusToServer(percentage);
+                        } else {
+                            Log.e(TAG, "Token not found");
                         }
+                    } catch (Exception ex) {
+                        Log.d(TAG, ex.getMessage());
                     }
                 })
-                .onError(new AsyncResultBag.Error() {
-                    @Override
-                    public void onError(Object error) {
-                        Log.e(TAG, ((Exception) error).getMessage());
-                    }
-                })
+                .onError(error -> Log.e(TAG, ((Exception) error).getMessage()))
                 .execute();
     }
 
     private void sendStatusToServer(float percentage) throws JSONException {
         String url = Constants.GetApiUrl("device/update");
-
         JSONObject jsonRequest = new JSONObject();
+        String version_name = Util.getVersionName(_context);
 
         jsonRequest.put("battery_percentage", percentage);
+        jsonRequest.put("app_version", version_name);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new Response.Listener<JSONObject>() {
             @Override

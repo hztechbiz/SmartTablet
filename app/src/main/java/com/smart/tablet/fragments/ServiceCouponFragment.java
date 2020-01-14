@@ -1,14 +1,19 @@
 package com.smart.tablet.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -34,6 +39,7 @@ public class ServiceCouponFragment extends Fragment implements AsyncResultBag.Su
     Service _service;
     Bundle _bundle;
     TextView txt_heading;
+    boolean isWatchingKeyboard;
     private FragmentActivityListener parentListener;
 
     public ServiceCouponFragment() {
@@ -79,9 +85,44 @@ public class ServiceCouponFragment extends Fragment implements AsyncResultBag.Su
             }
         });
 
+        webview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                View rootView = webview.getRootView();
+
+                if (isKeyboardShown(rootView)) {
+                    Rect r = new Rect();
+                    rootView.getWindowVisibleDisplayFrame(r);
+
+                    int height = r.bottom - r.top;
+
+                    RelativeLayout.LayoutParams webViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height);
+                    webview.setLayoutParams(webViewParams);
+                } else {
+                    RelativeLayout.LayoutParams webViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    webview.setLayoutParams(webViewParams);
+                }
+            }
+        });
+
         bind();
 
         return view;
+    }
+
+    private boolean isKeyboardShown(View rootView) {
+        /* 128dp = 32dp * 4, minimum button height 32dp and generic 4 rows soft keyboard */
+        final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
+
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        /* heightDiff = rootView height - status bar height (r.top) - visible frame height (r.bottom - r.top) */
+        int heightDiff = rootView.getBottom() - r.bottom;
+        /* Threshold size: dp to pixels, multiply with display density */
+        boolean isKeyboardShown = heightDiff > SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD * dm.density;
+
+        return isKeyboardShown;
     }
 
     private void bind() {

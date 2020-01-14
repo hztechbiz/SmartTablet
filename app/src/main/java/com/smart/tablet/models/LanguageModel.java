@@ -5,6 +5,12 @@ public class LanguageModel {
     private String icon;
     private String value;
 
+    public LanguageModel(String name, String icon, String value) {
+        this.name = name;
+        this.icon = icon;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }

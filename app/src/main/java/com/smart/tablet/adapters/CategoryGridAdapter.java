@@ -93,7 +93,7 @@ public class CategoryGridAdapter extends BaseAdapter {
             Resources resources = context.getResources();
             final int resourceId = resources.getIdentifier(image_name, "drawable",
                     context.getPackageName());
-            image.setImageDrawable(resources.getDrawable(resourceId));
+            image.setImageDrawable(resources.getDrawable(resourceId, null));
         } catch (Resources.NotFoundException ex) {
             ex.printStackTrace();
         }

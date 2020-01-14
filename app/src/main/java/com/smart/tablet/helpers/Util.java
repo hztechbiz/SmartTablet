@@ -2,6 +2,7 @@ package com.smart.tablet.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -14,6 +15,19 @@ import com.smart.tablet.R;
 import java.util.Date;
 
 public class Util {
+    public static String getVersionName(Context context) {
+        String version_name = "N/A";
+
+        try {
+            version_name = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return version_name;
+    }
+
     public static void setLanguage(Context context, String language_code) {
         SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences(context.getString(R.string.sp_language), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();

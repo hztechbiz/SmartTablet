@@ -60,7 +60,12 @@ public class LanguagesListAdapter extends BaseAdapter {
         ImageView icon = view.findViewById(R.id.img_icon);
 
         name.setText(languageModel.getName());
-        icon.setImageDrawable(context.getDrawable(context.getResources().getIdentifier(languageModel.getIcon(), "drawable", context.getPackageName())));
+
+        if (languageModel.getIcon() != null && !languageModel.getIcon().equals("")) {
+            icon.setImageDrawable(context.getDrawable(context.getResources().getIdentifier(languageModel.getIcon(), "drawable", context.getPackageName())));
+            icon.setVisibility(View.VISIBLE);
+        } else
+            icon.setVisibility(View.INVISIBLE);
 
         view.setOnClickListener(itemClickListener);
         view.setTag(languageModel.getValue());

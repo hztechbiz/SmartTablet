@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.smart.tablet.Constants;
@@ -18,7 +20,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
     @Override
-    public void onNewToken(String s) {
+    public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         storeToken(s);
     }
@@ -35,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     // [START receive_message]
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
         // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
@@ -56,36 +58,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Map<String, String> data = remoteMessage.getData();
 
-            if (data.get("type").equals("notification")) {
-                Intent i = new Intent(MESSAGE_RECEIVED);
+            if(data.get("type") != null) {
+                if (data.get("type").equals("notification")) {
+                    Intent i = new Intent(MESSAGE_RECEIVED);
 
-                for (Map.Entry<String, String> entry :
-                        data.entrySet()) {
-                    i.putExtra(entry.getKey(), entry.getValue());
-                }
+                    for (Map.Entry<String, String> entry :
+                            data.entrySet()) {
+                        i.putExtra(entry.getKey(), entry.getValue());
+                    }
 
-                sendBroadcast(i);
-            } else if (data.get("type").equals("command")) {
-                String command = data.get("command");
-                Intent intent = null;
+                    sendBroadcast(i);
+                } else if (data.get("type").equals("command")) {
+                    String command = data.get("command");
+                    Intent intent = null;
 
-                switch (command) {
-                    case Constants.COMMAND_EXECUTE_SEND_REPORT:
-                        intent = new Intent(this, SendAnalytics.class);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent);
-                        } else {
-                            startService(intent);
-                        }
-                        break;
-                    case Constants.COMMAND_PING:
-                        intent = new Intent(this, PingResponse.class);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent);
-                        } else {
-                            startService(intent);
-                        }
-                        break;
+                    switch (command) {
+                        case Constants.COMMAND_EXECUTE_SEND_REPORT:
+                            intent = new Intent(this, SendAnalytics.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(intent);
+                            } else {
+                                startService(intent);
+                            }
+                            break;
+                        case Constants.COMMAND_PING:
+                            intent = new Intent(this, PingResponse.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(intent);
+                            } else {
+                                startService(intent);
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -94,5 +98,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
+    }
+
+    @Override
+    public void onDeletedMessages() {
+        super.onDeletedMessages();
+
+        Log.d(TAG, "notification deleted");
     }
 }
